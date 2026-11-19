@@ -3,6 +3,25 @@ import AxeBuilder from '@axe-core/playwright';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { comparisonDocuments } from '../src/data/comparisonDocuments.js';
+import { coatingProducts, comparisonGroups, coatingHardeners } from '../src/data/comparisons.js';
+
+test('product evidence points to captured SDS and preserves component and test scopes', () => {
+  const ids = new Set(comparisonDocuments.map(doc => doc.id));
+  for (const group of Object.values(comparisonGroups)) {
+    for (const id of [group.ours, ...group.peers]) {
+      const p = coatingProducts[id];
+      expect(ids.has(p.tds), `${id} TDS`).toBe(true);
+      expect(ids.has(p.sds), `${id} SDS`).toBe(true);
+      for (const h of p.hardeners || []) expect(ids.has(coatingHardeners[h].sds), `${id} hardener`).toBe(true);
+      if (p.tests) expect(ids.has(p.tests.source), `${id} test source`).toBe(true);
+      for (const source of Object.values(p.specSources || {})) expect(ids.has(source)).toBe(true);
+    }
+  }
+  expect(coatingProducts.renner083.safety.ingredientNote).toContain('No Section 3 concentrations');
+  expect(coatingProducts.gallery.specs.pencil).toContain('7-day dry');
+  expect(coatingProducts.krystal.tests.values).toContainEqual(['77% Sulfuric Acid','1 · Poor']);
+  expect(coatingProducts.magnamax.tests.values).toContainEqual(['Nail Polish Remover','4 · Very Good']);
+});
 
 test('comparison source copies match their recorded identities and complete page sets', async () => {
   for (const doc of comparisonDocuments) {
@@ -81,6 +100,35 @@ test('comparison and document reader fit tablets and retain accessible controls'
   await expect.poll(() => page.locator('.comparison-page-image img').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
   await page.screenshot({ path:`test-results/coating-document-${test.info().project.name}.png`, fullPage:true });
   expect(errors).toEqual([]);
+});
+
+test('expanded results and component SDS open from the comparison sheet', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion:'reduce' });
+  await page.goto('./#/comparison?area=interior&coat=paint');
+  await page.getByRole('button',{name:'M.L. Campbell',exact:true}).click();
+  const results=page.getByRole('row',{name:/Published Test Results/}).locator('td[data-product="krystal"]');
+  await results.getByText('34 Reported Results',{exact:true}).click();
+  await expect(results).toContainText('77% Sulfuric Acid');
+  await expect(results).toContainText('1 · Poor');
+  await results.getByText('77% Sulfuric Acid',{exact:true}).scrollIntoViewIfNeeded();
+  await expect.poll(() => page.evaluate(() => document.querySelector('.comparison-matrix thead th').getBoundingClientRect().top >= document.querySelector('.app-header').getBoundingClientRect().bottom - 1)).toBe(true);
+  await results.getByRole('link',{name:'Read Test Source',exact:true}).click();
+  await expect(page.locator('main h1')).toHaveText('Krystal Laboratory Test Results');
+  await page.getByRole('button',{name:'Next Page',exact:true}).click();
+  await page.getByRole('button',{name:'Read Page Text',exact:true}).click();
+  await expect(page.locator('.comparison-page-text pre')).toContainText('77% Sulfuric Acid');
+  await page.goBack();
+  await page.getByRole('button',{name:'Renner',exact:true}).click();
+  const sds=page.getByRole('row',{name:/Source Editions & Documents/}).locator('td[data-product="renner688"]');
+  await sds.getByRole('link',{name:'Read SDS',exact:true}).click();
+  await expect(page.locator('main h1')).toHaveText('Renner U688 Kitchen Topcoat');
+  await page.getByRole('button',{name:'Read Page Text',exact:true}).click();
+  await expect(page.locator('.comparison-page-text pre')).toContainText('2/25/2025');
+  await page.goBack();
+  await page.getByRole('button',{name:'Renner',exact:true}).click();
+  const hardeners=page.getByRole('row',{name:/Hardener \/ Catalyst SDS/}).locator('td[data-product="renner688"]');
+  await hardeners.getByRole('link',{name:'Read Hardener SDS',exact:true}).last().click();
+  await expect(page.locator('main h1')).toHaveText('Renner YC-M404 Hardener');
 });
 
 test('all comparison originals, images and text are available offline under GitHub Pages base', async ({ page, context, browserName }) => {

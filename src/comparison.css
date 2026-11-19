@@ -10,12 +10,19 @@
 .comparison-matrix th,.comparison-matrix td { width:240px; min-width:240px; max-width:240px; padding:18px; vertical-align:top; text-align:left; line-height:1.55; border-right:1px solid #d8e2e8; border-bottom:1px solid #d8e2e8; background:#fff; overflow-wrap:anywhere; }
 .comparison-matrix tr > :first-child { position:sticky; left:0; z-index:2; width:160px; min-width:160px; max-width:160px; background:#edf3f7; font-size:16px; }
 .comparison-matrix tr > :nth-child(2) { position:sticky; left:160px; z-index:1; width:220px; min-width:220px; max-width:220px; background:#f1f7fa; border-right:3px solid #8cabbf; font-weight:700; }
-.comparison-matrix thead th { position:sticky; top:0; z-index:3; background:#edf3f7; font-size:19px; }
+.comparison-matrix thead th { position:sticky; top:var(--comparison-sticky-offset,0px); z-index:3; background:#edf3f7; font-size:19px; }
 .comparison-matrix thead th:first-child { z-index:5; }
 .comparison-matrix thead th:nth-child(2) { z-index:4; }
 .comparison-matrix thead th:nth-child(2) { background:var(--ink); color:#fff; }
 .comparison-matrix small { display:block; font-size:14px; font-weight:400; margin-top:8px; }
 .comparison-matrix .matrix-section th { background:#dce8ef; color:var(--ink); max-width:none; }
+.comparison-matrix .matrix-section > th { position:static; }
+.comparison-matrix .matrix-section span { position:sticky; left:18px; display:inline-block; }
+.comparison-test-results dl { margin:8px 0; font-size:15px; font-weight:400; }
+.comparison-test-results dl > div { border-bottom:1px solid #d8e2e8; padding:10px 0; }
+.comparison-test-results dt { font-weight:800; }
+.comparison-test-results dd { margin:4px 0 0; }
+.comparison-hardener-list > div + div { margin-top:20px; padding-top:18px; border-top:1px solid #d8e2e8; }
 .comparison-matrix summary,.comparison-source-library > summary { cursor:pointer; padding:12px 0; min-height:48px; font-size:16px; font-weight:800; }
 .comparison-matrix ul { padding-left:18px; margin:0; }
 .comparison-matrix li { margin-bottom:10px; }

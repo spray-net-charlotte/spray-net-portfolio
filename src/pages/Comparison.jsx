@@ -6,7 +6,7 @@ import Photo from '../components/Photo';
 import Lightbox from '../components/Lightbox';
 import { mediaUrl } from '../lib/media';
 import { closeOverlay, navigate, updateQuery } from '../lib/navigation';
-import { benchmarkProducts, benchmarkRows, catalystSafety, coatingProducts, comparisonChecked, comparisonDocuments, comparisonGroups, specificationRows } from '../data/comparisons';
+import { benchmarkProducts, benchmarkRows, catalystSafety, coatingHardeners, coatingProducts, comparisonChecked, comparisonDocuments, comparisonGroups, specificationRows } from '../data/comparisons';
 import '../comparison.css';
 
 const docById = (id) => comparisonDocuments.find((doc) => doc.id === id);
@@ -26,6 +26,20 @@ function DocumentCard({ doc, route }) {
   return <a className="comparison-document-card" href={sourceHref(doc.id, route)}>
     <span className="comparison-doc-kind">{doc.kind}</span><h3>{doc.title}</h3><p>{doc.variant}</p><p className="comparison-document-edition">{doc.edition}</p><span className="comparison-document-open">Read {doc.pages} {doc.pages === 1 ? 'Page' : 'Pages'}<Icon name="arrow" size={20} /></span>
   </a>;
+}
+function Ingredients({ safety }) {
+  return safety.ingredients.length ? <details><summary>Selected Ingredients &amp; CAS Numbers</summary><p>Selected disclosures for reading. The original SDS contains the complete reported list.</p>{safety.ingredients.map(([name,cas,amount]) => <p key={`${cas}-${name}`}>{name}<br/><small>CAS {cas} · {amount}</small></p>)}</details> : safety.ingredientNote || 'See the captured SDS for ingredient disclosures.';
+}
+function TestResults({ product, route }) {
+  const tests = product.tests;
+  return tests ? <details className="comparison-test-results"><summary>{tests.values.length} Reported Results</summary><p>{tests.conditions}</p><dl>{tests.values.map(([name,result]) => <div key={name}><dt>{name}</dt><dd>{result}</dd></div>)}</dl><SourceLink id={tests.source} route={route}>Read Test Source</SourceLink></details> : product.specs.performance || 'No numerical test results in the captured source.';
+}
+function HardenerSafety({ ids, route }) {
+  if (!ids?.length) return 'No separate hardener listed in this reference.';
+  return <div className="comparison-hardener-list">{ids.map(id => {
+    const h = coatingHardeners[id];
+    return <div key={id}><strong>{h.name} · {h.signal}</strong><details><summary>Classification &amp; Ingredients</summary><p>{h.edition}</p><ul>{h.classes.map(c => <li key={c}>{c}</li>)}</ul><p>{h.summary}</p><Ingredients safety={h}/></details><SourceLink id={h.sds} route={route}>Read Hardener SDS</SourceLink></div>;
+  })}</div>;
 }
 function DocumentView({ doc, route }) {
   const [page, setPage] = useState(0);
@@ -56,7 +70,7 @@ function DocumentView({ doc, route }) {
     </div>
     <p className="comparison-page-status" role="status">Page {page + 1} of {doc.pages}</p>
     {showText ? <div className="comparison-page-text">
-      <p>Extracted text for reading and screen readers. Refer to the original page for table layout and symbols.</p>
+      <p>{doc.textNote || 'Extracted text for reading and screen readers. Refer to the original page for table layout and symbols.'}</p>
       {text ? <pre>{text[page]}</pre> : failed ? <><p role="alert">Page text could not load. The original page is available below.</p><button className="button button-dark" onClick={() => setRetry(retry + 1)}>Try Again</button><Photo src={images[page].src} alt={images[page].alt} eager /></> : <p role="status">Loading page text…</p>}
     </div> : <button className="comparison-page-image" aria-label={`View page ${page + 1} fullscreen`} onClick={() => updateQuery(route, 'full', '1', false)}><Photo key={page} src={images[page].src} alt={images[page].alt} eager /></button>}
     <details className="comparison-provenance"><summary>Document Details &amp; Source</summary><p>{doc.sourceLabel}. Checked {comparisonChecked}.</p>{doc.sourceUrl && <p className="comparison-source-url">{doc.sourceUrl}</p>}<p>SHA-256: <code>{doc.sha256}</code></p><p>The original PDF and all {doc.pages} page images are included in the offline portfolio. This copy preserves the source edition; a newer formulation may have a different sheet.</p></details>
@@ -68,10 +82,25 @@ function DocumentView({ doc, route }) {
 function ComparisonSheet({ groupKey, route }) {
   const sheet = useRef(null);
   const [activeBrand, setActiveBrand] = useState('');
+  useEffect(() => {
+    const header = document.querySelector('.app-header');
+    const containers = [...document.querySelectorAll('.coating-comparison .comparison-matrix-scroll')];
+    const update = () => containers.forEach(container => {
+      const overlap = Math.max(0, (header?.getBoundingClientRect().bottom || 0) - container.getBoundingClientRect().top);
+      container.style.setProperty('--comparison-sticky-offset', `${overlap}px`);
+      container.style.scrollPaddingTop = `${overlap + container.querySelector('thead').getBoundingClientRect().height + 8}px`;
+    });
+    update();
+    const observer = new ResizeObserver(update);
+    if (header) observer.observe(header);
+    window.addEventListener('scroll', update, { passive:true });
+    window.addEventListener('resize', update);
+    return () => { observer.disconnect(); window.removeEventListener('scroll', update); window.removeEventListener('resize', update); };
+  }, []);
   const group = comparisonGroups[groupKey];
   const products = [group.ours, ...group.peers].map(id => coatingProducts[id]);
-  const rows = specificationRows.filter(([key]) => (groupKey === 'paint' || !['persoz','adhesion','mek'].includes(key)) && (key !== 'unqualifiedSolids' || products.some(p => p.specs[key])));
-  const sourceIds = new Set(products.flatMap(p => [p.tds,p.sds,...(p.extraSources || [])]).filter(Boolean));
+  const rows = specificationRows.filter(([key]) => (groupKey === 'paint' || !['pencil','persoz','adhesion','mek','performance'].includes(key)) && (!['unqualifiedSolids','sdsSolids'].includes(key) || products.some(p => p.specs[key])));
+  const sourceIds = new Set(products.flatMap(p => [p.tds,p.sds,p.tests?.source,...(p.extraSources || []),...(p.hardeners || []).map(id => coatingHardeners[id].sds)]).filter(Boolean));
   const brandFor = p => p.brand || (p.name.startsWith('Sherwin-Williams') ? 'Sherwin-Williams' : p.name.startsWith('INSL-X') ? 'INSL-X' : p.name.startsWith('Benjamin Moore') ? 'Benjamin Moore' : p.name.startsWith('Zinsser') ? 'Zinsser' : p.name.startsWith('KILZ') ? 'KILZ' : 'Spray-Net');
   const brands = [...new Set(products.slice(1).map(brandFor))];
   const jumpToBrand = brand => {
@@ -91,14 +120,15 @@ function ComparisonSheet({ groupKey, route }) {
       <table className="comparison-matrix"><caption className="sr-only">{groupKey === 'primer' ? 'Primer' : 'Paint'} specifications and safety across all brands</caption>
         <thead><tr><th scope="col">Compare</th>{products.map(p => <th scope="col" key={p.id} data-product={p.id}><span className="small-caps">{brandFor(p).toUpperCase()}</span>{p.name}<small>{p.detail}</small></th>)}</tr></thead>
         <tbody>
-          <tr className="matrix-section"><th colSpan={products.length+1}>Specifications</th></tr>
-          {rows.map(([key,label,help]) => <tr key={key}><th scope="row">{label}{help && <details><summary>About This Value</summary><p>{help}</p></details>}</th>{products.map(p => <td key={p.id}>{p.specs[key] || p.missingLabel || 'Not Reported in This TDS'}</td>)}</tr>)}
-          <tr className="matrix-section"><th colSpan={products.length+1}>Safety &amp; Materials</th></tr>
-          <tr><th scope="row">Signal Word</th>{products.map(p => <td key={p.id}>{p.safety.signal}</td>)}</tr>
-          <tr><th scope="row">SDS Classification</th>{products.map(p => <td key={p.id}><ul>{p.safety.classes.map(c => <li key={c}>{c}</li>)}</ul></td>)}</tr>
-          <tr><th scope="row">Handling / Exposure Notes</th>{products.map(p => <td key={p.id}>{p.safety.summary}</td>)}</tr>
-          <tr><th scope="row">Selected Disclosed Ingredients</th>{products.map(p => <td key={p.id}>{p.safety.ingredients.length ? <details><summary>Selected Ingredients &amp; CAS Numbers</summary><p>Selected disclosures for reading. The original SDS contains the complete reported list.</p>{p.safety.ingredients.map(([name,cas,amount]) => <p key={`${cas}-${name}`}>{name}<br/><small>CAS {cas} · {amount}</small></p>)}</details> : 'Matched SDS Pending'}</td>)}</tr>
-          <tr><th scope="row">Source Editions &amp; Documents</th>{products.map(p => <td key={p.id}><SourceLink id={p.tds} route={route}>Read {docById(p.tds).kind}</SourceLink>{p.sds && <SourceLink id={p.sds} route={route}>Read SDS</SourceLink>}<details><summary>Edition &amp; Product Notes</summary><p>{p.note}</p><p>{p.safety.edition}</p></details></td>)}</tr>
+          <tr className="matrix-section"><th colSpan={products.length+1}><span>Specifications &amp; Performance</span></th></tr>
+          {rows.map(([key,label,help]) => <tr key={key}><th scope="row">{label}{help && <details><summary>About This Value</summary><p>{help}</p></details>}</th>{products.map(p => <td key={p.id} data-product={p.id}>{key === 'performance' ? <TestResults product={p} route={route}/> : <>{p.specs[key] || p.missingLabel || 'Not Reported in This TDS'}{p.specSources?.[key] && <SourceLink id={p.specSources[key]} route={route}>View Source</SourceLink>}</>}</td>)}</tr>)}
+          <tr className="matrix-section"><th colSpan={products.length+1}><span>Coating Base Safety &amp; Materials</span></th></tr>
+          <tr><th scope="row">Signal Word</th>{products.map(p => <td key={p.id} data-product={p.id}>{p.safety.signal}</td>)}</tr>
+          <tr><th scope="row">SDS Classification</th>{products.map(p => <td key={p.id} data-product={p.id}><ul>{p.safety.classes.map(c => <li key={c}>{c}</li>)}</ul></td>)}</tr>
+          <tr><th scope="row">Handling / Exposure Notes</th>{products.map(p => <td key={p.id} data-product={p.id}>{p.safety.summary}</td>)}</tr>
+          <tr><th scope="row">Selected Disclosed Ingredients</th>{products.map(p => <td key={p.id} data-product={p.id}>{p.sds ? <Ingredients safety={p.safety}/> : 'Matched SDS Pending'}</td>)}</tr>
+          <tr><th scope="row">Hardener / Catalyst SDS<small>Separate supplied component; not a mixed-system classification.</small></th>{products.map(p => <td key={p.id} data-product={p.id}><HardenerSafety ids={p.hardeners} route={route}/></td>)}</tr>
+          <tr><th scope="row">Source Editions &amp; Documents</th>{products.map(p => <td key={p.id} data-product={p.id}><SourceLink id={p.tds} route={route}>Read {docById(p.tds).kind}</SourceLink>{p.sds && <SourceLink id={p.sds} route={route}>Read SDS</SourceLink>}<details><summary>Edition &amp; Product Notes</summary><p>{p.note}</p><p>{p.safety.edition}</p></details></td>)}</tr>
         </tbody>
       </table>
     </div>
@@ -106,7 +136,7 @@ function ComparisonSheet({ groupKey, route }) {
     {groupKey === 'paint' && <>
       <h2 className="comparison-sheet-title">Cabinet Coating Benchmarks — All Brands</h2>
       <p className="comparison-reading-note">Our in-house ASTM / KCMA report. Test date, exact competitor SKUs, sheen and cure schedule are not printed; these historical test identities differ from the specification products above.</p>
-      <div className="comparison-matrix-scroll" role="region" aria-label="All-brand benchmark sheet" tabIndex={0}><table className="comparison-matrix"><caption className="sr-only">In-house cabinet coating benchmarks across all brands</caption><thead><tr><th scope="col">Test</th><th scope="col">Spray-Net Kitchen Cabinet Paint</th>{benchmarkProducts.map(p => <th scope="col" key={p.id}>{p.name}</th>)}</tr></thead><tbody>{benchmarkRows.map(([label,method,result,key,index]) => <tr key={label}><th scope="row">{label}<small>{method}</small></th><td>{result}</td>{benchmarkProducts.map(p => <td key={p.id}>{index === undefined ? p[key] : p[key][index]}</td>)}</tr>)}</tbody></table></div>
+      <div className="comparison-matrix-scroll" role="region" aria-label="All-brand benchmark sheet" tabIndex={0}><table className="comparison-matrix"><caption className="sr-only">In-house cabinet coating benchmarks across all brands</caption><thead><tr><th scope="col">Test</th><th scope="col">Spray-Net Kitchen Cabinet Paint</th>{benchmarkProducts.map(p => <th scope="col" key={p.id}>{p.name}</th>)}</tr></thead><tbody>{benchmarkRows.map(([label,method,result,key,index]) => <tr key={label}><th scope="row">{label}<small>{method}</small></th><td>{result}</td>{benchmarkProducts.map(p => <td key={p.id} data-product={p.id}>{index === undefined ? p[key] : p[key][index]}</td>)}</tr>)}</tbody></table></div>
       <SourceLink id="sn-benchmark" route={route}>Read Complete Benchmark Report</SourceLink>
       <article className="comparison-catalyst"><h2>{catalystSafety.name}</h2><p>{catalystSafety.edition} · {catalystSafety.classes[0]}</p><p>{catalystSafety.summary}</p><SourceLink id="sn-catalyst-sds" route={route}>Read Catalyst SDS</SourceLink></article>
     </>}

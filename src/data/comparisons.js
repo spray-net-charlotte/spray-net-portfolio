@@ -2,6 +2,7 @@ import { comparisonDocuments } from './comparisonDocuments';
 import { expandedPrimers } from './expandedPrimers.js';
 import { professionalPrimers } from './professionalPrimers.js';
 import { professionalPaints } from './professionalPaints.js';
+export { coatingHardeners } from './coatingHardeners.js';
 
 export { comparisonDocuments };
 export const comparisonChecked = 'November 19, 2026';
@@ -15,6 +16,7 @@ export const specificationRows = [
   ['volume', 'Solids by Volume', 'Volume and weight percentages measure different things. More solids alone does not establish better performance.'],
   ['weight', 'Solids by Weight'],
   ['unqualifiedSolids', 'Solids (Unspecified Basis)', 'Shown separately when the manufacturer does not identify weight or volume basis.'],
+  ['sdsSolids', 'SDS Total Solids at 250°C', 'The SDS reports this separate test at 250°C / 482°F. Do not substitute it for TDS weight or volume solids; reference dates and formulations may differ.'],
   ['voc', 'VOC Content', 'Keep the reporting basis with the number. These sheets use different bases; VOC content alone does not measure indoor emissions or overall safety.'],
   ['wet', 'Wet Film per Coat'],
   ['dry', 'Dry Film per Coat', '1 mil = 0.001 inch. Compare coverage only alongside the specified film thickness.'],
@@ -22,10 +24,11 @@ export const specificationRows = [
   ['touch', 'Dry to Touch', 'Drying depends on temperature, humidity and film thickness. Touch-dry is different from fully cured.'],
   ['recoat', 'Recoat Time'],
   ['cure', 'Cure / Full Properties'],
+  ['pencil', 'Pencil Hardness', 'ASTM D3363 is an ordinal scale. Results from separate laboratories, cures, sheens and editions are not a matched head-to-head test.'],
   ['persoz', 'Persoz Hardness', 'ASTM D4366 · seconds; different from pencil-hardness grades.'],
   ['adhesion', 'Cross-Hatch Adhesion', 'ASTM D3359 · the stated test classification, not a service-life prediction.'],
   ['mek', 'MEK Rub Test', 'ASTM D4752 · reported count. A missing TDS result is not a failed test.'],
-  ['performance', 'Published Performance Claims', 'Manufacturer statements and test scopes, not a new head-to-head benchmark or independent certification.'],
+  ['performance', 'Published Test Results', 'Expand the reported results for the test conditions and source. Manufacturer studies are separate from our historical head-to-head report; matching rating numbers do not establish matching protocols.'],
 ];
 const missing = 'Not reported in this TDS';
 export const coatingProducts = {
@@ -150,14 +153,24 @@ coatingProducts.emerald.specs.system = 'Waterborne Urethane-Modified Alkyd Ename
 coatingProducts.advance.specs.catalysis = 'No added catalyst specified in this sheet';
 coatingProducts.emerald.specs.catalysis = 'No added catalyst specified in this sheet';
 coatingProducts.renner643.specs.catalysis = 'Regional 2020 TDS: 1K / 2K; YC-M401, M402 or M404 at 4–8%. U.S. process guide differs; editions are not combined.';
-coatingProducts.renner083.specs.catalysis = '1K in the official process guide';
 coatingProducts.renner643.specs.unqualifiedSolids = '50 ± 2% · sheet does not specify weight / volume basis';
 coatingProducts.renner643.specs.volume = 'Not separately reported';
 coatingProducts.renner643.specs.weight = 'Not separately reported';
 coatingProducts['sn-coating'].specs.performance = 'TDS reports KCMA 9.4 ratings of 5, KCMA 9.5 detergent / water pass, and KCMA 9.2 / 9.3 heat / cold-check passes.';
-coatingProducts.gallery.specs.performance = 'PDS states it meets KCMA hardness and household-chemical test requirements when properly applied; no numeric hardness / rub result is provided.';
-coatingProducts.krystal.specs.performance = 'Historical PDS states it meets or exceeds chemical-resistance requirements for AWI System 5 conversion varnish and System 11 catalyzed polyurethane.';
-coatingProducts.magnamax.specs.performance = 'Historical PDS states it passes KCMA tests and AWI Systems 2 / 5 chemical and moisture resistance. Exact contemporary results are not established by this edition.';
+coatingProducts['sn-coating'].specs.pencil = 'HB · historical in-house ASTM D3363 report; cure, sheen and exact tested SKU not printed';
+coatingProducts['sn-coating'].specSources = { pencil: 'sn-benchmark' };
+coatingProducts['sn-coating'].hardeners = ['a003'];
+coatingProducts['sn-coating'].tests = {
+  source: 'sn-coating-tds',
+  conditions: '2023 cabinet coating TDS · KCMA 9.4 chemical ratings. Individual exposure duration and specimen cure are not printed in this TDS; the separate historical head-to-head report specifies 24-hour chemical exposure.',
+  values: [
+    ...['Ketchup','Olive Oil','Coffee','Wine','Vinegar','Lemon Juice','Orange Juice','100 Proof Alcohol','Detergent Solution'].map(name => [name,'5 · KCMA 9.4']),
+    ['Detergent & Water Resistance','Pass · KCMA 9.5 · no blistering or color change'],
+    ['Shrinkage & Heat Resistance','Pass · KCMA 9.2'],
+    ['Hot & Cold Check Resistance','Pass · KCMA 9.3; cycle count not printed'],
+    ['Freeze / Thaw','Pass · 3 cycles'],
+  ],
+};
 
 // Historical in-house report. Do not merge these test identities with today's SKUs.
 export const benchmarkProducts = [

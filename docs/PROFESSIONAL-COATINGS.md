@@ -1,33 +1,61 @@
-# Professional Coating References — Portfolio 1.8.2
+# Professional Coating References — Portfolio 1.8.3
 
-This release expands the existing sheet with professional finishes and a visible **Find a Brand** control. It preserves all columns, pins Spray-Net and property names, and keeps brand headers visible while scrolling. It does not assign a universal product ranking from different tests, chemistry or regulatory classifications.
+The comparison includes 50 captured manufacturer / Spray-Net documents and 384 pages. Every displayed coating has a captured SDS. Brand buttons, pinned headings, and pinned property / Spray-Net columns keep the comparison navigable on tablets. All originals, page images and accessible text cache offline.
 
-## Primer additions
+## New source documents
 
-- Sherwin-Williams White Pigmented Shellac: July 2023 PDS, B49W08150; November 1, 2026 U.S. SDS, B49W8150. Specifications p. 1; SDS classifications / ingredients pp. 1–2. Liquid shellac, not synthetic shellac or aerosol.
-- Sherwin-Williams ProBlock Quick Dry Oil-Based: April 2026 PDS, PB16W0100; September 5, 2026 U.S. SDS. Specifications p. 1; SDS Sections 2–3 pp. 1–3. Oil-modified and waterbased ProBlock products are different formulas.
-- Renner 643: manufacturer-authored October 26, 2020 regional TDS and April 24, 2024 Dutch / EU CLP SDS. TDS specifications p. 1; SDS classification p. 2, ingredients pp. 3–4. Classification is translated and explicitly identified as EU CLP. The reported 50 ± 2% solids has no printed weight / volume basis; it is in a separate row. The cited SDS is the basecoat, not a mixed 2K system.
-- Renner 083: official Renner Process Guide identifies YI-M083/C02 in 1K cabinet systems, printed pp. 4–7. This is a guide reference, not a verified TDS/SDS; unavailable chemistry and safety fields remain unavailable.
-
-## Paint / finishing-system additions
-
-| Product | Source identity | Important scope |
+| Source | Edition / variant | Data locations |
 | --- | --- | --- |
-| Gallery Series | October 2024 PDS, B52W00010; August 29, 2026 SDS, B52W10 | 10 Gloss Matte White, 1K acrylic. PDS p. 1; SDS pp. 1–2. |
-| COMMAND | October 8, 2026 HP3920 TDS; March 20, 2025 HP3920-7X SDS | Current HP series, not the separately listed discontinued V392. Satin / tintable-white SDS. TDS p. 1; SDS pp. 1–3. |
-| Renner 688 | March 23, 2020 YO xxC688/XXX TDS, Version 3 | Regional C688 reference, not verified current U.S. U688. White and neutral solids are unqualified as to weight / volume and are not placed in either solids column. |
-| Renner 785 | February 18, 2021 YO xxM785/XXX TDS, Version 17 | European two-pack reference, not a U688/U765 substitute. Solids basis unqualified. |
-| Krystal | November 2014 C145-family manufacturer PDS; June 19, 2022 C14514B Satin SDS | Clear post-catalyzed amino-alkyd conversion varnish. Historical editions; not proof of current formulation. PDS pp. 1–2; SDS pp. 1–3. C1491 catalyst is separately required and its SDS is not included. |
-| MagnaMax | April 2009 C148-family manufacturer PDS; July 19, 2022 MC14814SF SDS | Historical clear pre-catalyzed lacquer. SDS is Clear Tint Base Satin, a different variant from the general C148 PDS; never silently treated as the same formulation. PDS pp. 1–2; SDS pp. 1–3. |
+| Renner 083 TDS | March 3, 2023, Version 6; YI-M083/C02 White | p. 1: solids, application, coverage, drying |
+| Renner U688 TDS | March 20, 2023, Version 2; U688 series | p. 1: catalysis, solids, application, drying |
+| Renner 083 U.S. SDS | May 15, 2025, Revision 7; YI-M083/C02 | pp. 1–2: hazards / disclosures; p. 5: physical data |
+| Renner 643 U.S. SDS | March 24, 2025, Revision 8; YL-M643/C02 | pp. 1–2: hazards / ingredients; p. 6: physical data |
+| Renner U688 U.S. SDS | February 25, 2025, Revision 4; YO-30U688/SBN White | pp. 1–2: hazards / ingredients; p. 5: physical data |
+| Renner M785 U.S. SDS | May 15, 2025, Revision 5; YO-10M785/SBN White | pp. 1–2: hazards / ingredients; p. 5: physical data |
+| Renner YC-M404 U.S. SDS | March 25, 2025, Revision 8 | pp. 1–3: hardener classification / ingredients |
+| Renner YC-M403 U.S. SDS | March 27, 2025, Revision 5 | pp. 1–3: hardener classification / ingredients |
+| C1491 Care Catalyst U.S. SDS | October 23, 2026, Version 21 | pp. 1–2: classification / ingredients |
+| Krystal laboratory brochure | May 2010 footer; clear conversion varnish | p. 2: 28 chemical and six performance results |
+| MagnaMax laboratory brochure | January 2011 footer; clear pre-catalyzed lacquer | p. 2: 28 chemical and six performance results |
 
-Manufacturer-authored reference PDFs hosted by regional suppliers remain primary documents, with the actual retrieval URL and original SHA-256 in `comparisonDocuments.js`. They are not represented as current U.S. editions or as third-party testing. M.L. Campbell's public product pages confirm the conversion-varnish / pre-catalyzed-lacquer product families; their manufacturer-authored archived sheets provide the displayed figures. Download dates are not revision dates.
+Renner's public SDS page supplies the captured direct public PDFs, even though its previously tested product-page buttons led to registered access. The 083 / U688 manufacturer TDS came from a supplier's public document collection. No registration was bypassed. Exact URLs, source hashes, original files and page counts are in `comparisonDocuments.js`.
 
-## Remaining source gaps
+## Values filled
 
-Renner's current U.S. TDS/SDS links lead to its registered-user area. Public regional manufacturer-authored sheets and the official process guide are included as explicitly dated references, not a substitute for authenticated current U.S. sheets. Matched Renner 083, C688 and M785 SDS / hardener sheets are not verified. No missing SDS is classified as safe. The complete mixed-system classifications for Krystal and Renner 2K systems are not inferred from base-component documents.
+Renner SDS §9.2 gives these uncatalyzed-base values:
 
-Selected ingredients are summarized to keep the sheet readable; the full captured SDS contains the complete disclosed list. Manufacturer KCMA / AWI statements are labeled as published claims. Historical Spray-Net comparative tests remain a separate table; Gallery, COMMAND, Renner and the industrial systems are not retroactively assigned those test results.
+| Product / exact base | VOC, g/L | Total solids at 250°C / 482°F |
+| --- | --- | --- |
+| 083 / C02 | 16 | 58.22% |
+| 643 / C02 | 113 | 53.80% |
+| 30U688 / SBN | 180 | 38.70% |
+| 10M785 / SBN | 167 | 39.01% |
 
-## Updating
+The SDS does not state the VOC subtraction basis. These values are not mixed / catalyzed coating values. The SDS total-solids test is separate from TDS solids and is not relabeled weight or volume solids. Renner 083 TDS reports 55 ± 2% solids without weight / volume basis, 6–10 m²/L coverage, 60-minute dust-free / 90-minute handling and 8–24-hour overcoating at its printed conditions.
 
-Edit `src/data/professionalPrimers.js` or `src/data/professionalPaints.js`, product order in `comparisons.js`, and source metadata in `comparisonDocuments.js`. Every captured original, page image and extracted-text file is precached. Add only matched editions, then run the content build and coating-comparison tests. Full metadata, hashes and dates are maintained per document. Prices are intentionally omitted.
+The 083, U688 and M785 U.S. base SDS list no OSHA hazard classification but name possible allergic-reaction contributors. The 643 U.S. base SDS gives Skin Sensitization 1A. The 083 Section 3 gives no ingredient concentration table; the app says that explicitly instead of showing missing SDS or implying full formulation disclosure.
+
+## Separate hardener safety
+
+M403 and M404 are isocyanate-containing hardeners with Danger signal words and separately listed classifications, including respiratory / skin sensitization. C1491 Care Catalyst has a Danger signal word with flammability, skin-corrosion, eye-damage and narcotic-effects classifications. Their selected ingredient / CAS ranges and original SDS are accessible in the hardener row. M403's separate EU environmental note is not relabeled a U.S. health classification.
+
+The separate Spray-Net A-003 SDS remains in that row. The cabinet TDS names SWC010; the A-003 sheet does not establish catalyst equivalence or an updated mixing specification. Showing base and hardener sheets does not classify the final mixed coating. Renner 643's optional M401 / M402 alternatives are not represented as captured; the linked M404 sheet covers M404 only.
+
+## Published test results
+
+- **Gallery PDS p. 2:** ASTM D3363 pencil hardness **6H after seven-day drying**, White B52W00010. The former missing-hardness statement was incorrect and is replaced. The separate KCMA statement does not provide individual chemical scores or a numerical MEK count.
+- **Spray-Net TDS p. 2:** nine KCMA 9.4 chemical ratings of 5, KCMA 9.5 detergent / water pass, KCMA 9.2 heat / shrinkage pass, KCMA 9.3 hot / cold pass and three freeze / thaw cycles. Individual chemical exposure durations and specimen cure are not printed in this TDS. The historical in-house report remains separate with its own 24-hour exposures, HB pencil result and competitor identities.
+- **Krystal brochure p. 2:** all 28 chemical and six performance ratings are included, including 20 hot / cold cycles, blocking after four-hour drying, print after 24-hour drying, cross-hatch 5 on the manufacturer's own 1–5 scale, wet heat 4, and edge soak 5. Chemical results include 77% sulfuric acid **1 / Poor**; the other listed chemical ratings are 5. Its original is scanned; accessible table text is manually transcribed and checked visually against p. 2.
+- **MagnaMax brochure p. 2:** all 28 chemical and six performance ratings, including 77% sulfuric acid **1 / Poor** and nail polish remover **4 / Very Good**. Other listed chemical ratings are 5.
+
+The brochures reference AWI / KCMA chemical contact schedules without printing individual durations. Their cross-hatch score of 5 is not an ASTM 5B classification. Matching numbers do not prove matching protocols. These manufacturer studies are separate from Spray-Net's historical head-to-head report; no newly added product is assigned those older competitor results. The brochures describe clear finish families, not every current sheen / base, and do not independently certify a 15-year service life.
+
+## Remaining source limits
+
+Numerical MEK / Persoz values for current COMMAND HP3920 and Renner U688 / M785 were not verified in the reviewed manufacturer material. They remain unreported. Informal review videos and results for unrelated products were excluded.
+
+The M785 technical reference remains the February 2021 European TDS; its later U.S. SDS is identified separately and does not establish identical formulation. U688's new 2023 TDS header identifies U688 but retains some C688 references in its body; the original inconsistency is preserved. The old 2020 C688 TDS and Dutch 643 SDS remain archived separately. MagnaMax's April 2009 C148-family PDS and July 2022 MC14814SF Clear Tint Base SDS remain different variants. Krystal retains the November 2014 PDS / June 2022 base SDS alongside the separately dated catalyst / test references.
+
+## Maintenance
+
+Edit `professionalPrimers.js`, `professionalPaints.js` and `coatingHardeners.js`; Spray-Net and retail data are in `comparisons.js`. Preserve original PDFs, source identities, per-page images and accessible text. After updates run the build, source-integrity / evidence-link checks, tablet navigation, accessibility and offline tests. Prices are omitted.

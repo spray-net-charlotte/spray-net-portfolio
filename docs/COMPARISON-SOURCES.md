@@ -4,7 +4,7 @@ Checked November 19, 2026. Scope: **cabinet refinishing primer and topcoat**, no
 
 ## Source files and traceability
 
-`src/data/comparisonDocuments.js` records the identity, source URL where available, printed date or footer code, page count, local path and SHA-256 of every original. `src/data/comparisons.js` stores the transcribed figures and their limitations. All 39 captured source PDFs, 287 page images and per-page extracted text are in `public/media/comparison/<document-id>/`. The in-app reader stays inside the portfolio, supports fullscreen and selectable text, and works offline after service-worker installation.
+`src/data/comparisonDocuments.js` records the identity, source URL where available, printed date or footer code, page count, local path and SHA-256 of every original. `src/data/comparisons.js` stores the transcribed figures and their limitations. All 50 captured source PDFs, 384 page images and per-page extracted text are in `public/media/comparison/<document-id>/`. The in-app reader stays inside the portfolio, supports fullscreen and selectable text, and works offline after service-worker installation.
 
 Spray-Net originals were retrieved from the existing South Charlotte sales library (`Sales/Spray-Net VS the World`) and cross-checked with Ezee Assist's references in Brave. The Ezee answer was used for discovery; values were verified against the PDFs, including visual inspection of the benchmark table. Ezee-generated summaries are not used as primary evidence. Its temporary signed attachment links are not published.
 
@@ -70,3 +70,14 @@ Matching SDS follow-up: KILZ 2 U.S. No. 2000, March 7, 2024, retrieved from the 
 ## Professional expansion — 1.8.2
 
 See [Professional coating references](PROFESSIONAL-COATINGS.md) for all additional products, exact source editions, catalyst scope, regional Renner references and remaining source gaps. The current set contains 39 originals and 287 rendered pages. The 1.8.1 six-primer section above records that earlier source set; the current primer sheet has ten competitor references.
+
+
+## Source gap closure — 1.8.3
+
+Added 11 original manufacturer documents: U.S. SDS for Renner 083, 643, U688 and M785; M403 / M404 hardeners; C1491 Care Catalyst; manufacturer TDS for 083 and U688; Krystal (May 2010) and MagnaMax (January 2011) laboratory-result brochures. All displayed base coatings now have captured SDS. Renner’s public SDS page supplies direct public PDF links; its previously inaccessible product-page buttons do not describe current SDS availability. Original editions are retained separately.
+
+Gallery PDS p. 2 reports ASTM D3363 pencil hardness 6H after seven-day drying. The earlier statement that no numerical hardness result was published was incorrect and is replaced. Spray-Net’s HB result remains identified as its separate historical study; it is not a matched cure / sheen comparison.
+
+Renner SDS §9.2 VOC / total solids are identified separately from TDS figures and from mixed / catalyzed coatings. The SDS total-solids test at 250°C is not relabeled weight or volume solids. Base classifications are separate from hardener classifications. Renner 083’s empty ingredient table is represented as no Section 3 concentrations disclosed, not missing SDS or a full-formula disclosure.
+
+The in-app manufacturer tables include all 28 chemical and six performance results from each M.L. Campbell brochure, including the 77% sulfuric-acid rating of 1 and MagnaMax nail-polish-remover rating of 4. Krystal’s original is scanned; its accessible text is explicitly a manual table transcription checked against rendered p. 2. Current product pages corroborate most ratings but do not replace the captured dated study. No current HP3920 or Renner numerical MEK / Persoz result was verified in the reviewed manufacturer material; those cells remain unreported. Retailer opinions, informal videos, and unrelated products were not substituted for measured values.
