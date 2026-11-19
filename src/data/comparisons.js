@@ -1,5 +1,7 @@
 import { comparisonDocuments } from './comparisonDocuments';
 import { expandedPrimers } from './expandedPrimers.js';
+import { professionalPrimers } from './professionalPrimers.js';
+import { professionalPaints } from './professionalPaints.js';
 
 export { comparisonDocuments };
 export const comparisonChecked = 'November 19, 2026';
@@ -7,9 +9,12 @@ export const comparisonChecked = 'November 19, 2026';
 // Values are transcribed from the named edition, not inferred from marketing copy.
 // A missing result means not reported in this source, never zero or a failed test.
 export const specificationRows = [
+  ['system', 'Coating Type / Finish'],
+  ['catalysis', 'Catalysis / Components', 'Reference editions only. A base-component SDS does not classify the catalyst or the complete mixed system.'],
   ['resin', 'Resin / Vehicle'],
   ['volume', 'Solids by Volume', 'Volume and weight percentages measure different things. More solids alone does not establish better performance.'],
   ['weight', 'Solids by Weight'],
+  ['unqualifiedSolids', 'Solids (Unspecified Basis)', 'Shown separately when the manufacturer does not identify weight or volume basis.'],
   ['voc', 'VOC Content', 'Keep the reporting basis with the number. These sheets use different bases; VOC content alone does not measure indoor emissions or overall safety.'],
   ['wet', 'Wet Film per Coat'],
   ['dry', 'Dry Film per Coat', '1 mil = 0.001 inch. Compare coverage only alongside the specified film thickness.'],
@@ -20,6 +25,7 @@ export const specificationRows = [
   ['persoz', 'Persoz Hardness', 'ASTM D4366 · seconds; different from pencil-hardness grades.'],
   ['adhesion', 'Cross-Hatch Adhesion', 'ASTM D3359 · the stated test classification, not a service-life prediction.'],
   ['mek', 'MEK Rub Test', 'ASTM D4752 · reported count. A missing TDS result is not a failed test.'],
+  ['performance', 'Published Performance Claims', 'Manufacturer statements and test scopes, not a new head-to-head benchmark or independent certification.'],
 ];
 const missing = 'Not reported in this TDS';
 export const coatingProducts = {
@@ -131,11 +137,27 @@ export const coatingProducts = {
 };
 
 export const comparisonGroups = {
-  primer: { label: 'Primer', ours: 'sn-primer', peers: ['kilz2', 'bullseye', 'cover', 'bin', 'stix', 'extreme'] },
-  paint: { label: 'Interior Paint', ours: 'sn-coating', peers: ['advance', 'emerald'] },
+  primer: { label: 'Primer', ours: 'sn-primer', peers: ['extreme', 'sw-shellac', 'sw-problock', 'renner643', 'renner083', 'stix', 'bin', 'cover', 'bullseye', 'kilz2'] },
+  paint: { label: 'Interior Paint', ours: 'sn-coating', peers: ['gallery', 'command', 'renner688', 'renner785', 'krystal', 'magnamax', 'emerald', 'advance'] },
 };
 
-Object.assign(coatingProducts, expandedPrimers);
+Object.assign(coatingProducts, expandedPrimers, professionalPrimers, professionalPaints);
+coatingProducts['sn-coating'].specs.system = 'Professional Waterborne Polyurethane · Pigmented';
+coatingProducts['sn-coating'].specs.catalysis = '2023 TDS: SWC010 catalyst, 10:1 by volume. Separate 2026 A-003 SDS does not establish equivalence or an updated mixing specification.';
+coatingProducts['sn-primer'].specs.system = 'Water-Based High-Build Stain-Blocking Primer';
+coatingProducts.advance.specs.system = 'Waterborne Alkyd Enamel · Pigmented';
+coatingProducts.emerald.specs.system = 'Waterborne Urethane-Modified Alkyd Enamel · Pigmented';
+coatingProducts.advance.specs.catalysis = 'No added catalyst specified in this sheet';
+coatingProducts.emerald.specs.catalysis = 'No added catalyst specified in this sheet';
+coatingProducts.renner643.specs.catalysis = 'Regional 2020 TDS: 1K / 2K; YC-M401, M402 or M404 at 4–8%. U.S. process guide differs; editions are not combined.';
+coatingProducts.renner083.specs.catalysis = '1K in the official process guide';
+coatingProducts.renner643.specs.unqualifiedSolids = '50 ± 2% · sheet does not specify weight / volume basis';
+coatingProducts.renner643.specs.volume = 'Not separately reported';
+coatingProducts.renner643.specs.weight = 'Not separately reported';
+coatingProducts['sn-coating'].specs.performance = 'TDS reports KCMA 9.4 ratings of 5, KCMA 9.5 detergent / water pass, and KCMA 9.2 / 9.3 heat / cold-check passes.';
+coatingProducts.gallery.specs.performance = 'PDS states it meets KCMA hardness and household-chemical test requirements when properly applied; no numeric hardness / rub result is provided.';
+coatingProducts.krystal.specs.performance = 'Historical PDS states it meets or exceeds chemical-resistance requirements for AWI System 5 conversion varnish and System 11 catalyzed polyurethane.';
+coatingProducts.magnamax.specs.performance = 'Historical PDS states it passes KCMA tests and AWI Systems 2 / 5 chemical and moisture resistance. Exact contemporary results are not established by this edition.';
 
 // Historical in-house report. Do not merge these test identities with today's SKUs.
 export const benchmarkProducts = [

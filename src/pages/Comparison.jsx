@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PageHeader from '../components/PageHeader';
 import Icon from '../components/Icon';
 import BrandEmblem from '../components/BrandEmblem';
@@ -66,30 +66,43 @@ function DocumentView({ doc, route }) {
 
 
 function ComparisonSheet({ groupKey, route }) {
+  const sheet = useRef(null);
+  const [activeBrand, setActiveBrand] = useState('');
   const group = comparisonGroups[groupKey];
   const products = [group.ours, ...group.peers].map(id => coatingProducts[id]);
-  const rows = specificationRows.filter(([key]) => groupKey === 'paint' || !['persoz','adhesion','mek'].includes(key));
-  const sourceIds = new Set(products.flatMap(p => [p.tds,p.sds]).filter(Boolean));
+  const rows = specificationRows.filter(([key]) => (groupKey === 'paint' || !['persoz','adhesion','mek'].includes(key)) && (key !== 'unqualifiedSolids' || products.some(p => p.specs[key])));
+  const sourceIds = new Set(products.flatMap(p => [p.tds,p.sds,...(p.extraSources || [])]).filter(Boolean));
+  const brandFor = p => p.brand || (p.name.startsWith('Sherwin-Williams') ? 'Sherwin-Williams' : p.name.startsWith('INSL-X') ? 'INSL-X' : p.name.startsWith('Benjamin Moore') ? 'Benjamin Moore' : p.name.startsWith('Zinsser') ? 'Zinsser' : p.name.startsWith('KILZ') ? 'KILZ' : 'Spray-Net');
+  const brands = [...new Set(products.slice(1).map(brandFor))];
+  const jumpToBrand = brand => {
+    const product = products.find(p => brandFor(p) === brand);
+    const container = sheet.current;
+    const target = container.querySelector(`[data-product="${product.id}"]`);
+    const pinned = [...container.querySelectorAll('thead th')].slice(0,2).reduce((sum,cell) => sum + cell.getBoundingClientRect().width,0);
+    container.scrollTo({left:Math.max(0,container.scrollLeft + target.getBoundingClientRect().left - container.getBoundingClientRect().left - pinned),behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
+    setActiveBrand(brand);
+  };
   if (groupKey === 'paint') { sourceIds.add('sn-benchmark'); sourceIds.add('sn-catalyst-sds'); }
   return <>
     <h2 className="comparison-sheet-title">{groupKey === 'primer' ? 'Cabinet Primers' : 'Cabinet Paint'} — All Brands</h2>
-    <p className="comparison-reading-note">Swipe across the sheet to see every brand. The property names and Spray-Net column stay in view.</p>
-    <div className="comparison-matrix-scroll" role="region" aria-label="All-brand comparison sheet" tabIndex={0}>
+    <div className="comparison-brand-jumps" role="group" aria-label="Jump to a brand"><span>Find a Brand</span>{brands.map(brand => <button key={brand} className="chip" aria-pressed={activeBrand === brand} onClick={() => jumpToBrand(brand)}>{brand}</button>)}</div>
+    <p className="comparison-reading-note">Tap a brand or swipe across the sheet. Property names, Spray-Net and the brand headings stay in view.</p>
+    <div ref={sheet} className="comparison-matrix-scroll" role="region" aria-label="All-brand comparison sheet" tabIndex={0}>
       <table className="comparison-matrix"><caption className="sr-only">{groupKey === 'primer' ? 'Primer' : 'Paint'} specifications and safety across all brands</caption>
-        <thead><tr><th scope="col">Compare</th>{products.map(p => <th scope="col" key={p.id}><span className="small-caps">{p.id.startsWith('sn-') ? 'SPRAY-NET' : 'REFERENCE PRODUCT'}</span>{p.name}<small>{p.detail}</small></th>)}</tr></thead>
+        <thead><tr><th scope="col">Compare</th>{products.map(p => <th scope="col" key={p.id} data-product={p.id}><span className="small-caps">{brandFor(p).toUpperCase()}</span>{p.name}<small>{p.detail}</small></th>)}</tr></thead>
         <tbody>
           <tr className="matrix-section"><th colSpan={products.length+1}>Specifications</th></tr>
-          {rows.map(([key,label,help]) => <tr key={key}><th scope="row">{label}{help && <details><summary>About This Value</summary><p>{help}</p></details>}</th>{products.map(p => <td key={p.id}>{p.specs[key] || 'Not Reported in This TDS'}</td>)}</tr>)}
+          {rows.map(([key,label,help]) => <tr key={key}><th scope="row">{label}{help && <details><summary>About This Value</summary><p>{help}</p></details>}</th>{products.map(p => <td key={p.id}>{p.specs[key] || p.missingLabel || 'Not Reported in This TDS'}</td>)}</tr>)}
           <tr className="matrix-section"><th colSpan={products.length+1}>Safety &amp; Materials</th></tr>
           <tr><th scope="row">Signal Word</th>{products.map(p => <td key={p.id}>{p.safety.signal}</td>)}</tr>
           <tr><th scope="row">SDS Classification</th>{products.map(p => <td key={p.id}><ul>{p.safety.classes.map(c => <li key={c}>{c}</li>)}</ul></td>)}</tr>
           <tr><th scope="row">Handling / Exposure Notes</th>{products.map(p => <td key={p.id}>{p.safety.summary}</td>)}</tr>
-          <tr><th scope="row">Disclosed Ingredients</th>{products.map(p => <td key={p.id}>{p.safety.ingredients.length ? <details><summary>Ingredients &amp; CAS Numbers</summary>{p.safety.ingredients.map(([name,cas,amount]) => <p key={cas}>{name}<br/><small>CAS {cas} · {amount}</small></p>)}</details> : 'Matched SDS Pending'}</td>)}</tr>
-          <tr><th scope="row">Source Editions &amp; Documents</th>{products.map(p => <td key={p.id}><SourceLink id={p.tds} route={route}>Read {p.id === 'extreme' || p.id === 'emerald' ? 'PDS' : 'TDS'}</SourceLink>{p.sds && <SourceLink id={p.sds} route={route}>Read SDS</SourceLink>}<details><summary>Edition &amp; Product Notes</summary><p>{p.note}</p><p>{p.safety.edition}</p></details></td>)}</tr>
+          <tr><th scope="row">Selected Disclosed Ingredients</th>{products.map(p => <td key={p.id}>{p.safety.ingredients.length ? <details><summary>Selected Ingredients &amp; CAS Numbers</summary><p>Selected disclosures for reading. The original SDS contains the complete reported list.</p>{p.safety.ingredients.map(([name,cas,amount]) => <p key={`${cas}-${name}`}>{name}<br/><small>CAS {cas} · {amount}</small></p>)}</details> : 'Matched SDS Pending'}</td>)}</tr>
+          <tr><th scope="row">Source Editions &amp; Documents</th>{products.map(p => <td key={p.id}><SourceLink id={p.tds} route={route}>Read {docById(p.tds).kind}</SourceLink>{p.sds && <SourceLink id={p.sds} route={route}>Read SDS</SourceLink>}<details><summary>Edition &amp; Product Notes</summary><p>{p.note}</p><p>{p.safety.edition}</p></details></td>)}</tr>
         </tbody>
       </table>
     </div>
-    <p className="comparison-reading-note">Figures retain their reporting bases. Coverage depends on film thickness; VOC content is not an indoor-emissions test. SDS classifications describe supplied-product hazards, not a ranking of cured-finish safety. Missing measurements are not failed tests.</p>
+    <p className="comparison-reading-note">Figures retain their reporting bases. Coverage depends on film thickness; VOC content is not an indoor-emissions test. SDS classifications describe the identified supplied component, not every catalyst or the whole mixed system. Clear finishes, pigmented paints and regional formulas are identified separately. Missing measurements are not failed tests.</p>
     {groupKey === 'paint' && <>
       <h2 className="comparison-sheet-title">Cabinet Coating Benchmarks — All Brands</h2>
       <p className="comparison-reading-note">Our in-house ASTM / KCMA report. Test date, exact competitor SKUs, sheen and cure schedule are not printed; these historical test identities differ from the specification products above.</p>
@@ -115,6 +128,6 @@ export default function Comparison({ route, documentId }) {
     {!area && <div className="comparison-empty"><BrandEmblem size={42}/><h2>Choose Interior or Exterior</h2><p>Explore the coatings, then compare the brands together on one sheet.</p></div>}
     {area === 'interior' && !coat && <div className="comparison-empty"><h2>Start with Primer or Paint</h2><p>Cabinet refinishing specifications, materials and safety information — side by side.</p></div>}
     {area === 'exterior' && <div className="comparison-empty"><h2>Exterior Comparison Coming Next</h2><p>Exterior coating sheets will be added here. The interior cabinet comparison is ready to explore.</p><button className="button button-dark" onClick={() => chooseArea('interior')}>Explore Interior</button></div>}
-    {area === 'interior' && coat && <ComparisonSheet groupKey={coat} route={route}/>}
+    {area === 'interior' && coat && <ComparisonSheet key={coat} groupKey={coat} route={route}/>}
   </section>;
 }

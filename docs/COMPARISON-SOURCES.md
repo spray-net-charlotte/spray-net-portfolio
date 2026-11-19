@@ -4,7 +4,7 @@ Checked November 19, 2026. Scope: **cabinet refinishing primer and topcoat**, no
 
 ## Source files and traceability
 
-`src/data/comparisonDocuments.js` records the identity, source URL where available, printed date or footer code, page count, local path and SHA-256 of every original. `src/data/comparisons.js` stores the transcribed figures and their limitations. All 22 complete PDFs, 119 page images and per-page extracted text are in `public/media/comparison/<document-id>/`. The in-app reader stays inside the portfolio, supports fullscreen and selectable text, and works offline after service-worker installation.
+`src/data/comparisonDocuments.js` records the identity, source URL where available, printed date or footer code, page count, local path and SHA-256 of every original. `src/data/comparisons.js` stores the transcribed figures and their limitations. All 39 captured source PDFs, 287 page images and per-page extracted text are in `public/media/comparison/<document-id>/`. The in-app reader stays inside the portfolio, supports fullscreen and selectable text, and works offline after service-worker installation.
 
 Spray-Net originals were retrieved from the existing South Charlotte sales library (`Sales/Spray-Net VS the World`) and cross-checked with Ezee Assist's references in Brave. The Ezee answer was used for discovery; values were verified against the PDFs, including visual inspection of the benchmark table. Ezee-generated summaries are not used as primary evidence. Its temporary signed attachment links are not published.
 
@@ -38,7 +38,7 @@ Spray-Net originals were retrieved from the existing South Charlotte sales libra
 - Never treat a missing value as zero or a failed test. Never compare weight solids directly with volume solids.
 - Retain VOC reporting bases. Spray-Net's `<150 g/L minus water/exempt` and `<65 g/L applied` are different quantities. A lower VOC figure alone does not prove lower exposure, safer application, lower cured-film emissions or longer life.
 - Coverage must retain its film thickness and theoretical/practical basis. No automatic best-product scoring.
-- SDS Section 2 classifications and Section 3 disclosed ingredients are available for **both** products. Signal words and category numbers are not a universal safety score; ingredients are not the complete recipe. Classification differences may reflect jurisdiction, reporting rules and source editions. Do not claim any complete system is non-toxic from the catalyst SDS.
+- SDS Section 2 classifications and selected Section 3 disclosed ingredients are shown where a matched source is captured; missing classifications remain unverified. Signal words and category numbers are not a universal safety score; ingredients are not the complete recipe. Classification differences may reflect jurisdiction, reporting rules and source editions. Do not claim any complete system is non-toxic from the catalyst SDS.
 - The ASTM D3363 pencil scale is ordinal, not a ratio. HB versus 7B does not mean a percentage or multiple. Persoz seconds (ASTM D4366) are a different test.
 - Reported MEK counts and KCMA results apply to their test, not every household chemical or real-world service life. Do not call the in-house sheet an independent certification.
 - Keep full originals and metadata when adding data; update the source register and rerun validation / tablet tests. Do not add unsupported safety, superiority or warranty claims.
@@ -65,3 +65,8 @@ All eight added source documents include original hashes, complete page images, 
 
 
 Matching SDS follow-up: KILZ 2 U.S. No. 2000, March 7, 2024, retrieved from the English / U.S. entry in the manufacturer-linked 3E catalog (Sections 2–3, p. 1). High Hide Cover Stain SKU 3551 SDS, November 1, 2022, retrieved from Rust-Oleum (Sections 2–3, pp. 1–2). Earlier pending-SDS notes above are resolved; no other SKU was substituted.
+
+
+## Professional expansion — 1.8.2
+
+See [Professional coating references](PROFESSIONAL-COATINGS.md) for all additional products, exact source editions, catalyst scope, regional Renner references and remaining source gaps. The current set contains 39 originals and 287 rendered pages. The 1.8.1 six-primer section above records that earlier source set; the current primer sheet has ten competitor references.
