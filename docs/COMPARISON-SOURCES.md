@@ -4,7 +4,7 @@ Checked November 19, 2026. Scope: **cabinet refinishing primer and topcoat**, no
 
 ## Source files and traceability
 
-`src/data/comparisonDocuments.js` records the identity, source URL where available, printed date or footer code, page count, local path and SHA-256 of every original. `src/data/comparisons.js` stores the transcribed figures and their limitations. All 14 complete PDFs, 75 page images and per-page extracted text are in `public/media/comparison/<document-id>/`. The in-app reader stays inside the portfolio, supports fullscreen and selectable text, and works offline after service-worker installation.
+`src/data/comparisonDocuments.js` records the identity, source URL where available, printed date or footer code, page count, local path and SHA-256 of every original. `src/data/comparisons.js` stores the transcribed figures and their limitations. All 22 complete PDFs, 119 page images and per-page extracted text are in `public/media/comparison/<document-id>/`. The in-app reader stays inside the portfolio, supports fullscreen and selectable text, and works offline after service-worker installation.
 
 Spray-Net originals were retrieved from the existing South Charlotte sales library (`Sales/Spray-Net VS the World`) and cross-checked with Ezee Assist's references in Brave. The Ezee answer was used for discovery; values were verified against the PDFs, including visual inspection of the benchmark table. Ezee-generated summaries are not used as primary evidence. Its temporary signed attachment links are not published.
 
@@ -50,3 +50,18 @@ Official cabinet FAQ: https://www.spray-net.com/faqs/what-is-your-warranty-for-k
 Official contract FAQ: https://www.spray-net.com/faqs/how-does-my-contract-warranty-work
 
 Checked November 19, 2026. The cabinet FAQ advertises a 15-year no-peel service warranty and distinguishes chips, scratches, accidental damage and wood damage. The contract FAQ describes product / labor peeling coverage subject to the written proposal. The app summarizes this scope and points to the customer's written agreement; it does not create new terms or imply that laboratory results prove a 15-year lifespan. The full current South Charlotte customer contract was not part of this source set.
+
+
+## Expanded Primer Sheet — 1.8.1
+
+Six competitor primers now appear on one sheet. Selection covers general-purpose acrylic, solvent-based stain blocking, and specialty bonding; no sales-volume survey establishes a most-used ranking. KILZ 2 and Bulls Eye 1-2-3 supply the general-purpose end of the range. A lower price tier is not proof of poor performance.
+
+- KILZ 2 No. 2000 U.S. TDS, March 2019: specifications p. 1. Manufacturer CDN source is recorded in metadata. The manufacturer-linked 3E catalog supplied the matching U.S. March 7, 2024 SDS (Sections 2–3, p. 1).
+- Bulls Eye 1-2-3: BEY123-01 TDS, February 8, 2022, physical data p. 3; SKU 2001 SDS, November 5, 2025, Sections 2–3 p. 1. No assigned signal word is preserved alongside the 11% unknown acute-toxicity statement.
+- High Hide Cover Stain: CVS-04 TDS, March 18, 2022, physical data p. 3; explicitly the 350 VOC formulation. Matched SKU 3551 SDS, November 1, 2022, Sections 2–3 pp. 1–2.
+- Extreme Bond: PDS October 2023, technical data p. 1; White B51W1150 SDS, November 3, 2026, Sections 2–3 pp. 1–2. PDS lists White but prints Clear B51W01150 above its numerical block; the discrepancy is retained in product notes.
+
+All eight added source documents include original hashes, complete page images, extracted text and offline caching. Exterior is a navigation entry with an explicit empty state, not a populated or verified comparison yet.
+
+
+Matching SDS follow-up: KILZ 2 U.S. No. 2000, March 7, 2024, retrieved from the English / U.S. entry in the manufacturer-linked 3E catalog (Sections 2–3, p. 1). High Hide Cover Stain SKU 3551 SDS, November 1, 2022, retrieved from Rust-Oleum (Sections 2–3, pp. 1–2). Earlier pending-SDS notes above are resolved; no other SKU was substituted.

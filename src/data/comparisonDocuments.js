@@ -1,4 +1,3 @@
-// Source copies verified November 19, 2026. See docs/COMPARISON-SOURCES.md.
 export const comparisonDocuments = [
   {
     "id": "sn-primer-tds",
@@ -181,5 +180,109 @@ export const comparisonDocuments = [
     "pages": 14,
     "base": "media/comparison/emerald-sds",
     "sha256": "2baef97eaeb73ec5ed1a842cf93c8d5e8bc10c1e9de583978103479f1af66c25"
+  },
+  {
+    "id": "extreme-tds",
+    "title": "Sherwin-Williams Extreme Bond",
+    "kind": "PDS",
+    "edition": "October 2023",
+    "variant": "B51W01150 · White; numerical block prints Clear",
+    "sourceUrl": "https://www.sherwin-williams.com/document/PDS/en/035777912874/",
+    "sourceLabel": "Manufacturer document",
+    "checked": "2026-11-19",
+    "pages": 2,
+    "base": "media/comparison/extreme-tds",
+    "sha256": "325ce15310c282ca43f0fb0d13a6086f2f3eb11a3472dfb31b0b7a36bdbb5e29"
+  },
+  {
+    "id": "extreme-sds",
+    "title": "Sherwin-Williams Extreme Bond",
+    "kind": "SDS",
+    "edition": "November 3, 2026",
+    "variant": "B51W1150 · White",
+    "sourceUrl": "https://www.sherwin-williams.com/document/SDS/en/035777912874/US/",
+    "sourceLabel": "Manufacturer document",
+    "checked": "2026-11-19",
+    "pages": 16,
+    "base": "media/comparison/extreme-sds",
+    "sha256": "022961dd5c88efed3d834eca39cf550e439d1416b8eb7f169af02c448f7828dd"
+  },
+  {
+    "id": "bullseye-tds",
+    "title": "Zinsser Bulls Eye 1-2-3",
+    "kind": "TDS",
+    "edition": "February 8, 2022",
+    "variant": "BEY123-01 · Water-Based · White",
+    "sourceUrl": "https://www.rustoleum.com/-/media/DigitalEncyclopedia/Documents/RustoleumUSA/TDS/English/CBG/Zinsser/BEY123-01-Bulls-Eye-1-2-3%20Water-based-Primer-TDS-1.ashx",
+    "sourceLabel": "Manufacturer document",
+    "checked": "2026-11-19",
+    "pages": 3,
+    "base": "media/comparison/bullseye-tds",
+    "sha256": "06de3c0a2fd72a75f2c7c063db3a79f4c59974634a8bd02f20b2aa3577d9d047"
+  },
+  {
+    "id": "bullseye-sds",
+    "title": "Zinsser Bulls Eye 1-2-3",
+    "kind": "SDS",
+    "edition": "November 5, 2025",
+    "variant": "2001 · One Gallon",
+    "sourceUrl": "https://www.rustoleum.com/MSDS/ENGLISH/2001.pdf",
+    "sourceLabel": "Manufacturer document",
+    "checked": "2026-11-19",
+    "pages": 5,
+    "base": "media/comparison/bullseye-sds",
+    "sha256": "3d32d0bb2ef588bbdf7505ae672b1b502c696e2a30c00baf7869e1e1516c7c07"
+  },
+  {
+    "id": "kilz2-tds",
+    "title": "KILZ 2 All-Purpose",
+    "kind": "TDS",
+    "edition": "March 2019",
+    "variant": "No. 2000 · U.S.",
+    "sourceUrl": "https://s7d9.scene7.com/is/content/behr/2000_tds_uspdf",
+    "sourceLabel": "Manufacturer document",
+    "checked": "2026-11-19",
+    "pages": 2,
+    "base": "media/comparison/kilz2-tds",
+    "sha256": "6f275bec7aaeee71e803240e1f4142ee50f97b99f94b0a56dacbae6532c44ec3"
+  },
+  {
+    "id": "cover-tds",
+    "title": "Zinsser High Hide Cover Stain",
+    "kind": "TDS",
+    "edition": "March 18, 2022",
+    "variant": "CVS-04 · 350 g/L formulation",
+    "sourceUrl": "https://www.rustoleum.com/-/media/DigitalEncyclopedia/Documents/RustoleumUSA/TDS/English/CBG/Zinsser/CVS-04_High_Hide_Cover-Stain_Primer_TDS_1.ashx",
+    "sourceLabel": "Manufacturer document",
+    "checked": "2026-11-19",
+    "pages": 3,
+    "base": "media/comparison/cover-tds",
+    "sha256": "fc4fc1a7fccee9c9e9b82e77d0375d6f83404cd0ab6667b26a951ee82832f531"
+  },
+  {
+    "id": "kilz2-sds",
+    "title": "KILZ 2 All-Purpose",
+    "kind": "SDS",
+    "edition": "March 7, 2024",
+    "variant": "No. 2000 · U.S. · Version 02",
+    "sourceUrl": "https://www.3eonline.com/ImageServer/ImageViewer.aspx?id=I%2fOOuPyv6mw4ejsJkNLEp%2bWaDpQl3JvNPLMD8Gd9ExjB5KWf2xCTn6bktdXDojPye0xLecDFN4fuj5%2bzSNBjrbWTlFKWa%2fOoi3L7qd%2fvYePWT5jHbYuYjOS7bnkvRxT60CK%2bZ39BpTZ00kgpQqGMJ3WVF1XNGcCL0elPJeyklUtEp4aRkUZMVXZNIXGwEabUrKDi2%2fi0BZoKpJ%2b8exBLtw%3d%3d",
+    "sourceLabel": "Manufacturer document",
+    "checked": "2026-11-19",
+    "pages": 7,
+    "base": "media/comparison/kilz2-sds",
+    "sha256": "a89ceb8fbd330f2b0f123ee7d5d03b55906907fa7389d21157952b3c6a11d12b"
+  },
+  {
+    "id": "cover-sds",
+    "title": "Zinsser High Hide Cover Stain",
+    "kind": "SDS",
+    "edition": "November 1, 2022",
+    "variant": "3551 · High Hide · One Gallon",
+    "sourceUrl": "https://www.rustoleum.com/MSDS/ENGLISH/3551.PDF",
+    "sourceLabel": "Manufacturer document",
+    "checked": "2026-11-19",
+    "pages": 6,
+    "base": "media/comparison/cover-sds",
+    "sha256": "81a1779b199557ae051ba81ef361adc08a6ef55fb15363eddc8b035bbb5a5c9b"
   }
 ];

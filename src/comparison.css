@@ -1,4 +1,27 @@
 .comparison-choices { display:flex; flex-wrap:wrap; gap:8px; }
+.comparison-flow-step { padding-top:16px; }
+.comparison-sheet-title { margin:30px 0 12px; font-size:28px; }
+.comparison-matrix-scroll { max-width:100%; overflow:auto; border:1px solid #c7d5df; border-radius:12px; margin:20px 0; overscroll-behavior-x:contain; }
+.comparison-matrix { border-collapse:separate; border-spacing:0; width:max-content; min-width:100%; table-layout:fixed; font-size:17px; }
+.comparison-matrix th,.comparison-matrix td { width:240px; min-width:240px; max-width:240px; padding:18px; vertical-align:top; text-align:left; line-height:1.55; border-right:1px solid #d8e2e8; border-bottom:1px solid #d8e2e8; background:#fff; overflow-wrap:anywhere; }
+.comparison-matrix tr > :first-child { position:sticky; left:0; z-index:2; width:160px; min-width:160px; max-width:160px; background:#edf3f7; font-size:16px; }
+.comparison-matrix tr > :nth-child(2) { position:sticky; left:160px; z-index:1; width:220px; min-width:220px; max-width:220px; background:#f1f7fa; border-right:3px solid #8cabbf; font-weight:700; }
+.comparison-matrix thead th { background:#edf3f7; font-size:19px; }
+.comparison-matrix thead th:nth-child(2) { background:var(--ink); color:#fff; }
+.comparison-matrix small { display:block; font-size:14px; font-weight:400; margin-top:8px; }
+.comparison-matrix .matrix-section th { background:#dce8ef; color:var(--ink); max-width:none; }
+.comparison-matrix summary,.comparison-source-library > summary { cursor:pointer; padding:12px 0; min-height:48px; font-size:16px; font-weight:800; }
+.comparison-matrix ul { padding-left:18px; margin:0; }
+.comparison-matrix li { margin-bottom:10px; }
+.comparison-matrix details p { font-weight:400; font-size:14px; padding:10px 0; }
+.comparison-source-library { margin-top:30px; }
+.comparison-source-library h2 { margin:15px 0; }
+@media(max-width:600px) {
+ .comparison-matrix tr > :first-child { width:105px; min-width:105px; max-width:105px; font-size:14px; padding:10px; }
+ .comparison-matrix tr > :nth-child(2) { left:105px; width:145px; min-width:145px; max-width:145px; padding:10px; }
+ .comparison-matrix { font-size:15px; }
+ .comparison-matrix thead th { font-size:16px; }
+}
 .comparison-choices .chip { min-height:48px; font-size:17px; padding:10px 20px; }
 .comparison-choices .chip[aria-pressed="true"] { background:var(--ink); color:white; border-color:var(--ink); font-weight:800; }
 .comparison-system-note { display:flex; align-items:center; gap:15px; padding:18px 0 22px; color:var(--ink); }

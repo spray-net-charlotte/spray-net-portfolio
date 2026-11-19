@@ -5,11 +5,10 @@ import BrandEmblem from '../components/BrandEmblem';
 import Photo from '../components/Photo';
 import Lightbox from '../components/Lightbox';
 import { mediaUrl } from '../lib/media';
-import { closeOverlay, updateQuery } from '../lib/navigation';
+import { closeOverlay, navigate, updateQuery } from '../lib/navigation';
 import { benchmarkProducts, benchmarkRows, catalystSafety, coatingProducts, comparisonChecked, comparisonDocuments, comparisonGroups, specificationRows } from '../data/comparisons';
 import '../comparison.css';
 
-const views = [['specs', 'Specifications'], ['safety', 'Safety & Materials'], ['benchmarks', 'Benchmarks'], ['sources', 'Source Documents']];
 const docById = (id) => comparisonDocuments.find((doc) => doc.id === id);
 function sourceHref(id, route) {
   const params = new URLSearchParams(route.params);
@@ -22,28 +21,6 @@ function SourceLink({ id, route, children }) {
 }
 function ChoiceGroup({ label, options, value, onChange }) {
   return <div className="comparison-choices" role="group" aria-label={label}>{options.map(([id, text]) => <button key={id} className="chip" aria-pressed={value === id} onClick={() => onChange(id)}>{text}</button>)}</div>;
-}
-function DataTable({ title, ours, peer, rows }) {
-  return <div className="coating-table-wrap"><table className="coating-table">
-    <caption className="sr-only">{title}</caption>
-    <thead><tr><th scope="col">Property</th><th scope="col"><span className="small-caps">SPRAY-NET</span>{ours}</th><th scope="col">{peer}</th></tr></thead>
-    <tbody>{rows.map(([label, note, left, right]) => <tr key={label}><th scope="row">{label}{note && <span>{note}</span>}</th><td>{left}</td><td>{right}</td></tr>)}</tbody>
-  </table></div>;
-}
-function SafetyCard({ product, route, ours }) {
-  const safety = product.safety;
-  return <article className={`coating-safety-card ${ours ? 'is-spraynet' : ''}`}>
-    <p className="small-caps">{ours ? 'SPRAY-NET' : 'COMPARISON PRODUCT'}</p>
-    <h2>{product.name}</h2><p className="comparison-document-edition">{safety.edition}</p>
-    <p className="coating-signal">Signal Word: {safety.signal}</p>
-    <ul>{safety.classes.map((item) => <li key={item}>{item}</li>)}</ul>
-    <p>{safety.summary}</p>
-    <details className="comparison-ingredients"><summary>Listed Ingredients &amp; CAS Numbers</summary>
-      <p>Section 3 disclosures, by weight. These lists are not complete formulations.</p>
-      <dl>{safety.ingredients.map(([name, cas, amount]) => <div key={cas}><dt>{name}<small>CAS {cas}</small></dt><dd>{amount}</dd></div>)}</dl>
-    </details>
-    <SourceLink id={product.sds} route={route}>Read SDS · {safety.pages}</SourceLink>
-  </article>;
 }
 function DocumentCard({ doc, route }) {
   return <a className="comparison-document-card" href={sourceHref(doc.id, route)}>
@@ -87,45 +64,57 @@ function DocumentView({ doc, route }) {
   </section>;
 }
 
+
+function ComparisonSheet({ groupKey, route }) {
+  const group = comparisonGroups[groupKey];
+  const products = [group.ours, ...group.peers].map(id => coatingProducts[id]);
+  const rows = specificationRows.filter(([key]) => groupKey === 'paint' || !['persoz','adhesion','mek'].includes(key));
+  const sourceIds = new Set(products.flatMap(p => [p.tds,p.sds]).filter(Boolean));
+  if (groupKey === 'paint') { sourceIds.add('sn-benchmark'); sourceIds.add('sn-catalyst-sds'); }
+  return <>
+    <h2 className="comparison-sheet-title">{groupKey === 'primer' ? 'Cabinet Primers' : 'Cabinet Paint'} — All Brands</h2>
+    <p className="comparison-reading-note">Swipe across the sheet to see every brand. The property names and Spray-Net column stay in view.</p>
+    <div className="comparison-matrix-scroll" role="region" aria-label="All-brand comparison sheet" tabIndex={0}>
+      <table className="comparison-matrix"><caption className="sr-only">{groupKey === 'primer' ? 'Primer' : 'Paint'} specifications and safety across all brands</caption>
+        <thead><tr><th scope="col">Compare</th>{products.map(p => <th scope="col" key={p.id}><span className="small-caps">{p.id.startsWith('sn-') ? 'SPRAY-NET' : 'REFERENCE PRODUCT'}</span>{p.name}<small>{p.detail}</small></th>)}</tr></thead>
+        <tbody>
+          <tr className="matrix-section"><th colSpan={products.length+1}>Specifications</th></tr>
+          {rows.map(([key,label,help]) => <tr key={key}><th scope="row">{label}{help && <details><summary>About This Value</summary><p>{help}</p></details>}</th>{products.map(p => <td key={p.id}>{p.specs[key] || 'Not Reported in This TDS'}</td>)}</tr>)}
+          <tr className="matrix-section"><th colSpan={products.length+1}>Safety &amp; Materials</th></tr>
+          <tr><th scope="row">Signal Word</th>{products.map(p => <td key={p.id}>{p.safety.signal}</td>)}</tr>
+          <tr><th scope="row">SDS Classification</th>{products.map(p => <td key={p.id}><ul>{p.safety.classes.map(c => <li key={c}>{c}</li>)}</ul></td>)}</tr>
+          <tr><th scope="row">Handling / Exposure Notes</th>{products.map(p => <td key={p.id}>{p.safety.summary}</td>)}</tr>
+          <tr><th scope="row">Disclosed Ingredients</th>{products.map(p => <td key={p.id}>{p.safety.ingredients.length ? <details><summary>Ingredients &amp; CAS Numbers</summary>{p.safety.ingredients.map(([name,cas,amount]) => <p key={cas}>{name}<br/><small>CAS {cas} · {amount}</small></p>)}</details> : 'Matched SDS Pending'}</td>)}</tr>
+          <tr><th scope="row">Source Editions &amp; Documents</th>{products.map(p => <td key={p.id}><SourceLink id={p.tds} route={route}>Read {p.id === 'extreme' || p.id === 'emerald' ? 'PDS' : 'TDS'}</SourceLink>{p.sds && <SourceLink id={p.sds} route={route}>Read SDS</SourceLink>}<details><summary>Edition &amp; Product Notes</summary><p>{p.note}</p><p>{p.safety.edition}</p></details></td>)}</tr>
+        </tbody>
+      </table>
+    </div>
+    <p className="comparison-reading-note">Figures retain their reporting bases. Coverage depends on film thickness; VOC content is not an indoor-emissions test. SDS classifications describe supplied-product hazards, not a ranking of cured-finish safety. Missing measurements are not failed tests.</p>
+    {groupKey === 'paint' && <>
+      <h2 className="comparison-sheet-title">Cabinet Coating Benchmarks — All Brands</h2>
+      <p className="comparison-reading-note">Our in-house ASTM / KCMA report. Test date, exact competitor SKUs, sheen and cure schedule are not printed; these historical test identities differ from the specification products above.</p>
+      <div className="comparison-matrix-scroll" role="region" aria-label="All-brand benchmark sheet" tabIndex={0}><table className="comparison-matrix"><caption className="sr-only">In-house cabinet coating benchmarks across all brands</caption><thead><tr><th scope="col">Test</th><th scope="col">Spray-Net Kitchen Cabinet Paint</th>{benchmarkProducts.map(p => <th scope="col" key={p.id}>{p.name}</th>)}</tr></thead><tbody>{benchmarkRows.map(([label,method,result,key,index]) => <tr key={label}><th scope="row">{label}<small>{method}</small></th><td>{result}</td>{benchmarkProducts.map(p => <td key={p.id}>{index === undefined ? p[key] : p[key][index]}</td>)}</tr>)}</tbody></table></div>
+      <SourceLink id="sn-benchmark" route={route}>Read Complete Benchmark Report</SourceLink>
+      <article className="comparison-catalyst"><h2>{catalystSafety.name}</h2><p>{catalystSafety.edition} · {catalystSafety.classes[0]}</p><p>{catalystSafety.summary}</p><SourceLink id="sn-catalyst-sds" route={route}>Read Catalyst SDS</SourceLink></article>
+    </>}
+    <details className="comparison-source-library"><summary>Source Documents &amp; Product Notes</summary><h2>The Source Library</h2><div className="comparison-document-grid">{comparisonDocuments.filter(d => sourceIds.has(d.id)).map(doc => <DocumentCard key={doc.id} doc={doc} route={route}/>)}</div></details>
+    <aside className="comparison-warranty"><Icon name="shield" size={34}/><div><h2>Our 15-Year No-Peel Warranty</h2><p>Our cabinet refinishing service includes a 15-year warranty against peeling, subject to your written proposal and warranty terms. Preparation, application and the complete coating system matter. Chips, scratches and substrate damage are not blanket-covered; your written agreement defines coverage.</p><details><summary>Warranty Reference</summary><p>Spray-Net cabinet-warranty and contract-warranty FAQs, checked {comparisonChecked}. Laboratory tests do not calculate a 15-year service life.</p><p className="comparison-source-url">spray-net.com/faqs/what-is-your-warranty-for-kitchen-cabinets<br/>spray-net.com/faqs/how-does-my-contract-warranty-work</p></details></div></aside>
+    <p className="comparison-reviewed">Sources checked {comparisonChecked}. The primer selection spans general-purpose, solvent-based stain blocking and specialty bonding products; it is not a verified sales-volume ranking.</p>
+  </>;
+}
 export default function Comparison({ route, documentId }) {
   const doc = docById(documentId);
-  if (documentId) return doc ? <DocumentView key={doc.id} doc={doc} route={route} /> : <><PageHeader back="/comparison" backLabel="Comparison" title="Document Not Found" description="Choose a source from the comparison library." /><a className="button button-dark" href="#/comparison?view=sources">Browse Source Documents</a></>;
-  const groupKey = route.params.get('coat') === 'primer' ? 'primer' : 'paint';
-  const group = comparisonGroups[groupKey];
-  const ours = coatingProducts[group.ours];
-  const peerKey = group.peers.includes(route.params.get('peer')) ? route.params.get('peer') : group.peers[0];
-  const peer = coatingProducts[peerKey];
-  const view = views.some(([key]) => key === route.params.get('view')) ? route.params.get('view') : 'specs';
-  const benchmark = benchmarkProducts.find((item) => item.id === route.params.get('test')) || benchmarkProducts[0];
-  const sourceIds = new Set([ours.tds, ours.sds, ...group.peers.flatMap((id) => [coatingProducts[id].tds, coatingProducts[id].sds]), ...(groupKey === 'paint' ? ['sn-catalyst-sds', 'sn-benchmark'] : [])]);
+  if (documentId) return doc ? <DocumentView key={doc.id} doc={doc} route={route}/> : <><PageHeader back="/comparison" backLabel="Comparison" title="Document Not Found"/><a href="#/comparison" className="button button-dark">Back to Comparison</a></>;
+  const area = route.params.get('area') || (route.params.has('coat') ? 'interior' : '');
+  const coat = ['primer','paint'].includes(route.params.get('coat')) ? route.params.get('coat') : '';
+  const chooseArea = value => navigate(`/comparison?area=${value}`);
   return <section className="coating-comparison">
-    <PageHeader eyebrow="THE DETAILS BEHIND THE FINISH" title="Coating Comparison" description="Explore the chemistry, specifications and test results behind our cabinet finishing system." />
-    <ChoiceGroup label="Coating type" options={Object.entries(comparisonGroups).map(([key, value]) => [key, value.label])} value={groupKey} onChange={(value) => updateQuery(route, 'coat', value)} />
-    <div className="comparison-system-note"><BrandEmblem size={34} /><p><strong>Made for Cabinets.</strong> Interior primer and cabinet topcoat references. Each figure stays with its product, source edition and test method.</p></div>
-    <ChoiceGroup label="Comparison view" options={views} value={view} onChange={(value) => updateQuery(route, 'view', value)} />
-    {(view === 'specs' || view === 'safety') && <>
-      <div className="comparison-peer-picker"><span>Compare With</span><ChoiceGroup label="Comparison product" options={group.peers.map((key) => [key, coatingProducts[key].name])} value={peerKey} onChange={(value) => updateQuery(route, 'peer', value)} /></div>
-      <div className="comparison-editions"><p><strong>{ours.name}</strong>{ours.note}</p><p><strong>{peer.name}</strong>{peer.note}</p></div>
-    </>}
-    {view === 'specs' && <>
-      <DataTable title={`${group.label} published technical specifications`} ours={ours.name} peer={peer.name} rows={specificationRows.filter(([key]) => groupKey === 'paint' || !['persoz', 'adhesion', 'mek'].includes(key)).map(([key, label, help]) => [label, help, ours.specs[key] || 'Not reported in this TDS', peer.specs[key] || 'Not reported in this TDS'])} />
-      <div className="comparison-source-row"><SourceLink id={ours.tds} route={route}>Spray-Net TDS · Pages 1–2</SourceLink><SourceLink id={peer.tds} route={route}>{peer.name} {peer.id === 'emerald' ? 'PDS' : 'TDS'} · {peer.id === 'bin' ? 'Pages 2–3' : 'Page 1'}</SourceLink></div>
-      <p className="comparison-reading-note">Published specifications describe each coating. They are not a head-to-head performance test. Unreported values remain unreported; coverage, solids and drying times do not establish an overall ranking.</p>
-    </>}
-    {view === 'safety' && <>
-      <p className="comparison-reading-note">SDS classifications describe the supplied product and handling hazards. They do not rank the safety of a cured kitchen finish. VOC content is different from measured indoor-air emissions. Follow the full SDS, ventilation and protective-equipment requirements for every component.</p>
-      <div className="comparison-safety-grid"><SafetyCard product={ours} ours route={route} /><SafetyCard product={peer} route={route} /></div>
-      {groupKey === 'paint' && <article className="comparison-catalyst"><h3>{catalystSafety.name}</h3><p className="comparison-document-edition">{catalystSafety.edition}</p><p><strong>{catalystSafety.classes[0]} · {catalystSafety.signal}</strong></p><p>{catalystSafety.summary}</p><SourceLink id="sn-catalyst-sds" route={route}>Read Catalyst SDS · Pages 1–2</SourceLink></article>}
-    </>}
-    {view === 'benchmarks' && (groupKey === 'primer' ? <div className="comparison-empty"><Icon name="layers" size={36} /><h2>Primer Benchmarking</h2><p>A matched primer benchmark report is not included in this source set. Explore the published primer specifications or switch to Interior Paint for cabinet coating tests.</p><button className="button button-dark" onClick={() => updateQuery(route, 'coat', 'paint')}>See Cabinet Coating Tests<Icon name="arrow" size={18} /></button></div> : <>
-      <div className="comparison-benchmark-intro"><p className="eyebrow">IN-HOUSE CABINET COATING TESTS</p><h2>The Finish, Put to the Test.</h2><p>Hardness, solvent resistance, household stains and washing. These are results reported in our cabinet coating comparison sheet, using the ASTM and KCMA methods listed below.</p><p className="comparison-reading-note">No test date, exact competitor SKUs, sheen, batch or cure schedule is printed. Treat these as the report’s historical results, not proof of performance for today’s formulations or an independent certification.</p></div>
-      <label className="comparison-benchmark-select">Comparison in the Report<select value={benchmark.id} onChange={(event) => updateQuery(route, 'test', event.target.value)}>{benchmarkProducts.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
-      <DataTable title="In-house cabinet coating benchmark results" ours="Kitchen Cabinet Paint" peer={benchmark.name} rows={benchmarkRows.map(([label, method, result, key, index]) => [label, method, result, index === undefined ? benchmark[key] : benchmark[key][index]])} />
-      <SourceLink id="sn-benchmark" route={route}>Read the Complete Benchmark Report · Page 1</SourceLink>
-      <p className="comparison-reading-note">Pencil hardness (HB) and Persoz pendulum hardness (80 seconds in our TDS, ASTM D4366) are different measurements. A MEK rub result describes this solvent test; it does not establish resistance to every chemical.</p>
-    </>)}
-    {view === 'sources' && <><div className="comparison-library-heading"><h2>The Source Library</h2><p>TDS / PDS: technical specifications. SDS: handling, ingredients and safety. All pages are included for offline reading once the portfolio is ready offline.</p></div><div className="comparison-document-grid">{comparisonDocuments.filter((item) => sourceIds.has(item.id)).map((item) => <DocumentCard key={item.id} doc={item} route={route} />)}</div></>}
-    <aside className="comparison-warranty"><Icon name="shield" size={34} /><div><h2>Our 15-Year No-Peel Warranty</h2><p>Our cabinet refinishing service includes a 15-year warranty against peeling, subject to your written proposal and warranty terms. Chips, scratches, accidental damage and wood / substrate damage are not blanket-covered. Your written agreement defines coverage and exclusions.</p><p>Preparation, application and the complete coating system matter. Laboratory results support an understanding of the finish; they do not calculate a 15-year service life.</p><details><summary>Warranty Reference</summary><p>Spray-Net cabinet-warranty FAQ and contract-warranty FAQ, checked {comparisonChecked}.</p><p className="comparison-source-url">spray-net.com/faqs/what-is-your-warranty-for-kitchen-cabinets<br />spray-net.com/faqs/how-does-my-contract-warranty-work</p></details></div></aside>
-    <p className="comparison-reviewed">Source set checked {comparisonChecked}. Product editions and bases are identified above. New sheets can be added as they become available.</p>
+    <PageHeader eyebrow="THE DETAILS BEHIND THE FINISH" title="Coating Comparison" description="Compare our coating systems with familiar brands, from everyday primers to specialty finishes." back={coat ? '/comparison?area=interior' : area ? '/comparison' : '/'} backLabel={coat ? 'Interior' : area ? 'Comparison' : 'Home'}/>
+    <ChoiceGroup label="Interior or Exterior" options={ [['interior','Interior'],['exterior','Exterior']] } value={area} onChange={chooseArea}/>
+    {area === 'interior' && <div className="comparison-flow-step"><ChoiceGroup label="Interior coating" options={ [['primer','Primer'],['paint','Paint']] } value={coat} onChange={value => navigate(`/comparison?area=interior&coat=${value}`)}/></div>}
+    {!area && <div className="comparison-empty"><BrandEmblem size={42}/><h2>Choose Interior or Exterior</h2><p>Explore the coatings, then compare the brands together on one sheet.</p></div>}
+    {area === 'interior' && !coat && <div className="comparison-empty"><h2>Start with Primer or Paint</h2><p>Cabinet refinishing specifications, materials and safety information — side by side.</p></div>}
+    {area === 'exterior' && <div className="comparison-empty"><h2>Exterior Comparison Coming Next</h2><p>Exterior coating sheets will be added here. The interior cabinet comparison is ready to explore.</p><button className="button button-dark" onClick={() => chooseArea('interior')}>Explore Interior</button></div>}
+    {area === 'interior' && coat && <ComparisonSheet groupKey={coat} route={route}/>}
   </section>;
 }

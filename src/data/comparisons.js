@@ -1,4 +1,5 @@
 import { comparisonDocuments } from './comparisonDocuments';
+import { expandedPrimers } from './expandedPrimers.js';
 
 export { comparisonDocuments };
 export const comparisonChecked = 'November 19, 2026';
@@ -130,9 +131,11 @@ export const coatingProducts = {
 };
 
 export const comparisonGroups = {
-  primer: { label: 'Interior Primer', ours: 'sn-primer', peers: ['stix', 'bin'] },
+  primer: { label: 'Primer', ours: 'sn-primer', peers: ['kilz2', 'bullseye', 'cover', 'bin', 'stix', 'extreme'] },
   paint: { label: 'Interior Paint', ours: 'sn-coating', peers: ['advance', 'emerald'] },
 };
+
+Object.assign(coatingProducts, expandedPrimers);
 
 // Historical in-house report. Do not merge these test identities with today's SKUs.
 export const benchmarkProducts = [
