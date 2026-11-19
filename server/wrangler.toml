@@ -5,7 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 workers_dev = true
 
 [vars]
-VISUALIZER_ALLOWED_ORIGINS = "https://benjamin41997-ctrl.github.io"
+VISUALIZER_ALLOWED_ORIGINS = "https://spray-net-charlotte.github.io,https://benjamin41997-ctrl.github.io"
 VISUALIZER_MAX_TEN_MINUTE_RENDERS = "10"
 VISUALIZER_MAX_HOURLY_RENDERS = "30"
 VISUALIZER_MIN_INTERVAL_SECONDS = "5"
