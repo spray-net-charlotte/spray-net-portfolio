@@ -100,6 +100,15 @@ export default function Home() {
           </div>
           <Icon name="arrow" />
         </a>
+        <a className="small-nav-card comparison-nav" href="#/comparison">
+          <span className="nav-card-icon"><Icon name="layers" size={28} /></span>
+          <div>
+            <span className="small-caps">THE DETAILS BEHIND THE FINISH</span>
+            <h2>Coating Comparison</h2>
+            <p>Specifications. Materials. Test Results.</p>
+          </div>
+          <Icon name="arrow" />
+        </a>
         <a className="small-nav-card visualizer-nav" href="#/visualize">
           <span className="nav-card-icon"><Icon name="sparkles" size={28} /></span>
           <div>

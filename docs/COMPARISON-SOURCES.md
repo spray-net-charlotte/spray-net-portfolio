@@ -1,0 +1,52 @@
+# Coating Comparison Source Register
+
+Checked November 19, 2026. Scope: **cabinet refinishing primer and topcoat**, not interior wall paint. The initial reference set is not a market-share ranking. No pricing is included.
+
+## Source files and traceability
+
+`src/data/comparisonDocuments.js` records the identity, source URL where available, printed date or footer code, page count, local path and SHA-256 of every original. `src/data/comparisons.js` stores the transcribed figures and their limitations. All 14 complete PDFs, 75 page images and per-page extracted text are in `public/media/comparison/<document-id>/`. The in-app reader stays inside the portfolio, supports fullscreen and selectable text, and works offline after service-worker installation.
+
+Spray-Net originals were retrieved from the existing South Charlotte sales library (`Sales/Spray-Net VS the World`) and cross-checked with Ezee Assist's references in Brave. The Ezee answer was used for discovery; values were verified against the PDFs, including visual inspection of the benchmark table. Ezee-generated summaries are not used as primary evidence. Its temporary signed attachment links are not published.
+
+| Document | Edition / exact identity | Figure locations |
+| --- | --- | --- |
+| Spray-Net Interior Primer TDS | Stain Blocking High-Build Primer; copyright 2023, no printed revision date or G-002K code | Application / dry schedule p. 1; epoxy vehicle, solids, VOC basis, film and coverage p. 2 |
+| Spray-Net Primer SDS | SWP 1420 / G-002K, SDS 1393; Jan. 11, 2022 | Classifications / statements p. 1; Section 3 ingredients p. 2 |
+| Spray-Net Cabinet Coating TDS | Waterborne Polyurethane; SUW IR Series; copyright 2023, no printed revision date | Application / cure p. 1; chemistry, solids, two VOC bases, hardness / MEK / adhesion p. 2 |
+| Spray-Net Cabinet Coating SDS | SDS 1203; Jan. 12, 2022 | Classifications / statements p. 1; Section 3 ingredients p. 2 |
+| Spray-Net A-003 Catalyst SDS | SDS 1112; Apr. 2, 2026 | Classification and 80% water / 20% polycarbodiimide p. 1; PPE / physical properties p. 3 |
+| Spray-Net Cabinet Coating Test Results | No printed test date, exact tested SKU, sheen, batch or cure schedule | All results p. 1; explicitly in-house ASTM / KCMA methods |
+| INSL-X Stix TDS | SXA-110, White; footer `102726` | Technical data / cure discussion p. 1 |
+| INSL-X Stix SDS | SXA-1100, White; Dec. 30, 2024 | Section 2 p. 1; Section 3 p. 2 |
+| Zinsser B-I-N TDS | BIN-03; Sept. 12, 2019; liquid shellac primer, SKU 00904 included | Drying p. 2; physical properties p. 3 |
+| Zinsser B-I-N SDS | SKU 904 quart; Sept. 15, 2026 | Section 2 p. 1; Section 3 p. 2 |
+| Benjamin Moore ADVANCE TDS | Satin 792, Base 1; footer `070122` | Technical data and 30-day hardness qualification p. 1 |
+| Benjamin Moore ADVANCE SDS | 792-1X, Base 1; Jan. 4, 2024 | Section 2 pp. 1–2; Section 3 pp. 2–3 |
+| Sherwin-Williams Emerald PDS | Satin K37 series; March 2026; numerical data for Ultrawhite K37W01750 | Technical figures p. 1 |
+| Sherwin-Williams Emerald SDS | Satin High Hide White K37W2751; Oct. 23, 2026 | Sections 2–3 pp. 1–2 |
+
+## Open identity / edition issues
+
+- The Spray-Net 2023 TDSs are the verified reference editions, **not certified current formulations**. Ezee did not establish newer primer/topcoat sheets. The Academy QR-code link to a differently named primer TDS returned 404 in Brave. Do not replace dates with the retrieval date.
+- The primer TDS describes interior cabinet / furniture application but contains contradictory exterior-only boilerplate. It does not print G-002K. Preserve the original; verify a matched replacement with product support before turning it into application guidance.
+- The cabinet TDS names SWC010 catalyst; the separately dated current A-003 SDS does not establish equivalence or a revised mixing instruction. The app does not give a new mixing ratio or classify the mixed system from the catalyst alone.
+- Emerald's PDS is a series sheet with numerical data for **Ultrawhite**; the retrieved SDS is **High Hide White**. This difference is explicit in the UI and source cards. Its PDS also prints the inconsistent temperature pair `77°F (20°C)`; this is retained and identified, not silently corrected.
+- The benchmark is a historical in-house report. A 2021 repository date from Ezee is not a printed test date and is not presented as one. Its six competitors are separate test identities, not matched to today's ADVANCE/Emerald SKUs.
+
+## Comparison rules
+
+- Never treat a missing value as zero or a failed test. Never compare weight solids directly with volume solids.
+- Retain VOC reporting bases. Spray-Net's `<150 g/L minus water/exempt` and `<65 g/L applied` are different quantities. A lower VOC figure alone does not prove lower exposure, safer application, lower cured-film emissions or longer life.
+- Coverage must retain its film thickness and theoretical/practical basis. No automatic best-product scoring.
+- SDS Section 2 classifications and Section 3 disclosed ingredients are available for **both** products. Signal words and category numbers are not a universal safety score; ingredients are not the complete recipe. Classification differences may reflect jurisdiction, reporting rules and source editions. Do not claim any complete system is non-toxic from the catalyst SDS.
+- The ASTM D3363 pencil scale is ordinal, not a ratio. HB versus 7B does not mean a percentage or multiple. Persoz seconds (ASTM D4366) are a different test.
+- Reported MEK counts and KCMA results apply to their test, not every household chemical or real-world service life. Do not call the in-house sheet an independent certification.
+- Keep full originals and metadata when adding data; update the source register and rerun validation / tablet tests. Do not add unsupported safety, superiority or warranty claims.
+
+## Warranty references
+
+Official cabinet FAQ: https://www.spray-net.com/faqs/what-is-your-warranty-for-kitchen-cabinets
+
+Official contract FAQ: https://www.spray-net.com/faqs/how-does-my-contract-warranty-work
+
+Checked November 19, 2026. The cabinet FAQ advertises a 15-year no-peel service warranty and distinguishes chips, scratches, accidental damage and wood damage. The contract FAQ describes product / labor peeling coverage subject to the written proposal. The app summarizes this scope and points to the customer's written agreement; it does not create new terms or imply that laboratory results prove a 15-year lifespan. The full current South Charlotte customer contract was not part of this source set.

@@ -7,6 +7,7 @@ import { settings } from '../src/data/settings.js';
 import { resources } from '../src/data/resources.js';
 import { youtubeEmbed } from '../src/lib/media.js';
 import { colors } from '../src/data/colors.js';
+import { comparisonDocuments } from '../src/data/comparisonDocuments.js';
 
 const errors = [];
 const publicDir = new URL('../public/', import.meta.url);
@@ -157,6 +158,16 @@ for (const resource of resources) {
     content.some((article) => article.id === resource.articleId),
     `Resource ${resource.id}: unknown article.`,
   );
+}
+uniqueIds(comparisonDocuments, 'Comparison documents');
+for (const doc of comparisonDocuments) {
+  check(Boolean(doc.title && doc.kind && doc.edition && doc.variant), `Comparison ${doc.id}: missing document identity / edition.`);
+  check(Number.isInteger(doc.pages) && doc.pages > 0, `Comparison ${doc.id}: invalid page count.`);
+  check(/^[a-f0-9]{64}$/.test(doc.sha256), `Comparison ${doc.id}: missing source hash.`);
+  check(!doc.sourceUrl || doc.sourceUrl.startsWith('https://'), `Comparison ${doc.id}: invalid source URL.`);
+  media(`${doc.base}/original.pdf`, `Comparison ${doc.id} original`);
+  media(`${doc.base}/text.json`, `Comparison ${doc.id} text`);
+  for (let page = 1; page <= doc.pages; page++) media(`${doc.base}/${page}.webp`, `Comparison ${doc.id} page ${page}`);
 }
 if (errors.length) {
   console.error(`Content validation failed:\n${errors.map((error) => `  • ${error}`).join('\n')}`);

@@ -16,6 +16,7 @@ import ProjectDetail from './pages/ProjectDetail';
 import Reviews from './pages/Reviews';
 import Videos from './pages/Videos';
 import Why from './pages/Why';
+import Comparison from './pages/Comparison';
 import VisualizerProvider, { useVisualizer } from './components/VisualizerProvider';
 import OfflineVideoStatus from './components/OfflineVideoStatus';
 
@@ -78,7 +79,7 @@ function Portfolio() {
   const video = section === 'videos' && videos.find((item) => item.id === id);
   const article = section === 'why' && content.find((item) => item.id === id);
   useEffect(() => {
-    document.title = `${project?.title || video?.title || article?.title || { projects: 'Transformations', reviews: 'Customer Reviews', videos: 'Process Videos', why: 'Why Spray-Net', visualize: 'Design Visualizer' }[section] || 'Spray-Net Portfolio'} Â· South Charlotte`;
+    document.title = `${project?.title || video?.title || article?.title || { projects: 'Transformations', reviews: 'Customer Reviews', videos: 'Process Videos', why: 'Why Spray-Net', comparison: 'Coating Comparison', visualize: 'Design Visualizer' }[section] || 'Spray-Net Portfolio'} Â· South Charlotte`;
     if (previousPath.current !== route.path) {
       const initial = previousPath.current === null;
       previousPath.current = route.path;
@@ -104,6 +105,7 @@ function Portfolio() {
   else if (route.path === '/videos') page = <Videos />;
   else if (video && route.path === `/videos/${video.id}`) page = <Videos video={video} />;
   else if (route.path === '/why') page = <Why />;
+  else if (route.path === '/comparison' || (section === 'comparison' && route.path.split('/').length === 3)) page = <Comparison route={route} documentId={id} />;
   else if (route.path === '/visualize') page = <Suspense fallback={<p role="status">Opening the Design Studioâ€¦</p>}><Visualizer /></Suspense>;
   else if (article && route.path === `/why/${article.id}`)
     page = <Why article={article} route={route} />;
@@ -142,6 +144,9 @@ function Portfolio() {
           </a>
           <a href="#/why" aria-current={section === 'why' ? 'page' : undefined}>
             Why Spray-Net
+          </a>
+          <a href="#/comparison" aria-current={section === 'comparison' ? 'page' : undefined}>
+            Comparison
           </a>
           <a href="#/visualize" aria-current={section === 'visualize' ? 'page' : undefined}>
             Visualizer
@@ -189,7 +194,7 @@ function Portfolio() {
       </main>
       <footer className="app-footer">
         <span className="offline-status">
-          <span>Portfolio 1.7.2</span>
+          <span>Portfolio 1.8.0</span>
           {offlineReady && (
             <>
               <Icon name="check" size={14} />
