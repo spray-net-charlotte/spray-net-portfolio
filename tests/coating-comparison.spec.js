@@ -99,8 +99,14 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await expect(page.getByRole('heading',{name:'Cabinet Primers — All Brands'})).toBeVisible();
   await page.getByRole('button',{name:'Paint',exact:true}).click();
   const paint=page.getByRole('table',{name:'Paint specifications across all brands'});
-  await expect(paint.locator('thead th')).toHaveCount(12);
-  for(const name of ['Gallery Series','COMMAND','Renner 688','Renner 785','Centurion 1800','Milesi KKR513','Krystal','MagnaMax']) await expect(paint).toContainText(name);
+  await expect(paint.locator('thead th')).toHaveCount(11);
+  for(const name of ['Gallery Series','COMMAND','Renner 688','Centurion 1800','Milesi KKR513','Krystal','MagnaMax']) await expect(paint).toContainText(name);
+  await expect(paint).not.toContainText('Renner 785');
+  const prices = paint.getByRole('row', {name:/^Contractor Cost/});
+  await expect(paint.locator('tbody tr').first()).toHaveClass('comparison-cost-row');
+  for (const [id,price] of Object.entries({'sn-coating':'≈$189.44',renner688:'≈$152.34',centurion:'≈$134.71',milesi:'≈$121.71',gallery:'$112.13',emerald:'$91.34',command:'≈$80.70',advance:'≈$71.19',krystal:'≈$73.05',magnamax:'≈$60.71'})) await expect(prices.locator(`[data-product="${id}"]`)).toHaveText(price);
+  await page.getByText('Price Comparison Notes', {exact:true}).click();
+  await expect(page.getByText('Estimated discounts are planning assumptions, not dealer quotes.', {exact:false})).toBeVisible();
   const kcma = paint.getByRole('row', {name:/^Meets KCMA /});
   await expect(kcma.locator('[data-product="sn-coating"]')).toHaveText('Yes');
   await expect(kcma.locator('[data-product="gallery"]')).toHaveText('Yes');

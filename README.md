@@ -582,3 +582,12 @@ Use **Turn Off Advanced Mode** on the main screen, or turn it off in Consultatio
 
 
 Matching SDS follow-up: KILZ 2 U.S. No. 2000, March 7, 2024, retrieved from the English / U.S. entry in the manufacturer-linked 3E catalog (Sections 2–3, p. 1). High Hide Cover Stain SKU 3551 SDS, November 1, 2022, retrieved from Rust-Oleum (Sections 2–3, pp. 1–2). Earlier pending-SDS notes above are resolved; no other SKU was substituted.
+
+
+## Mixed Coating Prices — Portfolio 1.8.10
+
+Interior → Paint now starts with Contractor Cost, in USD per mixed U.S. gallon including required catalyst. Edit `src/data/coatingPrices.js` to change amounts, estimate labels, reference date and product notes. An ≈ marks planning estimates; Gallery and Emerald use local Pro+ quotes. Price Comparison Notes explains package/mix assumptions and estimated discounts. Renner 688 is the single active Renner topcoat; M785 source records remain available in the data archive.
+
+Prices compare purchased finished coatings, not factory ingredient costs. Added reducer, tax, delivery and spray loss are excluded. Krystal and MagnaMax are clear finishes; Krystal includes separate catalyst, while MagnaMax is factory pre-catalyzed. Original private invoices, historical price research and franchise markup assumptions are not published.
+
+Validation: production build passed; comparison tests passed in tablet Chromium and iPad WebKit (11 passed, one existing Windows WebKit offline-service-worker skip), covering all ten prices, first-row placement, estimate notes, document navigation, responsive layouts and Chromium offline sources. GitHub Actions runs the complete suite before deployment.
