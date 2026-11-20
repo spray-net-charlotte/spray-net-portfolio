@@ -251,6 +251,15 @@ test('brand filters combine selections and benchmarks fit tablets with accessibl
   await page.getByRole('button',{name:'All Brands',exact:true}).click();
   await expect(paint.locator('thead th')).toHaveCount(11);
   const benchmark=page.getByRole('table',{name:'In-house cabinet coating benchmarks across all brands'});
+  const dry=paint.getByRole('row',{name:/^Dry to Touch /});
+  await expect(dry.locator('[data-product="command"]')).toHaveText('15 min');
+  await expect(dry.locator('[data-product="renner688"]')).toHaveText('—');
+  await expect(dry.locator('[data-product="centurion"]')).toHaveText('—');
+  await expect(dry).not.toContainText('Dust-free');
+  const recoat=paint.getByRole('row',{name:/^Recoat /});
+  await expect(recoat.locator('[data-product="centurion"]')).toHaveText('≈45–60 min + sand');
+  await expect(recoat.locator('[data-product="krystal"]')).toHaveText('≈30–45 min + sand');
+  await expect(recoat.locator('[data-product="magnamax"]')).toHaveText('≈30–45 min + sand');
   const coffee=benchmark.getByRole('row',{name:/^Coffee /});
   await expect(coffee.locator('[data-product="sn-coating"]')).toHaveClass(/score-strong/);
   await expect(benchmark.getByRole('row',{name:/^MEK Rub Test /}).locator('[data-product="bm-advance"]')).toHaveClass(/score-weak/);

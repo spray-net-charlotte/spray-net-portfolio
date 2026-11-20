@@ -615,3 +615,12 @@ The original eight-page HKR114 SDS, nine-page HNB1 SDS and two-page distributor 
 The regulatory VOC row estimates about 90 g/L for the selected mixture from base VOC 45.9 g/L, density 1.198 kg/L, water 47.6 wt%, HNB1 VOC 2.1 g/L and 10.9% hardener volume. Assumptions and source editions remain under VOC Calculation Notes; this is not a measured mixed-batch value. HNB1 contains isocyanates. Ben approved retaining approximately $121.71 per mixed U.S. gallon as a planning estimate while matched waterborne package pricing is verified; old solvent-system prices are not presented as waterborne quotes.
 
 Validation: production build and 13 Chromium/WebKit comparison checks passed, with the existing Windows WebKit offline-service-worker skip. Original hashes, complete page sets, new source navigation, brand filtering, price display, accessibility, benchmark fit and Chromium offline documents were checked.
+
+
+## Comparable Drying Endpoints — Portfolio 1.8.13
+
+The Dry to Touch row now uses that endpoint consistently. Dust-free and handling times are not relabeled as touch-dry; absent values remain — with the original observations under Drying & Recoat Notes. COMMAND retains its manufacturer-reported 15-minute touch time at 77°F / 50% RH and 3.6–4.6 mil wet-film guidance; touch-dry is not through-dry, cure or service-ready.
+
+Centurion 1800 now shows an approximate 45–60 minute sand-and-recoat window, inferred from its published sanding time and intercoat sanding instructions. Clear Krystal and MagnaMax show approximate 30–45 minutes plus sanding using the same approach. These are practical sanding-based estimates, not separately published manufacturer minimum recoat guarantees. The source notes preserve the distinction and reference the captured TDS files. U688 remains without a verified recoat value: its TDS leaves overcoating blank, and a dealer sanding claim differs from the handling figures. See `src/data/coatingDrying.js` for editable explanations.
+
+Validation: build and the Chromium/WebKit comparison suite passed (13 passed, one existing Windows WebKit offline-service-worker skip), including standardized endpoint labels, reported COMMAND time, unreported touch endpoints and the three marked sanding/recoat estimates.
