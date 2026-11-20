@@ -12,7 +12,7 @@ export const summaryRows = [
 
 // VOC display values and estimates live in regulatoryVoc.js; solids retain their reported bases.
 export const comparisonSummary = {
-  'sn-primer': { type:'1K Water-Based', catalyst:'None', film:'Wet 4–6 / Dry 2.5–3.5', touch:'≤1 hr', recoat:'—' },
+  'sn-primer': { type:'1K Water-Based', catalyst:'None', film:'Wet 4–6 / Dry 2.5–3.5', touch:'≤1 hr', recoat:'45 min' },
   extreme: { type:'1K Water-Based', catalyst:'None', film:'Wet 3.1 / Dry 1', touch:'30 min', recoat:'1 hr primer / 4 hr stain seal / 24 hr high-performance finish' },
   'sw-shellac': { type:'1K Shellac / Solvent-Based', catalyst:'None', film:'Wet 4 / Dry 1.4', touch:'15 min', recoat:'45 min' },
   'sw-problock': { type:'1K Oil-Based', catalyst:'None', film:'Wet 4 / Dry 2.2', touch:'30 min', recoat:'60–90 min' },

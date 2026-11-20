@@ -29,6 +29,7 @@ test('product evidence points to captured SDS and preserves component and test s
     }
   }
   expect(getComparisonSummary(coatingProducts['sn-primer']).solids).toBe('55% vol / 57% wt');
+  expect(getComparisonSummary(coatingProducts['sn-primer']).recoat).toBe('45 min');
   expect(getComparisonSummary(coatingProducts['sn-coating']).catalyst).toBe('SWC010');
   expect(getComparisonSummary(coatingProducts.milesi).solids).toContain('Basis unspecified');
   expect(coatingProducts.renner083.safety.ingredientNote).toContain('No Section 3 concentrations');
@@ -77,16 +78,24 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await page.goBack(); await page.getByRole('button',{name:'Interior',exact:true}).click();
   await page.getByRole('button',{name:'Primer',exact:true}).click();
   const sheet=page.getByRole('table',{name:'Primer specifications across all brands'});
-  await expect(sheet.locator('thead th')).toHaveCount(12);
+  await expect(sheet.locator('thead th')).toHaveCount(11);
   await page.getByRole('button',{name:'Renner',exact:true}).click();
-  await expect(sheet.locator('thead th')).toHaveCount(4);
+  await expect(sheet.locator('thead th')).toHaveCount(3);
   await expect(sheet).not.toContainText('KILZ 2 All-Purpose');
   await expect(page.getByRole('button',{name:'Renner',exact:true})).toHaveAttribute('aria-pressed','true');
   await page.getByRole('button',{name:'Sherwin-Williams',exact:true}).click();
-  await expect(sheet.locator('thead th')).toHaveCount(7);
+  await expect(sheet.locator('thead th')).toHaveCount(6);
   await page.getByRole('button',{name:'All Brands',exact:true}).click();
-  await expect(sheet.locator('thead th')).toHaveCount(12);
+  await expect(sheet.locator('thead th')).toHaveCount(11);
   await expect(sheet).toContainText('KILZ 2 All-Purpose'); await expect(sheet).toContainText('Extreme Bond');
+  await expect(sheet).not.toContainText('Renner 643');
+  await expect(sheet.getByRole('row',{name:/^Catalyst /})).toHaveCount(0);
+  await expect(sheet.getByRole('row',{name:/^Isocyanate-Free Catalyst /})).toHaveCount(0);
+  await expect(sheet.getByRole('row',{name:/^Recoat /}).locator('[data-product="sn-primer"]')).toHaveText('45 min');
+  const primerPrices=sheet.getByRole('row',{name:/^Contractor Cost /});
+  await expect(primerPrices).toContainText('USD / U.S. Gal.');
+  await expect(primerPrices.locator('[data-product="sn-primer"]')).toHaveText('≈$95.74');
+  await expect(primerPrices.locator('[data-product="sw-shellac"]')).toHaveText('≈$61.94');
   await expect(sheet.getByRole('row',{name:/^Solids /})).toContainText('55%');
   for (const label of ['Signal Word','SDS Classification','Handling / Exposure Notes','Selected Disclosed Ingredients','Published Test Results','Indoor Emissions Testing','About This Value']) await expect(sheet).not.toContainText(label);
   await expect(sheet.getByRole('row',{name:/^Coating Type /})).toContainText('1K Water-Based');

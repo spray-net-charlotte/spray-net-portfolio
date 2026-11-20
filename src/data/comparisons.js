@@ -141,7 +141,7 @@ export const coatingProducts = {
 };
 
 export const comparisonGroups = {
-  primer: { label: 'Primer', ours: 'sn-primer', peers: ['extreme', 'sw-shellac', 'sw-problock', 'renner643', 'renner083', 'stix', 'bin', 'cover', 'bullseye', 'kilz2'] },
+  primer: { label: 'Primer', ours: 'sn-primer', peers: ['extreme', 'sw-shellac', 'sw-problock', 'renner083', 'stix', 'bin', 'cover', 'bullseye', 'kilz2'] },
   paint: { label: 'Interior Paint', ours: 'sn-coating', peers: ['advance', 'emerald', 'command', 'gallery', 'milesi', 'centurion', 'renner688', 'magnamax', 'krystal'] },
 };
 
@@ -151,6 +151,7 @@ coatingProducts['sn-coating'].specs.system = 'Professional Waterborne Polyuretha
 coatingProducts['sn-coating'].specs.recoat = '25 minutes · consultation guidance confirmed November 19, 2026';
 coatingProducts['sn-coating'].specs.catalysis = '2023 TDS: SWC010 catalyst, 10:1 by volume. Separate 2026 A-003 SDS does not establish equivalence or an updated mixing specification.';
 coatingProducts['sn-primer'].specs.system = 'Water-Based High-Build Stain-Blocking Primer';
+coatingProducts['sn-primer'].specs.recoat = '45 minutes · consultation guidance confirmed November 20, 2026';
 coatingProducts.advance.specs.system = 'Waterborne Alkyd Enamel · Pigmented';
 coatingProducts.emerald.specs.system = 'Waterborne Urethane-Modified Alkyd Enamel · Pigmented';
 coatingProducts.advance.specs.catalysis = 'No added catalyst specified in this sheet';

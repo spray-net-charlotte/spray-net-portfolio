@@ -1,6 +1,7 @@
 // Keep endpoints separate: dust-free, dry-to-touch, sandable and handling are
 // different observations. Sand-and-recoat estimates are identified explicitly.
 export const coatingDryingNotes = {
+  'sn-primer':'Primer recoat guidance: 45 minutes, confirmed for consultation use. This is separate from the cabinet topcoat recoat value. The archived primer TDS remains available as originally published.',
   command:'Published dry-to-touch: 15 minutes; recoat: 1 hour at 77°F / 25°C and 50% RH. The same TDS specifies 3.6–4.6 mil wet and 1.5–1.9 mil dry. Cool temperatures and high humidity extend these times. Touch dry is not through-dry, service-ready or fully cured.',
   renner688:'The U688 TDS reports dust-free at 45 minutes, handleable at 4 hours and stackable at 24 hours at 20°C / 68°F, 45–65% RH and 120 g/m². It does not publish a dry-to-touch or overcoating time. These endpoints are not substituted for one another. A dealer lists handling at 2 hours and sanding at 21 hours, but this differs from the TDS and is not used as a verified recoat interval.',
   centurion:'The selected CW-3115–3118 TDS reports dust-free at 10–15 minutes and sanding at 45–60 minutes at 77°F / 25°C and 50% RH. It requires sanding between coats. The approximately 45–60 minute sand-and-recoat figure is inferred from that sanding window, not a separately published minimum recoat time. Dry-to-touch is not stated.',

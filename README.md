@@ -624,3 +624,12 @@ The Dry to Touch row now uses that endpoint consistently. Dust-free and handling
 Centurion 1800 now shows an approximate 45–60 minute sand-and-recoat window, inferred from its published sanding time and intercoat sanding instructions. Clear Krystal and MagnaMax show approximate 30–45 minutes plus sanding using the same approach. These are practical sanding-based estimates, not separately published manufacturer minimum recoat guarantees. The source notes preserve the distinction and reference the captured TDS files. U688 remains without a verified recoat value: its TDS leaves overcoating blank, and a dealer sanding claim differs from the handling figures. See `src/data/coatingDrying.js` for editable explanations.
 
 Validation: build and the Chromium/WebKit comparison suite passed (13 passed, one existing Windows WebKit offline-service-worker skip), including standardized endpoint labels, reported COMMAND time, unreported touch endpoints and the three marked sanding/recoat estimates.
+
+
+## Primer Prices and Simplified Rows — Portfolio 1.8.14
+
+Primer now begins with Contractor Cost in USD per U.S. gallon, with ≈ on every figure. Spray-Net primer is $95.74/gallon, calculated from the confirmed $478.70 five-U.S.-gallon purchase. Shellac uses the confirmed $61.94 local Pro+ quote. Other primer contractor figures are explicit 20%-below-public-price planning estimates; details remain under Price Comparison Notes and the editable `primerPrices` export in `src/data/coatingPrices.js`. No ingredient-cost or manufacturer-margin claims are added.
+
+Renner 643 is removed from the active primer columns; Renner 083 remains. Catalyst and Isocyanate-Free Catalyst rows display only for paint. Spray-Net primer recoat guidance is 45 minutes; cabinet topcoat retains its separate 25-minute recoat guidance. Original source documents are preserved.
+
+Validation: production build and Chromium/WebKit comparison suite passed (13 passed, one existing Windows WebKit offline-service-worker skip), including primer price units, $95.74 / $61.94 values, missing catalyst rows, updated primer recoat and multi-brand filtering after removal of 643.
