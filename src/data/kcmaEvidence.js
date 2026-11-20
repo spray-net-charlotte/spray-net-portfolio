@@ -2,7 +2,7 @@
 export const kcmaEvidence = {
   'sn-coating': {
     status: 'Manufacturer Finish Tests Reported',
-    detail: 'The coating TDS reports KCMA 9.2–9.5 chemical-resistance results. These are finish results, not certification of a cabinet design or proof of a warranty term.',
+    detail: 'The coating TDS reports KCMA 9.2–9.5 finish-performance results, including chemical, detergent, heat and cold-cycle tests. These are finish results, not certification of a cabinet design or proof of a warranty term.',
     source: 'sn-coating-tds',
   },
   gallery: {
