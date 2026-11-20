@@ -93,7 +93,7 @@ function ComparisonSheet({ groupKey, route }) {
   }, []);
   const group = comparisonGroups[groupKey];
   const products = [group.ours, ...group.peers].map(id => coatingProducts[id]);
-  const sourceIds = new Set(products.flatMap(p => [p.tds,p.sds,p.tests?.source,...(p.extraSources || []),...(p.hardeners || []).map(id => coatingHardeners[id].sds)]).filter(Boolean));
+  const sourceIds = new Set(products.flatMap(p => [p.tds,p.sds,p.tests?.source,...(p.extraSources || []),...(regulatoryVoc[p.id]?.extraSources || []),...(p.hardeners || []).map(id => coatingHardeners[id].sds)]).filter(Boolean));
   const brandFor = p => p.brand || (p.name.startsWith('Sherwin-Williams') ? 'Sherwin-Williams' : p.name.startsWith('INSL-X') ? 'INSL-X' : p.name.startsWith('Benjamin Moore') ? 'Benjamin Moore' : p.name.startsWith('Zinsser') ? 'Zinsser' : p.name.startsWith('KILZ') ? 'KILZ' : 'Spray-Net');
   const brands = [...new Set(products.slice(1).map(brandFor))];
   const jumpToBrand = brand => {
@@ -120,7 +120,7 @@ function ComparisonSheet({ groupKey, route }) {
       </table>
     </div>
     <p className="comparison-reading-note">* Estimated or assumed VOC basis. ≈ Approximate. &lt; Upper limit. Solids: vol = volume, wt = weight. Drying times depend on conditions.</p>
-    <details className="comparison-source-library"><summary>VOC Calculation Notes</summary><p>Regulatory VOC excludes water and exempt-solvent volume. Estimates use the stated assumptions; basis-assumed entries use the published value without a conversion. Base components and catalyzed mixtures are identified below.</p>{products.map(p => {const value = regulatoryVoc[p.id]; return value && <div key={p.id}><h3>{p.name} · {value.display} g/L</h3><p>{value.note}</p><SourceLink id={value.source} route={route}>VOC Source</SourceLink></div>;})}<p className="comparison-source-url">Method reference: {vocMethodReference}</p></details>
+    <details className="comparison-source-library"><summary>VOC Calculation Notes</summary><p>Regulatory VOC excludes water and exempt-solvent volume. Estimates use the stated assumptions; basis-assumed entries use the published value without a conversion. Base components and catalyzed mixtures are identified below.</p>{products.map(p => {const value = regulatoryVoc[p.id]; return value && <div key={p.id}><h3>{p.name} · {value.display} g/L</h3><p>{value.note}</p><SourceLink id={value.source} route={route}>VOC Source</SourceLink>{value.extraSources?.map(id => <SourceLink key={id} id={id} route={route}/>)}</div>;})}<p className="comparison-source-url">Method reference: {vocMethodReference}</p></details>
     {groupKey === 'paint' && <>
       <h2 className="comparison-sheet-title">Cabinet Coating Benchmarks — All Brands</h2>
       <p className="comparison-reading-note">Historical Spray-Net lab comparison. Products and test conditions differ from the current specification sheets above.</p>

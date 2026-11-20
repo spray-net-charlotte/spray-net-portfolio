@@ -6,7 +6,7 @@ import { comparisonDocuments } from '../src/data/comparisonDocuments.js';
 import { coatingProducts, comparisonGroups, coatingHardeners } from '../src/data/comparisons.js';
 import { getComparisonSummary } from '../src/data/comparisonSummary.js';
 import { getKcmaEvidence, kcmaFinishStatus } from '../src/data/kcmaEvidence.js';
-import { regulatoryVoc, estimateRegulatoryVoc } from '../src/data/regulatoryVoc.js';
+import { regulatoryVoc, estimateRegulatoryVoc, estimateMixedRegulatoryVoc, professionalMixEstimates } from '../src/data/regulatoryVoc.js';
 import { getCatalystComparison } from '../src/data/catalystComparison.js';
 
 test('product evidence points to captured SDS and preserves component and test scopes', () => {
@@ -17,6 +17,7 @@ test('product evidence points to captured SDS and preserves component and test s
       expect(getComparisonSummary(p).type, `${id} compact coating type`).toBeTruthy();
       expect(getComparisonSummary(p).catalyst, `${id} compact catalyst`).toBeTruthy();
       expect(ids.has(regulatoryVoc[id]?.source), `${id} regulatory VOC source`).toBe(true);
+      for (const source of regulatoryVoc[id]?.extraSources || []) expect(ids.has(source)).toBe(true);
       for (const source of getCatalystComparison(p,getComparisonSummary(p)).sources || []) expect(ids.has(source), `${id} catalyst source`).toBe(true);
       expect(ids.has(p.tds), `${id} TDS`).toBe(true);
       expect(ids.has(p.sds), `${id} SDS`).toBe(true);
@@ -34,16 +35,22 @@ test('product evidence points to captured SDS and preserves component and test s
   expect(coatingProducts.gallery.specs.pencil).toContain('7-day dry');
   expect(coatingProducts.krystal.tests.values).toContainEqual(['77% Sulfuric Acid','1 · Poor']);
   expect(coatingProducts.magnamax.tests.values).toContainEqual(['Nail Polish Remover','4 · Very Good']);
-  expect(coatingProducts.milesi.specs.voc).toContain('47.4 g/L');
-  expect(coatingProducts.milesi.safety.signal).toBe('Warning');
+  expect(coatingProducts.milesi.specs.voc).toContain('630.4 g/L');
+  expect(coatingProducts.milesi.safety.signal).toBe('Danger');
   expect(coatingProducts.centurion.safety.summary).toContain('inconsistency');
   expect(coatingHardeners.hnb40.edition).toContain('Bulgarian / EU');
   expect(getKcmaEvidence('milesi', 'paint').status).toBe('Certification Not Verified');
   expect(kcmaFinishStatus['sn-coating']).toBe('Yes');
   expect(kcmaFinishStatus.gallery).toBe('Yes');
+  for (const id of ['renner688','renner785','milesi']) expect(coatingProducts[id].twoKOnly).toBe(true);
+  expect(coatingProducts.milesi.hardeners).toEqual(['lnb99']);
+  expect(getComparisonSummary(coatingProducts.milesi).type).toBe('2K-Only Solvent-Based');
+  expect(professionalMixEstimates.milesiUnthinned).toBeCloseTo(633.59,1);
+  expect(estimateMixedRegulatoryVoc([{volumeLitres:1,actualVocGL:100},{volumeLitres:1,actualVocGL:200}])).toBe(150);
+  expect(() => estimateMixedRegulatoryVoc([{volumeLitres:1,actualVocGL:100,waterFraction:1}])).toThrow();
   expect(getComparisonSummary(coatingProducts['sn-coating']).recoat).toBe('25 min');
   expect(regulatoryVoc.command.display).toBe('<50');
-  expect(regulatoryVoc.milesi.display).toBe('≈120*');
+  expect(regulatoryVoc.milesi.display).toBe('≈630–660*');
   expect(estimateRegulatoryVoc({densityKgL:1,actualVocGL:50,waterWeightPercent:50})).toBe(100);
   expect(() => estimateRegulatoryVoc({densityKgL:1.5,actualVocGL:50,waterWeightPercent:80})).toThrow();
 });
@@ -93,7 +100,7 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await page.getByRole('button',{name:'Paint',exact:true}).click();
   const paint=page.getByRole('table',{name:'Paint specifications across all brands'});
   await expect(paint.locator('thead th')).toHaveCount(12);
-  for(const name of ['Gallery Series','COMMAND','Renner 688','Renner 785','Centurion 1800','Milesi HKR116','Krystal','MagnaMax']) await expect(paint).toContainText(name);
+  for(const name of ['Gallery Series','COMMAND','Renner 688','Renner 785','Centurion 1800','Milesi KKR513','Krystal','MagnaMax']) await expect(paint).toContainText(name);
   const kcma = paint.getByRole('row', {name:/^Meets KCMA /});
   await expect(kcma.locator('[data-product="sn-coating"]')).toHaveText('Yes');
   await expect(kcma.locator('[data-product="gallery"]')).toHaveText('Yes');
@@ -102,7 +109,7 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   const voc = paint.getByRole('row', {name:/^Regulatory VOC/});
   await expect(voc.locator('[data-product="command"]')).toHaveText('<50');
   await expect(voc.locator('[data-product="sn-coating"]')).toHaveText('<150');
-  await expect(voc.locator('[data-product="milesi"]')).toHaveText('≈120*');
+  await expect(voc.locator('[data-product="milesi"]')).toHaveText('≈630–660*');
   await expect(paint.getByRole('row',{name:/^Recoat /}).locator('[data-product="sn-coating"]')).toHaveText('25 min');
   const catalyst = paint.getByRole('row',{name:/^Isocyanate-Free Catalyst /});
   await expect(catalyst.locator('[data-product="sn-coating"]')).toHaveText('Yes');
@@ -114,9 +121,9 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await page.getByRole('button', {name:'Milesi',exact:true}).click();
   await expect(page.getByRole('button', {name:'Milesi',exact:true})).toHaveAttribute('aria-pressed','true');
   await paint.getByRole('row',{name:/^Documents /}).locator('[data-product="milesi"]').getByRole('link',{name:'SDS',exact:true}).click();
-  await expect(page.locator('main h1')).toHaveText('Milesi HKR116 White Converter 10SH');
+  await expect(page.locator('main h1')).toHaveText('Milesi KKR513 White 20 Gloss');
   await page.getByRole('button',{name:'Read Page Text',exact:true}).click();
-  await expect(page.locator('.comparison-page-text pre')).toContainText('Warning');
+  await expect(page.locator('.comparison-page-text pre')).toContainText('Danger');
   await page.goBack();
   await page.getByRole('button',{name:'M.L. Campbell',exact:true}).click();
   await expect.poll(() => page.locator('.comparison-matrix-scroll').first().evaluate(el => el.scrollLeft)).toBeGreaterThan(500);

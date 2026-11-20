@@ -214,5 +214,50 @@ export const coatingHardeners = {
         "50–74.9%"
       ]
     ]
+  },
+  "lnb99": {
+    "name": "Milesi LNB99",
+    "sds": "milesi-lnb99-sds",
+    "edition": "September 18, 2015 · Version 228 · U.S. reference",
+    "signal": "Danger",
+    "classes": [
+      "Flammable Liquid · Category 2",
+      "Carcinogenicity · Category 2",
+      "Reproductive Toxicity · Category 2",
+      "Specific Target Organ Toxicity, Repeated Exposure · Category 2",
+      "Aspiration Hazard · Category 1",
+      "Skin Irritation · Category 2",
+      "Eye Irritation · Category 2A",
+      "Skin Sensitization · Category 1",
+      "Specific Target Organ Toxicity, Single Exposure · Category 3"
+    ],
+    "summary": "Separate isocyanate-containing aliphatic hardener. Discloses HDI homopolymers and free hexamethylene diisocyanate. Archived U.S. reference; no current formulation equivalence or mixed-system classification is asserted.",
+    "ingredients": [
+      [
+        "HDI Homopolymers",
+        "28182-81-2",
+        "25–29.9%"
+      ],
+      [
+        "Ethyl Acetate",
+        "141-78-6",
+        "25–29.9%"
+      ],
+      [
+        "N-Butyl Acetate",
+        "123-86-4",
+        "15–<50%"
+      ],
+      [
+        "Toluene",
+        "108-88-3",
+        "12.5–15%"
+      ],
+      [
+        "Hexamethylene Diisocyanate",
+        "822-06-0",
+        "0.1–<0.5%"
+      ]
+    ]
   }
 };

@@ -8,6 +8,17 @@ export function estimateRegulatoryVoc({ densityKgL, vocWeightPercent, solidsWeig
   return actual / denominator;
 }
 
+export function estimateMixedRegulatoryVoc(components) {
+  let mass = 0, denominator = 0;
+  for (const {volumeLitres,actualVocGL,waterFraction = 0,exemptFraction = 0} of components) {
+    if (![volumeLitres,actualVocGL,waterFraction,exemptFraction].every(Number.isFinite) || volumeLitres <= 0 || actualVocGL < 0 || waterFraction < 0 || exemptFraction < 0 || waterFraction + exemptFraction > 1) throw new Error('Invalid mixture estimate inputs');
+    mass += volumeLitres * actualVocGL;
+    denominator += volumeLitres * (1 - waterFraction - exemptFraction);
+  }
+  if (denominator <= 0) throw new Error('Mixture has no non-exempt volume');
+  return mass / denominator;
+}
+
 const rennerAssumption = 'Rough base-component mass balance: assumes reported percentages are by weight, the balance after reported solids and VOC is water, water density 1 kg/L, and no exempt solvents. SDS solids are measured at 250°C; this is an approximate comparison, not Method 24 testing.';
 const estimated = (inputs, source, note, round = 10) => ({
   display:`≈${Math.round(estimateRegulatoryVoc(inputs) / round) * round}*`,
@@ -17,6 +28,16 @@ const estimated = (inputs, source, note, round = 10) => ({
 });
 const reported = (display, source, note = 'Published regulatory / less-water-and-exempt value for the captured reference.') => ({display, source, note});
 const assumed = (display, source, note) => ({display:`${display}*`,source,note:`Basis assumption only; no numeric conversion. ${note} The source does not identify the reporting basis, so this is a provisional comparison proxy, not a verified regulatory value.`});
+
+const milesiMix = [{volumeLitres:1,actualVocGL:630.4},{volumeLitres:0.116,actualVocGL:661.1}];
+export const professionalMixEstimates = {
+  milesiUnthinned:estimateMixedRegulatoryVoc(milesiMix),
+  milesiReduced:estimateMixedRegulatoryVoc([...milesiMix,{volumeLitres:0.12,actualVocGL:883}]),
+  renner688Low:estimateMixedRegulatoryVoc([{volumeLitres:1,actualVocGL:64.4,waterFraction:0.64055},{volumeLitres:0.15,actualVocGL:285.56}]),
+  renner688High:estimateMixedRegulatoryVoc([{volumeLitres:1,actualVocGL:64.4,waterFraction:0.64055},{volumeLitres:0.15*1.15/1.06,actualVocGL:335}]),
+  renner785:estimateMixedRegulatoryVoc([{volumeLitres:1,actualVocGL:55.696,waterFraction:0.663986},{volumeLitres:0.10*1.18/1.08,actualVocGL:15}]),
+};
+const roundTen = value => Math.round(value / 10) * 10;
 
 export const regulatoryVoc = {
   'sn-primer':reported('<100','sn-primer-tds'),
@@ -33,10 +54,10 @@ export const regulatoryVoc = {
   'sn-coating':reported('<150','sn-coating-tds','TDS reports <150 g/L minus water / exempt compounds. The separate <65 g/L applied value is not substituted for regulatory VOC.'),
   gallery:reported('176','gallery-tds'),
   command:reported('<50','command-emissions','The manufacturer declaration explicitly states Regulatory VOC Content <50 g/L, SCAQMD Rule 1113, EPA Method 24. Its SDS §9 also labels <50 g/L as the VOC Regulatory Limit. No multiplier is applied.'),
-  renner688:estimated({densityKgL:1.15,vocWeightPercent:5.60,solidsWeightPercent:38.70},'renner688-us-sds',`${rennerAssumption} Inputs: density 1.15 kg/L, VOC 5.60 wt%, solids 38.70 wt%. Calculated 179.2 g/L; source separately prints 180 g/L without a basis.`,10),
-  renner785:estimated({densityKgL:1.18,vocWeightPercent:4.72,solidsWeightPercent:39.01},'renner785-us-sds',`${rennerAssumption} Inputs: density 1.18 kg/L, VOC 4.72 wt%, solids 39.01 wt%. Calculated 165.8 g/L; source separately prints 167 g/L without a basis.`,10),
+  renner688:{display:`≈${roundTen(professionalMixEstimates.renner688Low)}–${roundTen(professionalMixEstimates.renner688High)}*`,source:'renner688-us-sds',extraSources:['renner-u688-tds','renner-m404-sds'],note:'Selected required 2K system: U688 + YC-M404 at 15%, the TDS maximum-resistance schedule. Rough mixed regulatory estimate, not the old base-only 180 g/L. Base model: 1 L, density 1.15 kg/L, VOC 5.60 wt% (64.4 g), estimated water volume 0.64055 L from SDS solids / VOC balance. M404 density 1.06, VOC 26.94 wt% (285.56 g/L) versus separately printed 335 g/L with unstated basis. Assuming hardener contains no water / exempt solvent, 15% volume gives ≈210 g/L and 15% weight using printed 335 g/L gives ≈228 g/L. Range brackets those basis assumptions; no extra water added. Not a matched-batch Method 24 result.'},
+  renner785:{display:`≈${roundTen(professionalMixEstimates.renner785)}*`,source:'renner785-us-sds',extraSources:['renner785-tds','renner-m403-sds'],note:'Selected required 2K system: M785 + YC-M403 at 10%. Rough mixed estimate, not the old base-only 167 g/L. Base: 1 L, density 1.18 kg/L, VOC 4.72 wt% (55.696 g), estimated water volume 0.663986 L from SDS solids / VOC balance. M403 density 1.08, VOC 1 wt% (10.8 g/L) versus separately printed 15 g/L. Assuming no water / exempt solvent in the hardener and 10% by weight or volume gives approximately 128–131 g/L, rounded to 130. Recipe percentage basis and water estimates remain assumptions; no extra water added.'},
   centurion:reported('≈110','centurion-tds','TDS reports 109.98 g/L minus exempt versus 48.55 g/L as supplied. Regulatory value rounded for display; no extra conversion.'),
-  milesi:estimated({densityKgL:1.226,waterWeightPercent:48.7,actualVocGL:47.4},'milesi116-sds','2021 HKR116 base SDS: density 1.226 kg/L, water 48.7 wt%, actual VOC 47.4 g/L. Assumes no exempt solvents and water density 1 kg/L. Estimated regulatory VOC 117.6 g/L, rounded to 120. Density ±0.03 kg/L gives approximately 114–122 g/L before other uncertainty. HNB40 is not included.',10),
+  milesi:{display:`≈${roundTen(professionalMixEstimates.milesiUnthinned)}–${roundTen(professionalMixEstimates.milesiReduced)}*`,source:'milesi-kkr513-sds',extraSources:['milesi-kkr-tds','milesi-lnb99-sds'],note:'KKR513 + required LNB99, replacing the optional 1K/2K HKR116 waterborne system. Base SDS: 630.4 g/L, water 0%. LNB99 SDS: 661.1 g/L. At the TDS 11.6% hardener volume, estimated unthinned mixed VOC = (630.4 + 0.116 × 661.1) / 1.116 = 633.6 g/L. The TDS also calls for 12% thinner volume (LZC9264, density 0.883 kg/L). Assuming that thinner is all non-exempt volatile solvent gives about 658 g/L; a fully exempt thinner leaves about 634 g/L regulatory VOC. Rounded range 630–660. Base / hardener exempt fractions and additive volumes are assumed, reducer SDS is not captured, and the 2023 recipe / 2020 base / 2015 hardener are not a verified current batch. Higher VOC reflects this solvent-based system, not a quality ranking.'},
   krystal:assumed('≈570','krystal-tds','Uses the PDS catalyzed-at-10% range of 564–573 g/L, rounded to 570, as an assumed regulatory figure. Exempt-solvent fractions are not established.'),
   magnamax:reported('625 ± 4','magnamax-tds','Packaged VOC less exempt solvents; historical clear-finish PDS.'),
   emerald:reported('<50','emerald-tds'),

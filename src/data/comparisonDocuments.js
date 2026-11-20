@@ -742,5 +742,44 @@ export const comparisonDocuments = [
     "base": "media/comparison/command-emissions",
     "sha256": "aa37dbf134e2d493cce63fcc2b567aefffe9920e24f817b30c20490fd82314f4",
     "textNote": "Page 4 is a scanned laboratory certificate. Its accessible text is a checked transcription of the product identity, results and conditions with a summarized disclaimer; consult the image for complete wording."
+  },
+  {
+    "id": "milesi-kkr-tds",
+    "title": "Milesi KKR51x Acrylic Urethane Topcoat",
+    "kind": "TDS",
+    "edition": "May 2023 · Revision 5",
+    "variant": "2K solvent-based white series · KKR513 20 Gloss · LNB99 schedule",
+    "sourceUrl": "https://media.witglobal.net/stmedia/1800/documents/std.lang.all/KKR51x_Technical_Data_Sheet.pdf",
+    "sourceLabel": "Manufacturer-authored document",
+    "checked": "2026-11-19",
+    "pages": 4,
+    "base": "media/comparison/milesi-kkr-tds",
+    "sha256": "53a82a74fe395e8cc29b00c04572daeba60dbce7901ab53b6e439d5cad21ad8d"
+  },
+  {
+    "id": "milesi-kkr513-sds",
+    "title": "Milesi KKR513 White 20 Gloss",
+    "kind": "SDS",
+    "edition": "July 9, 2020 · Version 41",
+    "variant": "U.S. OSHA HCS · Supplied solvent-based coating base",
+    "sourceUrl": "https://media.witglobal.net/stmedia/1800/documents/std.lang.all/MILKKR513-5KG-SDS.pdf",
+    "sourceLabel": "Manufacturer-authored document",
+    "checked": "2026-11-19",
+    "pages": 17,
+    "base": "media/comparison/milesi-kkr513-sds",
+    "sha256": "63b920dc9b6a77222b3176cb650d97fa5c959d94a7878ae2eb2265aa508c9885"
+  },
+  {
+    "id": "milesi-lnb99-sds",
+    "title": "Milesi LNB99 Hardener",
+    "kind": "SDS",
+    "edition": "September 18, 2015 · Version 228",
+    "variant": "U.S. reference · Separate aliphatic polyurethane hardener",
+    "sourceUrl": "https://www.atlanticplywood.com/sds/Milesi/SDS_US_LNB99_Hardener.PDF",
+    "sourceLabel": "Manufacturer-authored document",
+    "checked": "2026-11-19",
+    "pages": 13,
+    "base": "media/comparison/milesi-lnb99-sds",
+    "sha256": "0d0f2480f39ea4695a59f93809be03c354f3b3e9f6d324aae96f7422b26ed270"
   }
 ];

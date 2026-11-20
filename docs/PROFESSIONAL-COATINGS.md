@@ -1,6 +1,6 @@
-# Professional Coating References — Portfolio 1.8.5
+# Professional Coating References — Portfolio 1.8.9
 
-The comparison includes 57 captured manufacturer / Spray-Net documents and 438 pages. Every displayed coating has a captured SDS. Brand buttons, pinned headings, and pinned property / Spray-Net columns keep the comparison navigable on tablets. All originals, page images and accessible text cache offline.
+The comparison includes 60 captured manufacturer / Spray-Net documents and 472 pages. Every displayed coating has a captured SDS. Brand buttons, pinned headings, and pinned property / Spray-Net columns keep the comparison navigable on tablets. All originals, page images and accessible text cache offline.
 
 ## New source documents
 
@@ -102,3 +102,18 @@ Method source: https://www.aqmd.gov/home/rules-compliance/compliance/vocs/calcul
 Added a row directly below Catalyst. Spray-Net is Yes, per the operator's confirmation of the current system, alongside the captured A-003 water / polycarbodiimide SDS. No equivalence between legacy SWC010 and A-003 mixing instructions is newly asserted. Renner M403/M404, Centurion CW-4002 and Milesi HNB40 are No based on disclosed isocyanates / polyisocyanates. The HNB40 reference remains explicitly regional. Renner 643 is Depends on catalyst because its optional alternatives are not all captured. The 1K references and factory pre-catalyzed MagnaMax show No added catalyst. C1491 Care Catalyst is an acid catalyst with No isocyanates listed; this does not turn an incomplete SDS into an absolute formulation claim or label it isocyanate-containing. Full notes and links are inside the source library.
 
 This row concerns the supplied catalyst, not an overall safety rating or a claim that all competing coating systems contain isocyanates. Edit `src/data/catalystComparison.js` to maintain these statuses. Pricing research is not included in the app, public documents or release data.
+
+
+## Required 2K professional systems — 1.8.9
+
+Milesi HKR116 was an optional 1K/2K base compared in an HNB40-catalyzed schedule. Its prior VOC estimate was for the base, not the complete mixture. It is replaced in the active paint sheet by **KKR513 White 20 Gloss + LNB99**, a required two-component, non-yellowing solvent-based acrylic-urethane system. This is not a higher tier of the same waterborne formula. No unsupported brand-wide ranking is assigned. Old HKR documents remain archived, but do not supply the new product's specifications or prices.
+
+New originals: May 2023 KKR51x TDS Revision 5 (4 pages), July 9, 2020 U.S. KKR513 SDS Version 41 (17 pages), September 18, 2015 U.S. LNB99 SDS Version 228 (13 pages). The selected TDS recipe uses LNB99 10 wt% / 11.6 vol%, LZC9264 reducer 10 wt% / 12 vol%, a 24-hour pot life, touch dry 40 minutes, 12-hour complete dry and a maximum three-hour layer interval without sanding. Earliest recoat is not specified. Base solids 44.5 ±2%, mixture 43.2 ±2%, basis unqualified. LNB6AA5 is a separate alternative, not substituted into this reference. LNB99 contains HDI homopolymers and free HDI; the catalyst row points to its U.S. SDS.
+
+Renner **U688 is already 2K-only**; retain the high-durability product and make the requirement explicit. Select YC-M404 at the TDS maximum-resistance 15% schedule. **M785** is described as two-pack in its TDS; select YC-M403 at 10%. Optional 1K/2K 765 / 851 topcoats are not substituted. The broader primer sheet retains its existing mix of primer types, as originally requested.
+
+Mixed VOC remains an estimate, not a current batch test. KKR513 base is 630.4 g/L (not HKR116's 47.4); LNB99 is 661.1 g/L. At 11.6% catalyst volume the estimated unthinned mixture is 633.6 g/L. With the TDS 12% reducer volume, density 0.883 kg/L, assuming all reducer solvent is non-exempt yields 657.8 g/L; fully exempt reducer leaves 633.6 regulatory g/L. Display **≈630–660***. Exempt fractions, additive volumes and use of 2023 / 2020 / 2015 references are assumptions. Higher VOC reflects solvent chemistry, not a quality rank.
+
+Renner mixed estimates replace the earlier base-only numbers. U688 + 15% M404 displays **≈210–230***; M785 + 10% M403 displays **≈130***. The models use captured base density, VOC wt% and solids to estimate water; hardener is assumed water/exempt-free. Unprinted mix-ratio basis and ambiguous hardener VOC basis are bracketed for U688. Full inputs are in `regulatoryVoc.js` and the collapsed notes. `estimateMixedRegulatoryVoc` sums VOC masses and non-exempt volumes. No numerical performance scores are invented for the new SKUs.
+
+All 34 added pages, original hashes and accessible text are included offline. Current library: **60 documents / 472 pages**. Current Gallery / Emerald price research is held outside the public app and repository.

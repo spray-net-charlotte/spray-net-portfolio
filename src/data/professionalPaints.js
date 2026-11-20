@@ -133,15 +133,15 @@ export const professionalPaints = {
   },
   "renner688": {
     "id": "renner688",
-    "name": "Renner 688 Kitchen Topcoat",
+    "name": "Renner 688 High-Durability 2K",
     "brand": "Renner",
-    "detail": "2K Waterborne · U688 · 30 Gloss White SDS",
+    "detail": "2K-Only · Water-Based · U688 White 30 Gloss",
     "tds": "renner-u688-tds",
     "extraSources": [
       "renner-guide",
       "renner688-tds"
     ],
-    "note": "March 2023 U688-series manufacturer TDS, Version 2; February 25, 2025 U.S. SDS, Revision 4, YO-30U688/SBN White. The TDS retains some C688 references in its body; its header identifies U688. The older regional C688 TDS is archived separately. SDS values describe the uncatalyzed 30-gloss white base; hardener and mixed-system properties differ.",
+    "note": "March 2023 U688-series manufacturer TDS, Version 2; February 25, 2025 U.S. SDS, Revision 4, YO-30U688/SBN White. The TDS retains some C688 references in its body; its header identifies U688. The older regional C688 TDS is archived separately. SDS values describe the uncatalyzed 30-gloss white base; hardener and mixed-system properties differ. This topcoat requires catalysis; it is not the optional 1K/2K 765 or 851. The compact comparison selects YC-M404 at 15% for the TDS maximum-resistance schedule.",
     "specs": {
       "system": "Professional 2K Waterborne · White / Neutral",
       "catalysis": "2023 U688 TDS: YC-M403 or M404 at 10–15%; 15% for best chemical / physical resistance. Separate component SDS sheets are included.",
@@ -178,15 +178,16 @@ export const professionalPaints = {
     "specSources": {
       "voc": "renner688-us-sds",
       "sdsSolids": "renner688-us-sds"
-    }
+    },
+    "twoKOnly": true
   },
   "renner785": {
     "id": "renner785",
     "name": "Renner 785 Two-Pack Topcoat",
     "brand": "Renner",
-    "detail": "2K Waterborne · M785 · 10 Gloss White SDS",
+    "detail": "2K-Only · Water-Based · M785 White 10 Gloss",
     "tds": "renner785-tds",
-    "note": "February 2021 M785-series European TDS, Version 17; May 15, 2025 U.S. SDS, Revision 5, YO-10M785/SBN White. Technical and safety editions / jurisdictions remain identified separately; identical formulation across them is not established. SDS VOC / total solids belong to the U.S. 10-gloss white base only. Not a U688/U765 substitute.",
+    "note": "February 2021 M785-series European TDS, Version 17; May 15, 2025 U.S. SDS, Revision 5, YO-10M785/SBN White. Technical and safety editions / jurisdictions remain identified separately; identical formulation across them is not established. SDS VOC / total solids belong to the U.S. 10-gloss white base only. Not a U688/U765 substitute. The TDS describes a two-pack topcoat with a required hardener; the compact comparison selects YC-M403 at 10%.",
     "specs": {
       "system": "Professional 2K Waterborne · White / Neutral",
       "catalysis": "Regional TDS: YC-M403 at 4–10%; alternative hardeners are listed. Match product / hardener editions before use.",
@@ -222,7 +223,8 @@ export const professionalPaints = {
     "specSources": {
       "voc": "renner785-us-sds",
       "sdsSolids": "renner785-us-sds"
-    }
+    },
+    "twoKOnly": true
   },
   "krystal": {
     "id": "krystal",
@@ -707,69 +709,72 @@ export const professionalPaints = {
   },
   "milesi": {
     "id": "milesi",
-    "name": "Milesi HKR116",
+    "name": "Milesi KKR513 Acrylic Urethane",
     "brand": "Milesi",
-    "detail": "2K Waterborne White · 10 Gloss · HNB40 Schedule",
-    "tds": "milesi-tds",
-    "sds": "milesi116-sds",
+    "detail": "2K-Only · Solvent-Based · White 20 Gloss",
+    "tds": "milesi-kkr-tds",
+    "sds": "milesi-kkr513-sds",
     "hardeners": [
-      "hnb40"
+      "lnb99"
     ],
-    "note": "December 2016 HKR-series TDS; July 2021 U.S. HKR116 base SDS. HNB40 at 10% by weight is one TDS schedule; HNB3 and HNB1 are separate alternatives. The available HNB40 SDS is a 2017 Bulgarian / EU reference, not verified as the current U.S. hardener. No formula equivalence across editions is established.",
+    "twoKOnly": true,
+    "note": "Professional two-component, non-yellowing pigmented acrylic-urethane system. Replaces optional 1K/2K HKR116 in this sheet. May 2023 series TDS; July 2020 U.S. KKR513 base SDS; September 2015 U.S. LNB99 hardener SDS. This is solvent-based, not a different grade of the old waterborne product. Captured reference editions are not a matched current-batch test. The selected recipe uses LNB99 at 10% weight / 11.6% volume, plus LZC9264 thinner at 10% weight / 12% volume. LNB6AA5 is a separate alternative schedule.",
     "specs": {
-      "system": "Professional Waterborne · White / Pigmented",
-      "catalysis": "2K · HNB40 at 10% weight / 11.5% volume; 2-hour pot life",
-      "resin": "Water-based pigmented converter; exact resin not identified in this TDS",
-      "unqualifiedSolids": "HKR116 base 49.2 ± 2%; HNB40 mixture 50.1 ± 2% · basis not identified",
-      "voc": "47.4 g/L / 3.87% · 2021 base SDS §9; subtraction basis not stated",
-      "wet": "Airmix 4.0–5.0 mil; hand spray 3.6–4.3 mil · HNB40 schedule",
-      "touch": "2 hours · 18–22°C / 64–72°F, 65–70% RH · HNB40 schedule",
-      "cure": "Complete drying 96 hours; stackable 24 hours · HNB40 schedule",
-      "performance": "No numerical hardness, adhesion, MEK or KCMA results in this HKR-series TDS. Brand-level tests for other products are not assigned to HKR116."
+      "system": "Professional 2K-Only Solvent-Based Acrylic Urethane · White",
+      "catalysis": "Required LNB99 · 10% by weight / 11.6% by volume; LZC9264 thinner 10% weight / 12% volume; 24-hour pot life",
+      "resin": "Acrylic Urethane",
+      "unqualifiedSolids": "Base 44.5 ± 2%; base + LNB99 43.2 ± 2% · TDS does not state weight / volume basis",
+      "voc": "630.4 g/L / 58.37% · 2020 KKR513 supplied-base SDS; water 0%; mixed values are estimated separately",
+      "wet": "4.4–5.5 mil · Airmix / hand spray · LNB99 schedule",
+      "touch": "40 minutes · 18–22°C / 64–72°F, 65–70% RH",
+      "recoat": "Maximum 3 hours between layers without sanding; earliest recoat not specified",
+      "cure": "Complete / hard dry 12 hours · LNB99 schedule",
+      "performance": "No numerical hardness, adhesion, MEK or exact-SKU KCMA results in this captured TDS."
     },
     "specSources": {
-      "voc": "milesi116-sds"
+      "voc": "milesi-kkr513-sds"
     },
     "safety": {
-      "signal": "Warning",
-      "edition": "July 23, 2021 · Version 102 · HKR116 · U.S. OSHA HCS",
+      "signal": "Danger",
+      "edition": "July 9, 2020 · Version 41 · KKR513 · U.S. OSHA HCS",
       "classes": [
-        "Skin Sensitization · Category 1"
+        "Flammable Liquid · Category 2",
+        "Carcinogenicity · Category 1A",
+        "Reproductive Toxicity · Category 2",
+        "Specific Target Organ Toxicity, Repeated Exposure · Category 2",
+        "Eye Irritation · Category 2A",
+        "Skin Sensitization · Category 1",
+        "Specific Target Organ Toxicity, Single Exposure · Category 3"
       ],
-      "summary": "May cause an allergic skin reaction. This is the supplied base SDS; hardener classification is separate. The older 2015 HKR114 sheet is a different sheen and is not substituted.",
+      "summary": "Classification applies to the supplied KKR513 base. The required LNB99 hardener has its own SDS; no mixed-system hazard classification is calculated.",
       "ingredients": [
         [
-          "2-Butoxyethanol",
-          "111-76-2",
+          "N-Butyl Acetate",
+          "123-86-4",
+          "30–49.99%"
+        ],
+        [
+          "Isobutyl Acetate",
+          "110-19-0",
+          "10–12.49%"
+        ],
+        [
+          "Xylene",
+          "1330-20-7",
+          "5–9.99%"
+        ],
+        [
+          "Ethylbenzene",
+          "100-41-4",
           "1–2.49%"
         ],
         [
-          "Dipropylene Glycol Monomethyl Ether",
-          "34590-94-8",
-          "1–<5%"
-        ],
-        [
-          "2-(2-Butoxyethoxy)ethanol",
-          "112-34-5",
-          "<0.5%"
-        ],
-        [
-          "C16–18 Ethoxylated Alcohols",
-          "68439-49-6",
-          "<0.5%"
-        ],
-        [
-          "Methylisothiazolinone",
-          "2682-20-4",
-          "≥0.0015–<0.01%"
-        ],
-        [
-          "CMIT / MIT Mixture",
-          "55965-84-9",
-          "≥0.00025–<0.0015%"
+          "Toluene",
+          "108-88-3",
+          "1–2.49%"
         ]
       ],
-      "pages": "Sections 2–3 · pages 1–2"
+      "pages": "Sections 2–3 · pages 1–3"
     }
   }
 };

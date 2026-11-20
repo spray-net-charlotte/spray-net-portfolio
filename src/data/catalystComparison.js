@@ -28,8 +28,8 @@ export const catalystComparison = {
   },
   milesi: {
     label:'No',
-    sources:['milesi-hnb40-sds'],
-    note:'The captured 2017 Bulgarian / EU HNB40 SDS lists aliphatic polyisocyanate and EUH204 (contains isocyanates). Regional / edition limits remain in the original document.',
+    sources:['milesi-lnb99-sds'],
+    note:'Required LNB99 for the selected KKR513 2K-only solvent-based system. The U.S. SDS lists HDI homopolymers and hexamethylene diisocyanate. This replaces the old HKR116 / HNB40 comparison; original source dates remain visible.',
   },
   krystal: {
     label:'No isocyanates listed',
