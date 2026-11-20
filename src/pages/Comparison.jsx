@@ -12,6 +12,7 @@ import { kcmaFinishStatus } from '../data/kcmaEvidence.js';
 import { regulatoryVoc, vocMethodReference } from '../data/regulatoryVoc.js';
 import { getCatalystComparison } from '../data/catalystComparison.js';
 import { coatingPriceDate, coatingPrices, formatCoatingPrice } from '../data/coatingPrices.js';
+import { benchmarkNames, benchmarkDisplay } from '../data/benchmarkDisplay.js';
 import '../comparison.css';
 
 const docById = (id) => comparisonDocuments.find((doc) => doc.id === id);
@@ -35,6 +36,10 @@ function DocumentCard({ doc, route }) {
 function TestResults({ product, route }) {
   const tests = product.tests;
   return tests ? <details className="comparison-test-results"><summary>{tests.values.length} Reported Results</summary><p>{tests.conditions}</p><dl>{tests.values.map(([name,result]) => <div key={name}><dt>{name}</dt><dd>{result}</dd></div>)}</dl><SourceLink id={tests.source} route={route}>Read Test Source</SourceLink></details> : product.specs.performance || 'No numerical test results in the captured source.';
+}
+function BenchmarkCell({ value, testKey, productId }) {
+  const score = benchmarkDisplay(testKey, value);
+  return <td data-product={productId} className={`benchmark-score score-${score.level}`} title={String(value)}><span>{score.text}</span><small>{score.label}</small></td>;
 }
 function DocumentView({ doc, route }) {
   const [page, setPage] = useState(0);
@@ -76,7 +81,6 @@ function DocumentView({ doc, route }) {
 
 function ComparisonSheet({ groupKey, route }) {
   const sheet = useRef(null);
-  const [activeBrand, setActiveBrand] = useState('');
   useEffect(() => {
     const header = document.querySelector('.app-header');
     const containers = [...document.querySelectorAll('.coating-comparison .comparison-matrix-scroll')];
@@ -91,30 +95,31 @@ function ComparisonSheet({ groupKey, route }) {
     window.addEventListener('scroll', update, { passive:true });
     window.addEventListener('resize', update);
     return () => { observer.disconnect(); window.removeEventListener('scroll', update); window.removeEventListener('resize', update); };
-  }, []);
+  }, [route.raw]);
   const group = comparisonGroups[groupKey];
-  const products = [group.ours, ...group.peers].map(id => coatingProducts[id]);
-  const sourceIds = new Set(products.flatMap(p => [p.tds,p.sds,p.tests?.source,...(p.extraSources || []),...(regulatoryVoc[p.id]?.extraSources || []),...(p.hardeners || []).map(id => coatingHardeners[id].sds)]).filter(Boolean));
+  const allProducts = [group.ours, ...group.peers].map(id => coatingProducts[id]);
   const brandFor = p => p.brand || (p.name.startsWith('Sherwin-Williams') ? 'Sherwin-Williams' : p.name.startsWith('INSL-X') ? 'INSL-X' : p.name.startsWith('Benjamin Moore') ? 'Benjamin Moore' : p.name.startsWith('Zinsser') ? 'Zinsser' : p.name.startsWith('KILZ') ? 'KILZ' : 'Spray-Net');
-  const brands = [...new Set(products.slice(1).map(brandFor))];
-  const jumpToBrand = brand => {
-    const product = products.find(p => brandFor(p) === brand);
-    const container = sheet.current;
-    const target = container.querySelector(`[data-product="${product.id}"]`);
-    const pinned = [...container.querySelectorAll('thead th')].slice(0,2).reduce((sum,cell) => sum + cell.getBoundingClientRect().width,0);
-    container.scrollTo({left:Math.max(0,container.scrollLeft + target.getBoundingClientRect().left - container.getBoundingClientRect().left - pinned),behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
-    setActiveBrand(brand);
+  const brands = [...new Set(allProducts.slice(1).map(brandFor))];
+  const selectedBrands = (route.params.get('brands') || '').split(',').filter(brand => brands.includes(brand));
+  const products = allProducts.filter(p => p.id === group.ours || !selectedBrands.length || selectedBrands.includes(brandFor(p)));
+  const sourceIds = new Set(products.flatMap(p => [p.tds,p.sds,p.tests?.source,...(p.extraSources || []),...(regulatoryVoc[p.id]?.extraSources || []),...(p.hardeners || []).map(id => coatingHardeners[id].sds)]).filter(Boolean));
+  const toggleBrand = brand => {
+    const next = selectedBrands.includes(brand) ? selectedBrands.filter(value => value !== brand) : [...selectedBrands,brand];
+    const params = new URLSearchParams(route.params);
+    if (next.length) params.set('brands',next.join(',')); else params.delete('brands');
+    navigate(`${route.path}?${params}`);
+    sheet.current?.scrollTo({left:0});
   };
   if (groupKey === 'paint') { sourceIds.add('sn-benchmark'); sourceIds.add('sn-catalyst-sds'); }
   return <>
-    <h2 className="comparison-sheet-title">{groupKey === 'primer' ? 'Cabinet Primers' : 'Cabinet Paint'} — All Brands</h2>
-    <div className="comparison-brand-jumps" role="group" aria-label="Jump to a brand"><span>Find a Brand</span>{brands.map(brand => <button key={brand} className="chip" aria-pressed={activeBrand === brand} onClick={() => jumpToBrand(brand)}>{brand}</button>)}</div>
-    <p className="comparison-reading-note">Tap a brand or swipe to compare.</p>
+    <h2 className="comparison-sheet-title">{groupKey === 'primer' ? 'Cabinet Primers' : 'Cabinet Paint'} — {selectedBrands.length ? 'Selected Brands' : 'All Brands'}</h2>
+    <div className="comparison-brand-jumps" role="group" aria-label="Filter brands"><span>Compare Brands</span><button className="chip" aria-pressed={!selectedBrands.length} onClick={() => {const params=new URLSearchParams(route.params);params.delete('brands');navigate(`${route.path}?${params}`);sheet.current?.scrollTo({left:0});}}>All Brands</button>{brands.map(brand => <button key={brand} className="chip" aria-pressed={selectedBrands.includes(brand)} onClick={() => toggleBrand(brand)}>{brand}</button>)}</div>
+    <p className="comparison-reading-note">Select one or more brands. Spray-Net stays alongside your selections.</p>
     <div ref={sheet} className="comparison-matrix-scroll" role="region" aria-label="All-brand comparison sheet" tabIndex={0}>
       <table className="comparison-matrix"><caption className="sr-only">{groupKey === 'primer' ? 'Primer' : 'Paint'} specifications across all brands</caption>
         <thead><tr><th scope="col">Compare</th>{products.map(p => <th scope="col" key={p.id} data-product={p.id}><span className="small-caps">{brandFor(p).toUpperCase()}</span>{p.name}<small>{p.detail}</small></th>)}</tr></thead>
         <tbody>
-          {groupKey === 'paint' && <tr className="comparison-cost-row"><th scope="row">Contractor Cost<small>USD / Mixed U.S. Gal.<br />Catalyst Included</small></th>{products.map(p => <td key={p.id} data-product={p.id}>{formatCoatingPrice(p.id)}</td>)}</tr>}
+          {groupKey === 'paint' && <tr className="comparison-cost-row"><th scope="row">Contractor Cost<small>USD / Mixed Gal.</small></th>{products.map(p => <td key={p.id} data-product={p.id}>{formatCoatingPrice(p.id)}</td>)}</tr>}
           {groupKey === 'paint' && <tr><th scope="row">Meets KCMA</th>{products.map(p => <td key={p.id} data-product={p.id}>{kcmaFinishStatus[p.id] || 'Not verified'}</td>)}</tr>}
           {summaryRows.map(([key,label]) => <tr key={key}><th scope="row">{label}</th>{products.map(p => <td key={p.id} data-product={p.id}>{key === 'voc' ? regulatoryVoc[p.id]?.display || '—' : key === 'isocyanateFree' ? getCatalystComparison(p, getComparisonSummary(p)).label : getComparisonSummary(p)[key] || '—'}</td>)}</tr>)}
           <tr><th scope="row">Documents</th>{products.map(p => <td key={p.id} data-product={p.id}><SourceLink id={p.tds} route={route}>TDS</SourceLink>{p.sds && <SourceLink id={p.sds} route={route}>SDS</SourceLink>}</td>)}</tr>
@@ -127,7 +132,9 @@ function ComparisonSheet({ groupKey, route }) {
     {groupKey === 'paint' && <>
       <h2 className="comparison-sheet-title">Cabinet Coating Benchmarks — All Brands</h2>
       <p className="comparison-reading-note">Historical Spray-Net lab comparison. Products and test conditions differ from the current specification sheets above.</p>
-      <div className="comparison-matrix-scroll" role="region" aria-label="All-brand benchmark sheet" tabIndex={0}><table className="comparison-matrix"><caption className="sr-only">In-house cabinet coating benchmarks across all brands</caption><thead><tr><th scope="col">Test</th><th scope="col">Spray-Net Kitchen Cabinet Paint</th>{benchmarkProducts.map(p => <th scope="col" key={p.id}>{p.name}</th>)}</tr></thead><tbody>{benchmarkRows.map(([label,method,result,key,index]) => <tr key={label}><th scope="row">{label}<small>{method}</small></th><td>{result}</td>{benchmarkProducts.map(p => <td key={p.id} data-product={p.id}>{index === undefined ? p[key] : p[key][index]}</td>)}</tr>)}</tbody></table></div>
+      <div className="benchmark-legend" aria-label="Benchmark color guide"><span className="score-strong">Strong</span><span className="score-mixed">Mid</span><span className="score-weak">Weak</span><span className="score-unknown">Not Reported</span></div>
+      <div className="benchmark-scroll" role="region" aria-label="All-brand benchmark sheet" tabIndex={0}><table className="benchmark-matrix"><caption className="sr-only">In-house cabinet coating benchmarks across all brands</caption><thead><tr><th scope="col">Test</th><th scope="col">Spray-Net</th>{benchmarkProducts.map(p => <th scope="col" key={p.id}><abbr title={p.name}>{benchmarkNames[p.id]}</abbr></th>)}</tr></thead><tbody>{benchmarkRows.map(([label,method,result,key,index]) => <tr key={label}><th scope="row" title={method}>{label}</th><BenchmarkCell value={result} testKey={key} productId="sn-coating"/>{benchmarkProducts.map(p => <BenchmarkCell key={p.id} productId={p.id} testKey={key} value={index === undefined ? p[key] : p[key][index]}/>)}</tr>)}</tbody></table></div>
+      <details className="comparison-source-library"><summary>Benchmark Score Guide</summary><p>Colors summarize this historical report; they are not universal coating grades. Pencil: HB or harder = strong, B–3B = mid, 4B or softer = weak. MEK: 100+ rubs = strong, 30–99 = mid, below 30 = weak. Chemical ratings: 5 = strong, 3–4 = mid, 1–2 = weak. Unreported results stay gray.</p><p>Detergent / water: unchanged film = strong; softening or color change = mid; blistering, easy scratching or dissolved film = weak.</p>{benchmarkRows.map(([label,method]) => <p key={label}><strong>{label}:</strong> {method}</p>)}</details>
       <SourceLink id="sn-benchmark" route={route}>Read Complete Benchmark Report</SourceLink>
       <details className="comparison-source-library"><summary>Additional Published Test Results</summary>
         <div className="comparison-matrix-scroll" role="region" aria-label="Published manufacturer tests" tabIndex={0}><table className="comparison-published-tests"><caption className="sr-only">Additional published coating tests</caption><thead><tr><th scope="col">Coating</th><th scope="col">Results</th></tr></thead><tbody>

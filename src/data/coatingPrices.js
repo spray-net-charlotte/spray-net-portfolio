@@ -16,5 +16,5 @@ export const coatingPrices = {
 
 export function formatCoatingPrice(id) {
   const price = coatingPrices[id];
-  return price ? `${price.estimated ? '≈' : ''}$${price.amount.toFixed(2)}` : '—';
+  return price ? `≈$${price.amount.toFixed(2)}` : '—';
 }

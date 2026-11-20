@@ -16,7 +16,29 @@
 .comparison-matrix thead th:nth-child(2) { background:var(--ink); color:#fff; }
 .comparison-matrix small { display:block; font-size:14px; font-weight:400; margin-top:8px; }
 .comparison-matrix .comparison-cost-row > * { background:#fff4e8; border-bottom:2px solid #da782a; }
-.comparison-matrix .comparison-cost-row td { font-size:21px; font-weight:800; font-variant-numeric:tabular-nums; }
+.comparison-matrix .comparison-cost-row > * { padding-top:9px; padding-bottom:9px; }
+.comparison-matrix .comparison-cost-row th small { margin-top:2px; font-size:12px; white-space:nowrap; }
+.comparison-matrix .comparison-cost-row td { font-size:18px; font-weight:800; font-variant-numeric:tabular-nums; }
+.benchmark-scroll { max-width:100%; overflow:auto; border:1px solid #c7d5df; border-radius:12px; margin:16px 0; }
+.benchmark-matrix { border-collapse:separate; border-spacing:0; width:100%; min-width:640px; table-layout:fixed; font-size:15px; }
+.benchmark-matrix th,.benchmark-matrix td { padding:8px 5px; text-align:center; vertical-align:middle; border-right:1px solid #d8e2e8; border-bottom:1px solid #d8e2e8; overflow-wrap:anywhere; line-height:1.3; }
+.benchmark-matrix th:first-child { width:120px; text-align:left; background:#edf3f7; }
+.benchmark-matrix thead th { background:#edf3f7; font-size:14px; }
+.benchmark-matrix thead th:nth-child(2) { background:var(--ink); color:white; }
+.benchmark-matrix abbr { text-decoration:none; }
+.benchmark-score > span { display:block; font-weight:800; }
+.benchmark-score small { display:block; font-size:13px; margin-top:3px; }
+.benchmark-matrix .score-strong,.benchmark-legend .score-strong { background:#dff2e6; color:#14532d; }
+.benchmark-matrix .score-mixed,.benchmark-legend .score-mixed { background:#fff1bf; color:#684600; }
+.benchmark-matrix .score-weak,.benchmark-legend .score-weak { background:#fbe0df; color:#8b2020; }
+.benchmark-matrix .score-unknown,.benchmark-legend .score-unknown { background:#eef1f4; color:#44515d; }
+.benchmark-legend { display:flex; gap:8px; flex-wrap:wrap; }
+.benchmark-legend > span { border-radius:6px; padding:6px 12px; font-size:14px; font-weight:700; }
+@media(max-width:900px) {
+ .benchmark-matrix { font-size:14px; }
+ .benchmark-matrix th:first-child { width:100px; }
+ .benchmark-matrix th,.benchmark-matrix td { padding:7px 4px; }
+}
 .comparison-matrix .matrix-section th { background:#dce8ef; color:var(--ink); max-width:none; }
 .comparison-matrix .matrix-section > th { position:static; }
 .comparison-matrix .matrix-section span { position:sticky; left:18px; display:inline-block; }

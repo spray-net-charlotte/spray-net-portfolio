@@ -5,7 +5,7 @@ export const kcmaFinishStatus = {
   gallery: 'Yes',
   centurion: 'Yes',
   magnamax: 'Yes',
-  krystal: 'Tests reported',
+  krystal: 'Yes',
 };
 
 export const kcmaEvidence = {
@@ -25,8 +25,9 @@ export const kcmaEvidence = {
     source: 'centurion-tds',
   },
   krystal: {
-    status: 'Manufacturer Finish Tests Reported',
-    detail: 'The archived clear-finish brochure reports KCMA chemical tests. It is not a certificate for every current pigmented formula or a cabinet line.',
+    status: 'Manufacturer Compliance Claim',
+    detail: 'The manufacturer Krystal product page states that this clear finish meets or exceeds KCMA finish-performance requirements. This is a finish claim, separate from cabinet-line certification.',
+    sourceUrl: 'https://www.mlcampbell.com/product/krystal/',
     source: 'krystal-performance',
   },
   magnamax: {

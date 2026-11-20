@@ -79,10 +79,13 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   const sheet=page.getByRole('table',{name:'Primer specifications across all brands'});
   await expect(sheet.locator('thead th')).toHaveCount(12);
   await page.getByRole('button',{name:'Renner',exact:true}).click();
-  await expect.poll(() => page.locator('.comparison-matrix-scroll').first().evaluate(el => el.scrollLeft)).toBeGreaterThan(500);
+  await expect(sheet.locator('thead th')).toHaveCount(4);
+  await expect(sheet).not.toContainText('KILZ 2 All-Purpose');
   await expect(page.getByRole('button',{name:'Renner',exact:true})).toHaveAttribute('aria-pressed','true');
   await page.getByRole('button',{name:'Sherwin-Williams',exact:true}).click();
-  await expect.poll(() => page.locator('.comparison-matrix-scroll').first().evaluate(el => el.scrollLeft)).toBeLessThan(5);
+  await expect(sheet.locator('thead th')).toHaveCount(7);
+  await page.getByRole('button',{name:'All Brands',exact:true}).click();
+  await expect(sheet.locator('thead th')).toHaveCount(12);
   await expect(sheet).toContainText('KILZ 2 All-Purpose'); await expect(sheet).toContainText('Extreme Bond');
   await expect(sheet.getByRole('row',{name:/^Solids /})).toContainText('55%');
   for (const label of ['Signal Word','SDS Classification','Handling / Exposure Notes','Selected Disclosed Ingredients','Published Test Results','Indoor Emissions Testing','About This Value']) await expect(sheet).not.toContainText(label);
@@ -104,7 +107,7 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await expect(paint).not.toContainText('Renner 785');
   const prices = paint.getByRole('row', {name:/^Contractor Cost/});
   await expect(paint.locator('tbody tr').first()).toHaveClass('comparison-cost-row');
-  for (const [id,price] of Object.entries({'sn-coating':'≈$189.44',renner688:'≈$152.34',centurion:'≈$134.71',milesi:'≈$121.71',gallery:'$112.13',emerald:'$91.34',command:'≈$80.70',advance:'≈$71.19',krystal:'≈$73.05',magnamax:'≈$60.71'})) await expect(prices.locator(`[data-product="${id}"]`)).toHaveText(price);
+  for (const [id,price] of Object.entries({'sn-coating':'≈$189.44',renner688:'≈$152.34',centurion:'≈$134.71',milesi:'≈$121.71',gallery:'≈$112.13',emerald:'≈$91.34',command:'≈$80.70',advance:'≈$71.19',krystal:'≈$73.05',magnamax:'≈$60.71'})) await expect(prices.locator(`[data-product="${id}"]`)).toHaveText(price);
   await page.getByText('Price Comparison Notes', {exact:true}).click();
   await expect(page.getByText('Estimated discounts are planning assumptions, not dealer quotes.', {exact:false})).toBeVisible();
   const kcma = paint.getByRole('row', {name:/^Meets KCMA /});
@@ -132,8 +135,10 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await expect(page.locator('.comparison-page-text pre')).toContainText('Danger');
   await page.goBack();
   await page.getByRole('button',{name:'M.L. Campbell',exact:true}).click();
-  await expect.poll(() => page.locator('.comparison-matrix-scroll').first().evaluate(el => el.scrollLeft)).toBeGreaterThan(500);
+  await expect(paint.locator('thead th')).toHaveCount(5);
   await expect(page.getByRole('table',{name:'In-house cabinet coating benchmarks across all brands'})).toBeVisible();
+  await page.goBack(); await expect(page.getByRole('button',{name:'Milesi',exact:true})).toHaveAttribute('aria-pressed','true');
+  await page.goBack(); await expect(page.getByRole('button',{name:'All Brands',exact:true})).toHaveAttribute('aria-pressed','true');
   await page.goBack(); await expect(page.getByRole('button',{name:'Primer',exact:true})).toHaveAttribute('aria-pressed','true');
 });
 
@@ -224,4 +229,36 @@ test('all comparison originals, images and text are available offline under GitH
   })),comparisonDocuments);
   expect(originals.every(Boolean)).toBe(true);
   await context.setOffline(false);
+});
+
+
+test('brand filters combine selections and benchmarks fit tablets with accessible score colors', async ({page}) => {
+  await page.goto('./#/comparison?area=interior&coat=paint');
+  const paint=page.getByRole('table',{name:'Paint specifications across all brands'});
+  expect(await paint.locator('thead th[data-product]').evaluateAll(cells => cells.map(cell=>cell.dataset.product))).toEqual(['sn-coating','advance','emerald','command','gallery','milesi','centurion','renner688','magnamax','krystal']);
+  const prices=paint.getByRole('row',{name:/^Contractor Cost/});
+  await expect(prices).not.toContainText('Catalyst Included');
+  for(const cell of await prices.locator('td').all()) await expect(cell).toHaveText(/^≈\$/);
+  await page.getByRole('button',{name:'Benjamin Moore',exact:true}).click();
+  await page.getByRole('button',{name:'Sherwin-Williams',exact:true}).click();
+  await expect(paint.locator('thead th')).toHaveCount(6);
+  await expect(paint).not.toContainText('Renner 688');
+  await expect(paint).not.toContainText('Milesi KKR513');
+  await expect(paint).toContainText('ADVANCE');
+  await expect(paint).toContainText('Gallery Series');
+  await page.reload();
+  await expect(paint.locator('thead th')).toHaveCount(6);
+  await page.getByRole('button',{name:'All Brands',exact:true}).click();
+  await expect(paint.locator('thead th')).toHaveCount(11);
+  const benchmark=page.getByRole('table',{name:'In-house cabinet coating benchmarks across all brands'});
+  const coffee=benchmark.getByRole('row',{name:/^Coffee /});
+  await expect(coffee.locator('[data-product="sn-coating"]')).toHaveClass(/score-strong/);
+  await expect(benchmark.getByRole('row',{name:/^MEK Rub Test /}).locator('[data-product="bm-advance"]')).toHaveClass(/score-weak/);
+  await expect(benchmark.getByRole('row',{name:/^Film Hardness /}).locator('[data-product="sw-emerald"]')).toHaveClass(/score-unknown/);
+  for(const width of [768,834,1024,1180]) {
+    await page.setViewportSize({width,height:1024});
+    const overflow=await page.getByRole('region',{name:'All-brand benchmark sheet'}).evaluate(el=>el.scrollWidth>el.clientWidth+1);
+    expect(overflow,`benchmark horizontal overflow at ${width}`).toBe(false);
+  }
+  await benchmark.screenshot({path:`test-results/benchmark-compact-${test.info().project.name}.png`});
 });

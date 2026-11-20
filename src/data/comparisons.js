@@ -142,7 +142,7 @@ export const coatingProducts = {
 
 export const comparisonGroups = {
   primer: { label: 'Primer', ours: 'sn-primer', peers: ['extreme', 'sw-shellac', 'sw-problock', 'renner643', 'renner083', 'stix', 'bin', 'cover', 'bullseye', 'kilz2'] },
-  paint: { label: 'Interior Paint', ours: 'sn-coating', peers: ['gallery', 'command', 'renner688', 'centurion', 'milesi', 'krystal', 'magnamax', 'emerald', 'advance'] },
+  paint: { label: 'Interior Paint', ours: 'sn-coating', peers: ['advance', 'emerald', 'command', 'gallery', 'milesi', 'centurion', 'renner688', 'magnamax', 'krystal'] },
 };
 
 Object.assign(coatingProducts, expandedPrimers, professionalPrimers, professionalPaints);

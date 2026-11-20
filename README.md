@@ -591,3 +591,16 @@ Interior → Paint now starts with Contractor Cost, in USD per mixed U.S. gallon
 Prices compare purchased finished coatings, not factory ingredient costs. Added reducer, tax, delivery and spray loss are excluded. Krystal and MagnaMax are clear finishes; Krystal includes separate catalyst, while MagnaMax is factory pre-catalyzed. Original private invoices, historical price research and franchise markup assumptions are not published.
 
 Validation: production build passed; comparison tests passed in tablet Chromium and iPad WebKit (11 passed, one existing Windows WebKit offline-service-worker skip), covering all ten prices, first-row placement, estimate notes, document navigation, responsive layouts and Chromium offline sources. GitHub Actions runs the complete suite before deployment.
+
+
+## Compact Comparisons and Brand Filters — Portfolio 1.8.11
+
+The paint columns follow the selected presentation order: Spray-Net, ADVANCE, Emerald, COMMAND, Gallery, Milesi, Centurion, Renner 688, MagnaMax lacquer, Krystal varnish. This order is not a verified universal strength ranking. Contractor Cost has a compact USD / Mixed Gal. label and ≈ on every figure; catalyst remains included in the calculation and is explained in Price Comparison Notes.
+
+Brand buttons now filter instead of scrolling. Select multiple brands, deselect any brand, or choose All Brands. Spray-Net remains visible for comparison. Selections are stored in the URL and survive reload, source navigation and browser Back.
+
+The historical benchmark uses abbreviated headers and a separate compact table that fits tablet widths. Strong / Mid / Weak labels accompany green / yellow / red backgrounds; missing results stay gray. Edit display rules in `src/data/benchmarkDisplay.js`. Benchmark Score Guide explains the display thresholds and original test methods. Colors apply only to results in this report, not current products or a universal certification grade.
+
+KCMA remains finish-performance compliance rather than cabinet-line certification. The current M.L. Campbell Krystal manufacturer claim now supports Yes. Centurion and MagnaMax retain Yes. Product-specific U688 and KKR513 claims were not located and remain unverified.
+
+Validation: production build passed; 13 comparison checks passed across tablet Chromium and iPad WebKit, with the existing Windows WebKit offline-service-worker skip. Checks cover multi-brand filtering, URL reload and Back, all prices and ordering, gray missing scores, color labels, accessibility, document navigation, and benchmark width at 768, 834, 1024 and 1180 pixels.
