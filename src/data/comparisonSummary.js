@@ -29,7 +29,7 @@ export const comparisonSummary = {
   renner688: { type:'2K-Only Water-Based', catalyst:'YC-M404', film:'Wet ≤5.9 / Dry —', touch:'Dust-free: 45 min', recoat:'—' },
   renner785: { type:'2K-Only Water-Based', catalyst:'YC-M403', film:'Wet ≤5.9 / Dry —', touch:'Dust-free: 30 min', recoat:'—' },
   centurion: { type:'2K Water-Based', catalyst:'CW-4002', film:'—', touch:'Dust-free: 10–15 min', recoat:'—' },
-  milesi: { type:'2K-Only Solvent-Based', catalyst:'LNB99', film:'Wet 4.4–5.5 / Dry —', touch:'Touch: 40 min', recoat:'Within 3 hr without sanding' },
+  milesi: { type:'2K Water-Based', catalyst:'HNB1', film:'Wet 4–4.9 / Dry —', touch:'Touch: 2 hr', recoat:'—' },
   krystal: { type:'2K Solvent-Based Varnish', catalyst:'C1491 Care Catalyst', film:'Wet 4–5 / Dry 4–5 max, total system', touch:'Touch: 15–25 min', recoat:'After drying + sanding' },
   magnamax: { type:'1K Pre-Catalyzed Solvent-Based Lacquer', catalyst:'Factory Pre-Catalyzed', film:'Wet 3–6 / Dry 2.5–5 total system', touch:'Touch: 15–25 min', recoat:'After drying + sanding' },
   emerald: { type:'1K Water-Based', catalyst:'None', film:'Wet 4 / Dry 1.2', touch:'Touch: 1 hr', recoat:'4 hr' },

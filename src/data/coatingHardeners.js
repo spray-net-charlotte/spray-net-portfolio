@@ -259,5 +259,40 @@ export const coatingHardeners = {
         "0.1–<0.5%"
       ]
     ]
+  },
+  "hnb1": {
+    "name": "Milesi HNB1",
+    "sds": "milesi-hnb1-sds",
+    "edition": "September 18, 2015 · Version 39 · U.S. reference",
+    "signal": "Warning",
+    "classes": [
+      "Acute Inhalation Toxicity · Category 4",
+      "Eye Irritation · Category 2A",
+      "Skin Sensitization · Category 1",
+      "Specific Target Organ Toxicity, Single Exposure · Category 3"
+    ],
+    "summary": "Separate hardener for the selected waterborne 2K HKR114 recipe. Contains HDI homopolymers and free hexamethylene diisocyanate. Archived U.S. reference, not a mixed-system classification.",
+    "ingredients": [
+      [
+        "HDI Homopolymers",
+        "28182-81-2",
+        "50–74.9%"
+      ],
+      [
+        "Propylene Carbonate",
+        "108-32-7",
+        "20–24.9%"
+      ],
+      [
+        "HDI Polyethylene Glycol Reaction Polymer",
+        "1160001-30-8",
+        "12.5–15%"
+      ],
+      [
+        "Hexamethylene Diisocyanate",
+        "822-06-0",
+        "0.1–<0.5%"
+      ]
+    ]
   }
 };

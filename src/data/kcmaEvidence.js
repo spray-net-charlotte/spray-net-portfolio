@@ -6,9 +6,15 @@ export const kcmaFinishStatus = {
   centurion: 'Yes',
   magnamax: 'Yes',
   krystal: 'Yes',
+  milesi: 'Yes',
 };
 
 export const kcmaEvidence = {
+  milesi: {
+    status:'Distributor Finish Compliance Claim',
+    detail:'The distributor waterborne guide lists HKR114 as a two-component topcoat and states that the listed pigmented 2K waterborne systems meet KCMA cabinet finish requirements. No independent certificate is attached.',
+    source:'milesi-waterborne-guide',
+  },
   'sn-coating': {
     status: 'Manufacturer Finish Tests Reported',
     detail: 'The coating TDS reports KCMA 9.2–9.5 finish-performance results, including chemical, detergent, heat and cold-cycle tests. These are finish results, not certification of a cabinet design or proof of a warranty term.',

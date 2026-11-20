@@ -781,5 +781,44 @@ export const comparisonDocuments = [
     "pages": 13,
     "base": "media/comparison/milesi-lnb99-sds",
     "sha256": "0d0f2480f39ea4695a59f93809be03c354f3b3e9f6d324aae96f7422b26ed270"
+  },
+  {
+    "id": "milesi114-sds",
+    "title": "Milesi HKR114 White Waterborne Coating",
+    "kind": "SDS",
+    "edition": "November 12, 2015 · Version 85",
+    "variant": "U.S. reference · Water-based white 20 sheen",
+    "sourceUrl": "https://www.atlanticplywood.com/sds/Milesi/SDS_US_HKR114_.PDF",
+    "sourceLabel": "Manufacturer-authored U.S. SDS",
+    "checked": "2026-11-20",
+    "pages": 8,
+    "base": "media/comparison/milesi114-sds",
+    "sha256": "b206a2ee7845db06acb5b9bd2c0ad975f066b92b2ba1b1b31d24e56e494551c7"
+  },
+  {
+    "id": "milesi-hnb1-sds",
+    "title": "Milesi HNB1 Waterborne Hardener",
+    "kind": "SDS",
+    "edition": "September 18, 2015 · Version 39",
+    "variant": "U.S. reference · Separate hardener for waterborne 2K",
+    "sourceUrl": "https://www.atlanticplywood.com/sds/Milesi/SDS_US_HNB1_Hardener_for_WB_2K.PDF",
+    "sourceLabel": "Manufacturer-authored U.S. SDS",
+    "checked": "2026-11-20",
+    "pages": 9,
+    "base": "media/comparison/milesi-hnb1-sds",
+    "sha256": "ebbdd22c8e5c621c559d20b2438a9b9667456fc7a260edc34662b983d633af0c"
+  },
+  {
+    "id": "milesi-waterborne-guide",
+    "title": "Milesi Waterborne Coating Systems",
+    "kind": "Guide",
+    "edition": "Undated · Distributor reference",
+    "variant": "HKR114 two-component system · KCMA finish-performance claim",
+    "sourceUrl": "https://www.columbiaindustrialsupplies.com/wp-content/uploads/2019/11/Milesi-Water-Based-Introduction.pdf",
+    "sourceLabel": "Columbia Industrial Supplies · Milesi distributor literature",
+    "checked": "2026-11-20",
+    "pages": 2,
+    "base": "media/comparison/milesi-waterborne-guide",
+    "sha256": "d3b2de3c09e9df560488f6b80c3b28e41f219835fcfb6c0c2e58874d15423398"
   }
 ];

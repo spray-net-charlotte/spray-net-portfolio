@@ -28,8 +28,8 @@ export const catalystComparison = {
   },
   milesi: {
     label:'No',
-    sources:['milesi-lnb99-sds'],
-    note:'Required LNB99 for the selected KKR513 2K-only solvent-based system. The U.S. SDS lists HDI homopolymers and hexamethylene diisocyanate. This replaces the old HKR116 / HNB40 comparison; original source dates remain visible.',
+    sources:['milesi-hnb1-sds'],
+    note:'HNB1 hardener for the selected catalyzed HKR114 waterborne 2K schedule. The U.S. SDS lists HDI homopolymers and hexamethylene diisocyanate. This replaces solvent-based KKR513 / LNB99 in the active comparison.',
   },
   krystal: {
     label:'No isocyanates listed',

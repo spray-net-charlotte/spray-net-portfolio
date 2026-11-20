@@ -709,72 +709,59 @@ export const professionalPaints = {
   },
   "milesi": {
     "id": "milesi",
-    "name": "Milesi KKR513 Acrylic Urethane",
+    "name": "Milesi HKR114 Waterborne 2K",
     "brand": "Milesi",
-    "detail": "2K-Only · Solvent-Based · White 20 Gloss",
-    "tds": "milesi-kkr-tds",
-    "sds": "milesi-kkr513-sds",
+    "detail": "2K Water-Based System · White 20 Sheen · HNB1",
+    "tds": "milesi-tds",
+    "sds": "milesi114-sds",
     "hardeners": [
-      "lnb99"
+      "hnb1"
     ],
-    "twoKOnly": true,
-    "note": "Professional two-component, non-yellowing pigmented acrylic-urethane system. Replaces optional 1K/2K HKR116 in this sheet. May 2023 series TDS; July 2020 U.S. KKR513 base SDS; September 2015 U.S. LNB99 hardener SDS. This is solvent-based, not a different grade of the old waterborne product. Captured reference editions are not a matched current-batch test. The selected recipe uses LNB99 at 10% weight / 11.6% volume, plus LZC9264 thinner at 10% weight / 12% volume. LNB6AA5 is a separate alternative schedule.",
+    "twoKOnly": false,
+    "extraSources": [
+      "milesi-waterborne-guide"
+    ],
+    "note": "Selected catalyzed waterborne HKR114 + HNB1 schedule, replacing solvent-based KKR513. The HKR series is also sold for optional 1K use; this comparison uses its 2K recipe, not uncatalyzed coating. December 2016 series TDS, November 2015 U.S. base SDS, September 2015 U.S. hardener SDS. HNB1: 10% by weight / 10.9% by volume. Archived editions; confirm current matching sheets before application. Distributor literature identifies HKR114 as a two-component coating meeting KCMA cabinet finish requirements. The $121.71 figure is a user-selected planning estimate pending matched waterborne pricing, not a quote for this formulation.",
     "specs": {
-      "system": "Professional 2K-Only Solvent-Based Acrylic Urethane · White",
-      "catalysis": "Required LNB99 · 10% by weight / 11.6% by volume; LZC9264 thinner 10% weight / 12% volume; 24-hour pot life",
-      "resin": "Acrylic Urethane",
-      "unqualifiedSolids": "Base 44.5 ± 2%; base + LNB99 43.2 ± 2% · TDS does not state weight / volume basis",
-      "voc": "630.4 g/L / 58.37% · 2020 KKR513 supplied-base SDS; water 0%; mixed values are estimated separately",
-      "wet": "4.4–5.5 mil · Airmix / hand spray · LNB99 schedule",
-      "touch": "40 minutes · 18–22°C / 64–72°F, 65–70% RH",
-      "recoat": "Maximum 3 hours between layers without sanding; earliest recoat not specified",
-      "cure": "Complete / hard dry 12 hours · LNB99 schedule",
-      "performance": "No numerical hardness, adhesion, MEK or exact-SKU KCMA results in this captured TDS."
+      "system": "Professional Catalyzed Waterborne Acrylic Urethane · White",
+      "resin": "Waterborne Acrylic Urethane",
+      "catalysis": "Selected HNB1 schedule · 10% by weight / 10.9% by volume · 2-hour pot life",
+      "unqualifiedSolids": "Base 48.4 ± 2%; HNB1 mixed system 51.0 ± 2% · TDS does not state weight / volume basis",
+      "voc": "45.9 g/L / 3.8% · 2015 supplied-base SDS; regulatory mixed value estimated separately",
+      "wet": "4.0–4.9 mil · Airmix / hand spray",
+      "touch": "Touch dry 2 hours · 18–22°C, 65–70% RH · HNB1 schedule",
+      "recoat": "Not specified in selected TDS",
+      "cure": "Complete dry 96 hours; hard dry 4 hours · HNB1 schedule",
+      "performance": "Distributor literature claims KCMA cabinet finish compliance for the listed HKR114 2K system. No exact-SKU numerical hardness or MEK results captured."
     },
     "specSources": {
-      "voc": "milesi-kkr513-sds"
+      "voc": "milesi114-sds"
     },
     "safety": {
-      "signal": "Danger",
-      "edition": "July 9, 2020 · Version 41 · KKR513 · U.S. OSHA HCS",
+      "signal": "No Signal Word Assigned",
+      "edition": "November 12, 2015 · Version 85 · HKR114 · U.S. reference",
       "classes": [
-        "Flammable Liquid · Category 2",
-        "Carcinogenicity · Category 1A",
-        "Reproductive Toxicity · Category 2",
-        "Specific Target Organ Toxicity, Repeated Exposure · Category 2",
-        "Eye Irritation · Category 2A",
-        "Skin Sensitization · Category 1",
-        "Specific Target Organ Toxicity, Single Exposure · Category 3"
+        "Not Classified Under GHS in This Reference"
       ],
-      "summary": "Classification applies to the supplied KKR513 base. The required LNB99 hardener has its own SDS; no mixed-system hazard classification is calculated.",
+      "summary": "The archived supplied-base SDS assigns no GHS classification or signal word. The separately added HNB1 hardener is classified Warning and contains isocyanates. This is not a mixed-system safety classification.",
       "ingredients": [
         [
-          "N-Butyl Acetate",
-          "123-86-4",
-          "30–49.99%"
-        ],
-        [
-          "Isobutyl Acetate",
-          "110-19-0",
-          "10–12.49%"
-        ],
-        [
-          "Xylene",
-          "1330-20-7",
-          "5–9.99%"
-        ],
-        [
-          "Ethylbenzene",
-          "100-41-4",
+          "2-Butoxyethanol",
+          "111-76-2",
           "1–2.49%"
         ],
         [
-          "Toluene",
-          "108-88-3",
-          "1–2.49%"
+          "Dipropylene Glycol Monomethyl Ether",
+          "34590-94-8",
+          "1–<5%"
+        ],
+        [
+          "2-(2-Butoxyethoxy)ethanol",
+          "112-34-5",
+          "0.1–<0.5%"
         ]
       ],
-      "pages": "Sections 2–3 · pages 1–3"
+      "pages": "Sections 2–3 · Pages 1–2"
     }
   }
 };

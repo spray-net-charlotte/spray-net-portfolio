@@ -604,3 +604,14 @@ The historical benchmark uses abbreviated headers and a separate compact table t
 KCMA remains finish-performance compliance rather than cabinet-line certification. The current M.L. Campbell Krystal manufacturer claim now supports Yes. Centurion and MagnaMax retain Yes. Product-specific U688 and KKR513 claims were not located and remain unverified.
 
 Validation: production build passed; 13 comparison checks passed across tablet Chromium and iPad WebKit, with the existing Windows WebKit offline-service-worker skip. Checks cover multi-brand filtering, URL reload and Back, all prices and ordering, gray missing scores, color labels, accessibility, document navigation, and benchmark width at 768, 834, 1024 and 1180 pixels.
+
+
+## Milesi Waterborne Reference — Portfolio 1.8.12
+
+The active Milesi column now compares the catalyzed HKR114 + HNB1 waterborne system, replacing solvent-based KKR513 + LNB99. The HKR series can also be sold for uncatalyzed 1K use; the displayed comparison selects its 2K recipe, not a 2K-only product claim. December 2016 TDS uses HNB1 at 10% by weight / 10.9% by volume. The supplied-base and separate hardener U.S. SDS references are dated 2015; editions are explicit in the reader.
+
+The original eight-page HKR114 SDS, nine-page HNB1 SDS and two-page distributor waterborne guide are included offline (63 source documents, 491 pages total). The guide lists HKR114 as a two-component coating and claims KCMA cabinet finish compliance, so its Meets KCMA entry is Yes with distributor claim evidence. Renner U688 remains unverified pending a specific source. The solvent-based originals remain archived and are not substituted for waterborne specifications.
+
+The regulatory VOC row estimates about 90 g/L for the selected mixture from base VOC 45.9 g/L, density 1.198 kg/L, water 47.6 wt%, HNB1 VOC 2.1 g/L and 10.9% hardener volume. Assumptions and source editions remain under VOC Calculation Notes; this is not a measured mixed-batch value. HNB1 contains isocyanates. Ben approved retaining approximately $121.71 per mixed U.S. gallon as a planning estimate while matched waterborne package pricing is verified; old solvent-system prices are not presented as waterborne quotes.
+
+Validation: production build and 13 Chromium/WebKit comparison checks passed, with the existing Windows WebKit offline-service-worker skip. Original hashes, complete page sets, new source navigation, brand filtering, price display, accessibility, benchmark fit and Chromium offline documents were checked.
