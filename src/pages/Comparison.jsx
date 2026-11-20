@@ -8,6 +8,7 @@ import { mediaUrl } from '../lib/media';
 import { closeOverlay, navigate, updateQuery } from '../lib/navigation';
 import { benchmarkProducts, benchmarkRows, coatingHardeners, coatingProducts, comparisonChecked, comparisonDocuments, comparisonGroups } from '../data/comparisons';
 import { getComparisonSummary, summaryRows } from '../data/comparisonSummary.js';
+import { kcmaFinishStatus } from '../data/kcmaEvidence.js';
 import '../comparison.css';
 
 const docById = (id) => comparisonDocuments.find((doc) => doc.id === id);
@@ -110,7 +111,7 @@ function ComparisonSheet({ groupKey, route }) {
       <table className="comparison-matrix"><caption className="sr-only">{groupKey === 'primer' ? 'Primer' : 'Paint'} specifications across all brands</caption>
         <thead><tr><th scope="col">Compare</th>{products.map(p => <th scope="col" key={p.id} data-product={p.id}><span className="small-caps">{brandFor(p).toUpperCase()}</span>{p.name}<small>{p.detail}</small></th>)}</tr></thead>
         <tbody>
-          <tr><th scope="row">KCMA Certified</th>{products.map(p => <td key={p.id} data-product={p.id}>Not verified</td>)}</tr>
+          {groupKey === 'paint' && <tr><th scope="row">Meets KCMA</th>{products.map(p => <td key={p.id} data-product={p.id}>{kcmaFinishStatus[p.id] || 'Not verified'}</td>)}</tr>}
           {summaryRows.map(([key,label]) => <tr key={key}><th scope="row">{label}</th>{products.map(p => <td key={p.id} data-product={p.id}>{getComparisonSummary(p)[key] || '—'}</td>)}</tr>)}
           <tr><th scope="row">Documents</th>{products.map(p => <td key={p.id} data-product={p.id}><SourceLink id={p.tds} route={route}>TDS</SourceLink>{p.sds && <SourceLink id={p.sds} route={route}>SDS</SourceLink>}</td>)}</tr>
         </tbody>

@@ -1,4 +1,13 @@
 // Claims apply only to the product and reference named here. Unknown is not a failure.
+// Coating finish compliance, separate from a cabinet-line certification seal.
+export const kcmaFinishStatus = {
+  'sn-coating': 'Yes',
+  gallery: 'Yes',
+  centurion: 'Yes',
+  magnamax: 'Yes',
+  krystal: 'Tests reported',
+};
+
 export const kcmaEvidence = {
   'sn-coating': {
     status: 'Manufacturer Finish Tests Reported',

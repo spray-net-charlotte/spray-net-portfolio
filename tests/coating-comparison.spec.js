@@ -5,7 +5,7 @@ import { readFile } from 'node:fs/promises';
 import { comparisonDocuments } from '../src/data/comparisonDocuments.js';
 import { coatingProducts, comparisonGroups, coatingHardeners } from '../src/data/comparisons.js';
 import { getComparisonSummary } from '../src/data/comparisonSummary.js';
-import { getKcmaEvidence } from '../src/data/kcmaEvidence.js';
+import { getKcmaEvidence, kcmaFinishStatus } from '../src/data/kcmaEvidence.js';
 
 test('product evidence points to captured SDS and preserves component and test scopes', () => {
   const ids = new Set(comparisonDocuments.map(doc => doc.id));
@@ -35,6 +35,8 @@ test('product evidence points to captured SDS and preserves component and test s
   expect(coatingProducts.centurion.safety.summary).toContain('inconsistency');
   expect(coatingHardeners.hnb40.edition).toContain('Bulgarian / EU');
   expect(getKcmaEvidence('milesi', 'paint').status).toBe('Certification Not Verified');
+  expect(kcmaFinishStatus['sn-coating']).toBe('Yes');
+  expect(kcmaFinishStatus.gallery).toBe('Yes');
 });
 
 test('comparison source copies match their recorded identities and complete page sets', async () => {
@@ -83,8 +85,10 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   const paint=page.getByRole('table',{name:'Paint specifications across all brands'});
   await expect(paint.locator('thead th')).toHaveCount(12);
   for(const name of ['Gallery Series','COMMAND','Renner 688','Renner 785','Centurion 1800','Milesi HKR116','Krystal','MagnaMax']) await expect(paint).toContainText(name);
-  const kcma = paint.getByRole('row', {name:/^KCMA Certified /});
-  await expect(kcma.locator('[data-product="centurion"]')).toHaveText('Not verified');
+  const kcma = paint.getByRole('row', {name:/^Meets KCMA /});
+  await expect(kcma.locator('[data-product="sn-coating"]')).toHaveText('Yes');
+  await expect(kcma.locator('[data-product="gallery"]')).toHaveText('Yes');
+  await expect(kcma.locator('[data-product="centurion"]')).toHaveText('Yes');
   await expect(kcma.locator('[data-product="milesi"]')).toHaveText('Not verified');
   await page.getByRole('button', {name:'Milesi',exact:true}).click();
   await expect(page.getByRole('button', {name:'Milesi',exact:true})).toHaveAttribute('aria-pressed','true');
