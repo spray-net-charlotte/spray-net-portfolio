@@ -9,6 +9,7 @@ import { closeOverlay, navigate, updateQuery } from '../lib/navigation';
 import { benchmarkProducts, benchmarkRows, coatingHardeners, coatingProducts, comparisonChecked, comparisonDocuments, comparisonGroups } from '../data/comparisons';
 import { getComparisonSummary, summaryRows } from '../data/comparisonSummary.js';
 import { kcmaFinishStatus } from '../data/kcmaEvidence.js';
+import { regulatoryVoc, vocMethodReference } from '../data/regulatoryVoc.js';
 import '../comparison.css';
 
 const docById = (id) => comparisonDocuments.find((doc) => doc.id === id);
@@ -112,12 +113,13 @@ function ComparisonSheet({ groupKey, route }) {
         <thead><tr><th scope="col">Compare</th>{products.map(p => <th scope="col" key={p.id} data-product={p.id}><span className="small-caps">{brandFor(p).toUpperCase()}</span>{p.name}<small>{p.detail}</small></th>)}</tr></thead>
         <tbody>
           {groupKey === 'paint' && <tr><th scope="row">Meets KCMA</th>{products.map(p => <td key={p.id} data-product={p.id}>{kcmaFinishStatus[p.id] || 'Not verified'}</td>)}</tr>}
-          {summaryRows.map(([key,label]) => <tr key={key}><th scope="row">{label}</th>{products.map(p => <td key={p.id} data-product={p.id}>{getComparisonSummary(p)[key] || '—'}</td>)}</tr>)}
+          {summaryRows.map(([key,label]) => <tr key={key}><th scope="row">{label}</th>{products.map(p => <td key={p.id} data-product={p.id}>{key === 'voc' ? regulatoryVoc[p.id]?.display || '—' : getComparisonSummary(p)[key] || '—'}</td>)}</tr>)}
           <tr><th scope="row">Documents</th>{products.map(p => <td key={p.id} data-product={p.id}><SourceLink id={p.tds} route={route}>TDS</SourceLink>{p.sds && <SourceLink id={p.sds} route={route}>SDS</SourceLink>}</td>)}</tr>
         </tbody>
       </table>
     </div>
-    <p className="comparison-reading-note">— = not reported. Solids show volume (vol) or weight (wt). VOC figures retain the source basis; regulatory, supplied and applied values differ. Drying times depend on conditions.</p>
+    <p className="comparison-reading-note">* Estimated or assumed VOC basis. ≈ Approximate. &lt; Upper limit. Solids: vol = volume, wt = weight. Drying times depend on conditions.</p>
+    <details className="comparison-source-library"><summary>VOC Calculation Notes</summary><p>Regulatory VOC excludes water and exempt-solvent volume. Estimates use the stated assumptions; basis-assumed entries use the published value without a conversion. Base components and catalyzed mixtures are identified below.</p>{products.map(p => {const value = regulatoryVoc[p.id]; return value && <div key={p.id}><h3>{p.name} · {value.display} g/L</h3><p>{value.note}</p><SourceLink id={value.source} route={route}>VOC Source</SourceLink></div>;})}<p className="comparison-source-url">Method reference: {vocMethodReference}</p></details>
     {groupKey === 'paint' && <>
       <h2 className="comparison-sheet-title">Cabinet Coating Benchmarks — All Brands</h2>
       <p className="comparison-reading-note">Historical Spray-Net lab comparison. Products and test conditions differ from the current specification sheets above.</p>

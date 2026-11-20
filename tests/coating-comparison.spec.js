@@ -6,6 +6,7 @@ import { comparisonDocuments } from '../src/data/comparisonDocuments.js';
 import { coatingProducts, comparisonGroups, coatingHardeners } from '../src/data/comparisons.js';
 import { getComparisonSummary } from '../src/data/comparisonSummary.js';
 import { getKcmaEvidence, kcmaFinishStatus } from '../src/data/kcmaEvidence.js';
+import { regulatoryVoc, estimateRegulatoryVoc } from '../src/data/regulatoryVoc.js';
 
 test('product evidence points to captured SDS and preserves component and test scopes', () => {
   const ids = new Set(comparisonDocuments.map(doc => doc.id));
@@ -14,6 +15,7 @@ test('product evidence points to captured SDS and preserves component and test s
       const p = coatingProducts[id];
       expect(getComparisonSummary(p).type, `${id} compact coating type`).toBeTruthy();
       expect(getComparisonSummary(p).catalyst, `${id} compact catalyst`).toBeTruthy();
+      expect(ids.has(regulatoryVoc[id]?.source), `${id} regulatory VOC source`).toBe(true);
       expect(ids.has(p.tds), `${id} TDS`).toBe(true);
       expect(ids.has(p.sds), `${id} SDS`).toBe(true);
       for (const h of p.hardeners || []) expect(ids.has(coatingHardeners[h].sds), `${id} hardener`).toBe(true);
@@ -37,6 +39,11 @@ test('product evidence points to captured SDS and preserves component and test s
   expect(getKcmaEvidence('milesi', 'paint').status).toBe('Certification Not Verified');
   expect(kcmaFinishStatus['sn-coating']).toBe('Yes');
   expect(kcmaFinishStatus.gallery).toBe('Yes');
+  expect(getComparisonSummary(coatingProducts['sn-coating']).recoat).toBe('25 min');
+  expect(regulatoryVoc.command.display).toBe('<50');
+  expect(regulatoryVoc.milesi.display).toBe('≈120*');
+  expect(estimateRegulatoryVoc({densityKgL:1,actualVocGL:50,waterWeightPercent:50})).toBe(100);
+  expect(() => estimateRegulatoryVoc({densityKgL:1.5,actualVocGL:50,waterWeightPercent:80})).toThrow();
 });
 
 test('comparison source copies match their recorded identities and complete page sets', async () => {
@@ -90,6 +97,11 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await expect(kcma.locator('[data-product="gallery"]')).toHaveText('Yes');
   await expect(kcma.locator('[data-product="centurion"]')).toHaveText('Yes');
   await expect(kcma.locator('[data-product="milesi"]')).toHaveText('Not verified');
+  const voc = paint.getByRole('row', {name:/^Regulatory VOC/});
+  await expect(voc.locator('[data-product="command"]')).toHaveText('<50');
+  await expect(voc.locator('[data-product="sn-coating"]')).toHaveText('<150');
+  await expect(voc.locator('[data-product="milesi"]')).toHaveText('≈120*');
+  await expect(paint.getByRole('row',{name:/^Recoat /}).locator('[data-product="sn-coating"]')).toHaveText('25 min');
   await page.getByRole('button', {name:'Milesi',exact:true}).click();
   await expect(page.getByRole('button', {name:'Milesi',exact:true})).toHaveAttribute('aria-pressed','true');
   await paint.getByRole('row',{name:/^Documents /}).locator('[data-product="milesi"]').getByRole('link',{name:'SDS',exact:true}).click();

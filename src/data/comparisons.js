@@ -147,6 +147,8 @@ export const comparisonGroups = {
 
 Object.assign(coatingProducts, expandedPrimers, professionalPrimers, professionalPaints);
 coatingProducts['sn-coating'].specs.system = 'Professional Waterborne Polyurethane · Pigmented';
+// Salesperson-confirmed operating guidance; the archived manufacturer TDS remains unchanged.
+coatingProducts['sn-coating'].specs.recoat = '25 minutes · consultation guidance confirmed November 19, 2026';
 coatingProducts['sn-coating'].specs.catalysis = '2023 TDS: SWC010 catalyst, 10:1 by volume. Separate 2026 A-003 SDS does not establish equivalence or an updated mixing specification.';
 coatingProducts['sn-primer'].specs.system = 'Water-Based High-Build Stain-Blocking Primer';
 coatingProducts.advance.specs.system = 'Waterborne Alkyd Enamel · Pigmented';

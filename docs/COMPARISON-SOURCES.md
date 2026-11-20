@@ -104,3 +104,16 @@ Short display values are maintained in `src/data/comparisonSummary.js`. Solids r
 ## KCMA finish-row correction — 1.8.6
 
 The compact sheet incorrectly reduced every coating to unverified cabinet-line certification, hiding documented coating compliance. The paint row is now **Meets KCMA**: Spray-Net, Gallery, Centurion and MagnaMax show **Yes** based on captured finish-test results / manufacturer compliance claims. Krystal shows **Tests reported**; products without a captured claim remain **Not verified**. The all-unknown standalone primer certification row is omitted. This displays finish compliance without presenting it as a cabinet-line certification seal. Gallery's official product page also states it meets or exceeds KCMA requirements: https://www.sherwin-williams.com/painting-contractors/products/gallery-series-waterborne-topcoat/651307803 . No new coating measurements or unsupported claims were introduced.
+
+
+## Regulatory VOC comparison / recoat — 1.8.7
+
+Spray-Net recoat is 25 minutes per the salesperson's November 19, 2026 instruction. The archived TDS is unchanged. Regulatory VOC display and calculation inputs now live in `src/data/regulatoryVoc.js`.
+
+Reported values supersede guesses: COMMAND declaration p. 1 explicitly states regulatory VOC <50 g/L, Rule 1113 / EPA Method 24; COMMAND, Stix and ADVANCE SDS §9 also label regulatory limits. COMMAND is not extrapolated to 135 g/L. KILZ 2 No. 2000 SDS p. 4 reports 32 g/L Coating versus 10 g/L Material, so 32 is used.
+
+Model: regulatory VOC = actual VOC g/L divided by (1 − water volume fraction − exempt-solvent volume fraction). Water volume fraction ≈ density kg/L × water wt% / 100, assuming water density 1 kg/L. Milesi HKR116 base gives 47.4 / (1 − 1.226 × 0.487) = 117.6 g/L, displayed ≈120*. No exempt solvent or HNB40 is included. Renner rough mass balances assume % values are weight percentages and the remainder after solids / VOC is water, with no exempt solvent. Calculated outputs are approximately 112.9, 15.7, 179.2 and 165.8 g/L for 643 / 083 / U688 / M785; display rounds to 110*, 16*, 180* and 170*. The 250°C solids test adds uncertainty. This is a comparison estimate, not a Method 24 determination.
+
+B-I-N, Cover Stain, Bulls Eye and Krystal retain published VOC figures as explicitly basis-assumed provisional proxies, marked *. There are insufficient water / exempt fractions to perform numerical conversion, and their original basis remains unverified. No arbitrary multiplier is applied. Bounds (< / ≤) remain bounds. Krystal uses its reported catalyzed-at-10% range, rounded to ≈570*. All notes and source links remain in a collapsed VOC Calculation Notes section. All estimates are labeled and may mix base / ready-to-use states as specifically documented; this is not a matched as-applied laboratory comparison.
+
+Method source: https://www.aqmd.gov/home/rules-compliance/compliance/vocs/calculations . Existing captured documents provide all numerical inputs; no original PDF was changed.
