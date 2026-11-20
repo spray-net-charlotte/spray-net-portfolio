@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { comparisonDocuments } from '../src/data/comparisonDocuments.js';
 import { coatingProducts, comparisonGroups, coatingHardeners } from '../src/data/comparisons.js';
+import { getComparisonSummary } from '../src/data/comparisonSummary.js';
 import { getKcmaEvidence } from '../src/data/kcmaEvidence.js';
 
 test('product evidence points to captured SDS and preserves component and test scopes', () => {
@@ -11,6 +12,8 @@ test('product evidence points to captured SDS and preserves component and test s
   for (const group of Object.values(comparisonGroups)) {
     for (const id of [group.ours, ...group.peers]) {
       const p = coatingProducts[id];
+      expect(getComparisonSummary(p).type, `${id} compact coating type`).toBeTruthy();
+      expect(getComparisonSummary(p).catalyst, `${id} compact catalyst`).toBeTruthy();
       expect(ids.has(p.tds), `${id} TDS`).toBe(true);
       expect(ids.has(p.sds), `${id} SDS`).toBe(true);
       for (const h of p.hardeners || []) expect(ids.has(coatingHardeners[h].sds), `${id} hardener`).toBe(true);
@@ -20,6 +23,9 @@ test('product evidence points to captured SDS and preserves component and test s
       if (evidence.source) expect(ids.has(evidence.source)).toBe(true);
     }
   }
+  expect(getComparisonSummary(coatingProducts['sn-primer']).solids).toBe('55% vol / 57% wt');
+  expect(getComparisonSummary(coatingProducts['sn-coating']).catalyst).toBe('SWC010');
+  expect(getComparisonSummary(coatingProducts.milesi).solids).toContain('Basis unspecified');
   expect(coatingProducts.renner083.safety.ingredientNote).toContain('No Section 3 concentrations');
   expect(coatingProducts.gallery.specs.pencil).toContain('7-day dry');
   expect(coatingProducts.krystal.tests.values).toContainEqual(['77% Sulfuric Acid','1 · Poor']);
@@ -52,7 +58,7 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await expect(page.getByRole('heading',{name:'Exterior Comparison Coming Next'})).toBeVisible();
   await page.goBack(); await page.getByRole('button',{name:'Interior',exact:true}).click();
   await page.getByRole('button',{name:'Primer',exact:true}).click();
-  const sheet=page.getByRole('table',{name:'Primer specifications and safety across all brands'});
+  const sheet=page.getByRole('table',{name:'Primer specifications across all brands'});
   await expect(sheet.locator('thead th')).toHaveCount(12);
   await page.getByRole('button',{name:'Renner',exact:true}).click();
   await expect.poll(() => page.locator('.comparison-matrix-scroll').first().evaluate(el => el.scrollLeft)).toBeGreaterThan(500);
@@ -60,8 +66,9 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await page.getByRole('button',{name:'Sherwin-Williams',exact:true}).click();
   await expect.poll(() => page.locator('.comparison-matrix-scroll').first().evaluate(el => el.scrollLeft)).toBeLessThan(5);
   await expect(sheet).toContainText('KILZ 2 All-Purpose'); await expect(sheet).toContainText('Extreme Bond');
-  await expect(sheet.getByRole('row',{name:/Solids by Volume/})).toContainText('55%');
-  await expect(sheet).toContainText('Signal Word'); await expect(sheet).toContainText('Skin Sensitization');
+  await expect(sheet.getByRole('row',{name:/^Solids /})).toContainText('55%');
+  for (const label of ['Signal Word','SDS Classification','Handling / Exposure Notes','Selected Disclosed Ingredients','Published Test Results','Indoor Emissions Testing','About This Value']) await expect(sheet).not.toContainText(label);
+  await expect(sheet.getByRole('row',{name:/^Coating Type /})).toContainText('1K Water-Based');
   await page.getByText('Source Documents & Product Notes', {exact:true}).click();
   await page.locator('.comparison-document-card').filter({hasText:'Zinsser B-I-N Shellac Primer'}).filter({hasText:'SDS'}).click();
   await expect(page.locator('main h1')).toHaveText('Zinsser B-I-N Shellac Primer');
@@ -73,17 +80,15 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await expect(page.getByRole('dialog')).not.toBeVisible(); await page.goBack();
   await expect(page.getByRole('heading',{name:'Cabinet Primers — All Brands'})).toBeVisible();
   await page.getByRole('button',{name:'Paint',exact:true}).click();
-  const paint=page.getByRole('table',{name:'Paint specifications and safety across all brands'});
+  const paint=page.getByRole('table',{name:'Paint specifications across all brands'});
   await expect(paint.locator('thead th')).toHaveCount(12);
   for(const name of ['Gallery Series','COMMAND','Renner 688','Renner 785','Centurion 1800','Milesi HKR116','Krystal','MagnaMax']) await expect(paint).toContainText(name);
-  const kcma = paint.getByRole('row', {name:/KCMA \/ ANSI Evidence/});
-  await expect(kcma.locator('[data-product="centurion"]')).toContainText('Manufacturer Compliance Claim');
-  await expect(kcma.locator('[data-product="milesi"]')).toContainText('Certification Not Verified');
-  await page.getByText('Understanding KCMA & ANSI', {exact:true}).click();
-  await expect(page.getByText('Environmental Stewardship (ESP)', {exact:true})).toBeVisible();
+  const kcma = paint.getByRole('row', {name:/^KCMA Certified /});
+  await expect(kcma.locator('[data-product="centurion"]')).toHaveText('Not verified');
+  await expect(kcma.locator('[data-product="milesi"]')).toHaveText('Not verified');
   await page.getByRole('button', {name:'Milesi',exact:true}).click();
   await expect(page.getByRole('button', {name:'Milesi',exact:true})).toHaveAttribute('aria-pressed','true');
-  await paint.getByRole('row',{name:/Source Editions & Documents/}).locator('[data-product="milesi"]').getByRole('link',{name:'Read SDS',exact:true}).click();
+  await paint.getByRole('row',{name:/^Documents /}).locator('[data-product="milesi"]').getByRole('link',{name:'SDS',exact:true}).click();
   await expect(page.locator('main h1')).toHaveText('Milesi HKR116 White Converter 10SH');
   await page.getByRole('button',{name:'Read Page Text',exact:true}).click();
   await expect(page.locator('.comparison-page-text pre')).toContainText('Warning');
@@ -125,13 +130,11 @@ test('comparison and document reader fit tablets and retain accessible controls'
 test('expanded results and component SDS open from the comparison sheet', async ({ page }) => {
   await page.emulateMedia({ reducedMotion:'reduce' });
   await page.goto('./#/comparison?area=interior&coat=paint');
-  await page.getByRole('button',{name:'M.L. Campbell',exact:true}).click();
-  const results=page.getByRole('row',{name:/Published Test Results/}).locator('td[data-product="krystal"]');
+  await page.getByText('Additional Published Test Results',{exact:true}).click();
+  const results=page.getByRole('table',{name:'Additional published coating tests'}).getByRole('row',{name:/M.L. Campbell Krystal/});
   await results.getByText('34 Reported Results',{exact:true}).click();
   await expect(results).toContainText('77% Sulfuric Acid');
   await expect(results).toContainText('1 · Poor');
-  await results.getByText('77% Sulfuric Acid',{exact:true}).scrollIntoViewIfNeeded();
-  await expect.poll(() => page.evaluate(() => document.querySelector('.comparison-matrix thead th').getBoundingClientRect().top >= document.querySelector('.app-header').getBoundingClientRect().bottom - 1)).toBe(true);
   await results.getByRole('link',{name:'Read Test Source',exact:true}).click();
   await expect(page.locator('main h1')).toHaveText('Krystal Laboratory Test Results');
   await page.getByRole('button',{name:'Next Page',exact:true}).click();
@@ -139,15 +142,15 @@ test('expanded results and component SDS open from the comparison sheet', async 
   await expect(page.locator('.comparison-page-text pre')).toContainText('77% Sulfuric Acid');
   await page.goBack();
   await page.getByRole('button',{name:'Renner',exact:true}).click();
-  const sds=page.getByRole('row',{name:/Source Editions & Documents/}).locator('td[data-product="renner688"]');
-  await sds.getByRole('link',{name:'Read SDS',exact:true}).click();
+  const sds=page.getByRole('row',{name:/^Documents /}).locator('td[data-product="renner688"]');
+  await sds.getByRole('link',{name:'SDS',exact:true}).click();
   await expect(page.locator('main h1')).toHaveText('Renner U688 Kitchen Topcoat');
   await page.getByRole('button',{name:'Read Page Text',exact:true}).click();
   await expect(page.locator('.comparison-page-text pre')).toContainText('2/25/2025');
   await page.goBack();
   await page.getByRole('button',{name:'Renner',exact:true}).click();
-  const hardeners=page.getByRole('row',{name:/Hardener \/ Catalyst SDS/}).locator('td[data-product="renner688"]');
-  await hardeners.getByRole('link',{name:'Read Hardener SDS',exact:true}).last().click();
+  await page.getByText('Source Documents & Product Notes',{exact:true}).click();
+  await page.locator('.comparison-document-card').filter({hasText:'Renner YC-M404 Hardener'}).click();
   await expect(page.locator('main h1')).toHaveText('Renner YC-M404 Hardener');
 });
 

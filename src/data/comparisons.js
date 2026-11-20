@@ -1,4 +1,4 @@
-import { comparisonDocuments } from './comparisonDocuments';
+import { comparisonDocuments } from './comparisonDocuments.js';
 import { expandedPrimers } from './expandedPrimers.js';
 import { professionalPrimers } from './professionalPrimers.js';
 import { professionalPaints } from './professionalPaints.js';

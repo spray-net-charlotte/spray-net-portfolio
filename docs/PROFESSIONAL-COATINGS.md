@@ -1,4 +1,4 @@
-# Professional Coating References — Portfolio 1.8.4
+# Professional Coating References — Portfolio 1.8.5
 
 The comparison includes 57 captured manufacturer / Spray-Net documents and 438 pages. Every displayed coating has a captured SDS. Brand buttons, pinned headings, and pinned property / Spray-Net columns keep the comparison navigable on tablets. All originals, page images and accessible text cache offline.
 
@@ -61,7 +61,7 @@ The M785 technical reference remains the February 2021 European TDS; its later U
 Edit `professionalPrimers.js`, `professionalPaints.js` and `coatingHardeners.js`; Spray-Net and retail data are in `comparisons.js`. Preserve original PDFs, source identities, per-page images and accessible text. After updates run the build, source-integrity / evidence-link checks, tablet navigation, accessibility and offline tests. Prices are omitted.
 
 
-## Centurion, Milesi and certification evidence — 1.8.4
+## Centurion, Milesi and certification evidence — 1.8.5
 
 - **Centurion 1800 Series CW-3116 Satin White:** undated CW-3115–3118 TDS; October 21, 2020 base and CW-4002 catalyst SDS. TDS solids: 38.77 ± 1% volume, 46.34 ± 1% weight. VOC: 109.98 g/L minus exempt / 48.55 g/L as supplied. Catalyst 20%, pot life five hours. KCMA is a manufacturer compliance claim without an attached report. The base SDS prints Warning alongside Aspiration Hazard Category 1; the chart preserves and flags this inconsistency. The catalyst SDS also contains inconsistent classification wording. No current-formula equivalence is assumed.
 - **Milesi HKR116 White 10 Gloss:** December 2016 HKR111-series TDS; July 23, 2021 U.S. base SDS, version 102. HNB40 schedule: 10% weight / 11.5% volume, two-hour pot life, touch dry two hours and complete drying 96 hours at 18–22°C / 65–70% RH. Base solids 49.2 ± 2%, mixed solids 50.1 ± 2%, with basis unspecified. Base SDS VOC 47.4 g/L / 3.87%, reporting basis unspecified; Warning / Skin Sensitization Category 1. HNB40 SDS is March 2017 Bulgarian / EU CLP only, explicitly not verified as a current U.S. formula. HNB3 and HNB1 schedules are separate alternatives, not combined. A retailer HKR116 TDS link led to another product series and was excluded.
@@ -70,3 +70,10 @@ Edit `professionalPrimers.js`, `professionalPaints.js` and `coatingHardeners.js`
 The new KCMA / ANSI row covers every product. KCMA A161.1 Quality certifies cabinet designs including structure, drawers, doors and finish; Severe Use and ESP are distinct programs, not paint grades. ANSI does not certify products. Finish-test reports and manufacturer compliance claims are identified separately; no cabinet-line certificate is verified here. Unknown is not a failed test. Sources: https://kcma.org/certification and https://ansi.org/standards-faqs (checked November 19, 2026). Edit `src/data/kcmaEvidence.js` when new product-specific evidence becomes available.
 
 No category average is calculated: unmatched protocols, cure schedules, products, editions and units do not establish a defensible industry benchmark. Milesi family-level scratch / outdoor certifications are not assigned to HKR116. All seven additions preserve original PDF hashes, complete page images and offline text. Total: 57 documents / 438 pages.
+
+
+## Compact customer comparison — 1.8.5
+
+Main sheet: KCMA certification status, coating type, catalyst name, one solids row, VOC (g/L), combined wet / dry film thickness, drying time, recoat and source links. Resin, coverage, cure, sparse hardness / adhesion / MEK rows, emissions and all expanded safety / ingredient rows are removed from the main sheet. Complete TDS/SDS and archived figures remain available in the source library. Manufacturer results move to the lower test section; historical head-to-head results retain their separate identities.
+
+Short display values are maintained in `src/data/comparisonSummary.js`. Solids retain volume / weight / unspecified basis: converting between them requires reliable matched liquid and dry-solids density data, which are not available for the whole set. VOC units are standardized, not the reporting basis: applied, regulatory, base and packaged values are distinguished. Regulatory labels refer to the source minus-exempt reporting convention. No dilution / catalyst adjustments are invented. KCMA certification remains unverified for these products; manufacturer finish compliance does not become a certified cabinet-line claim. Approximation is limited to presentation, not fabricated certifications or measurements.
