@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { comparisonDocuments } from '../src/data/comparisonDocuments.js';
 import { coatingProducts, comparisonGroups, coatingHardeners } from '../src/data/comparisons.js';
+import { getKcmaEvidence } from '../src/data/kcmaEvidence.js';
 
 test('product evidence points to captured SDS and preserves component and test scopes', () => {
   const ids = new Set(comparisonDocuments.map(doc => doc.id));
@@ -15,12 +16,19 @@ test('product evidence points to captured SDS and preserves component and test s
       for (const h of p.hardeners || []) expect(ids.has(coatingHardeners[h].sds), `${id} hardener`).toBe(true);
       if (p.tests) expect(ids.has(p.tests.source), `${id} test source`).toBe(true);
       for (const source of Object.values(p.specSources || {})) expect(ids.has(source)).toBe(true);
+      const evidence = getKcmaEvidence(id, group.ours === 'sn-primer' ? 'primer' : 'paint');
+      if (evidence.source) expect(ids.has(evidence.source)).toBe(true);
     }
   }
   expect(coatingProducts.renner083.safety.ingredientNote).toContain('No Section 3 concentrations');
   expect(coatingProducts.gallery.specs.pencil).toContain('7-day dry');
   expect(coatingProducts.krystal.tests.values).toContainEqual(['77% Sulfuric Acid','1 · Poor']);
   expect(coatingProducts.magnamax.tests.values).toContainEqual(['Nail Polish Remover','4 · Very Good']);
+  expect(coatingProducts.milesi.specs.voc).toContain('47.4 g/L');
+  expect(coatingProducts.milesi.safety.signal).toBe('Warning');
+  expect(coatingProducts.centurion.safety.summary).toContain('inconsistency');
+  expect(coatingHardeners.hnb40.edition).toContain('Bulgarian / EU');
+  expect(getKcmaEvidence('milesi', 'paint').status).toBe('Certification Not Verified');
 });
 
 test('comparison source copies match their recorded identities and complete page sets', async () => {
@@ -54,7 +62,7 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await expect(sheet).toContainText('KILZ 2 All-Purpose'); await expect(sheet).toContainText('Extreme Bond');
   await expect(sheet.getByRole('row',{name:/Solids by Volume/})).toContainText('55%');
   await expect(sheet).toContainText('Signal Word'); await expect(sheet).toContainText('Skin Sensitization');
-  await page.locator('.comparison-source-library > summary').click();
+  await page.getByText('Source Documents & Product Notes', {exact:true}).click();
   await page.locator('.comparison-document-card').filter({hasText:'Zinsser B-I-N Shellac Primer'}).filter({hasText:'SDS'}).click();
   await expect(page.locator('main h1')).toHaveText('Zinsser B-I-N Shellac Primer');
   await page.getByRole('button',{name:'Next Page',exact:true}).click();
@@ -66,8 +74,20 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await expect(page.getByRole('heading',{name:'Cabinet Primers — All Brands'})).toBeVisible();
   await page.getByRole('button',{name:'Paint',exact:true}).click();
   const paint=page.getByRole('table',{name:'Paint specifications and safety across all brands'});
-  await expect(paint.locator('thead th')).toHaveCount(10);
-  for(const name of ['Gallery Series','COMMAND','Renner 688','Renner 785','Krystal','MagnaMax']) await expect(paint).toContainText(name);
+  await expect(paint.locator('thead th')).toHaveCount(12);
+  for(const name of ['Gallery Series','COMMAND','Renner 688','Renner 785','Centurion 1800','Milesi HKR116','Krystal','MagnaMax']) await expect(paint).toContainText(name);
+  const kcma = paint.getByRole('row', {name:/KCMA \/ ANSI Evidence/});
+  await expect(kcma.locator('[data-product="centurion"]')).toContainText('Manufacturer Compliance Claim');
+  await expect(kcma.locator('[data-product="milesi"]')).toContainText('Certification Not Verified');
+  await page.getByText('Understanding KCMA & ANSI', {exact:true}).click();
+  await expect(page.getByText('Environmental Stewardship (ESP)', {exact:true})).toBeVisible();
+  await page.getByRole('button', {name:'Milesi',exact:true}).click();
+  await expect(page.getByRole('button', {name:'Milesi',exact:true})).toHaveAttribute('aria-pressed','true');
+  await paint.getByRole('row',{name:/Source Editions & Documents/}).locator('[data-product="milesi"]').getByRole('link',{name:'Read SDS',exact:true}).click();
+  await expect(page.locator('main h1')).toHaveText('Milesi HKR116 White Converter 10SH');
+  await page.getByRole('button',{name:'Read Page Text',exact:true}).click();
+  await expect(page.locator('.comparison-page-text pre')).toContainText('Warning');
+  await page.goBack();
   await page.getByRole('button',{name:'M.L. Campbell',exact:true}).click();
   await expect.poll(() => page.locator('.comparison-matrix-scroll').first().evaluate(el => el.scrollLeft)).toBeGreaterThan(500);
   await expect(page.getByRole('table',{name:'In-house cabinet coating benchmarks across all brands'})).toBeVisible();

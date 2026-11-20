@@ -79,7 +79,8 @@ export const professionalPaints = {
       "touch": "15 minutes · 77°F, 50% RH",
       "recoat": "1 hour",
       "cure": "24-hour return to service; full cure not specified",
-      "performance": "TDS describes adhesion, abrasion resistance and early block resistance, but prints no numerical pencil, Persoz or MEK test result. General performance statements are not substituted for test counts."
+      "performance": "TDS describes adhesion, abrasion resistance and early block resistance, but prints no numerical pencil, Persoz or MEK test result. General performance statements are not substituted for test counts.",
+      "emissions": "CDPH v1.2 (2017) compliant · classroom / private-office scenarios; 14-day TVOC ≤0.5 mg/m³. Berkeley Analytical certificate 251023-06, October 23, 2025. Emissions testing, not a durability benchmark."
     },
     "safety": {
       "signal": "Warning",
@@ -122,6 +123,12 @@ export const professionalPaints = {
         ]
       ],
       "pages": "Sections 2–3 · Pages 1–3"
+    },
+    "extraSources": [
+      "command-emissions"
+    ],
+    "specSources": {
+      "emissions": "command-emissions"
     }
   },
   "renner688": {
@@ -648,6 +655,121 @@ export const professionalPaints = {
           "5 · Excellent"
         ]
       ]
+    }
+  },
+  "centurion": {
+    "id": "centurion",
+    "name": "Centurion 1800 Series",
+    "brand": "Centurion",
+    "detail": "2K Acrylic Polyurethane · CW-3116 Satin White",
+    "tds": "centurion-tds",
+    "sds": "centurion-sds",
+    "hardeners": [
+      "cw4002"
+    ],
+    "note": "Undated CW-3115–3118 TDS and October 2020 base / catalyst SDS. The TDS covers CW-3116 Satin; the SDS covers all four white sheens. Current formulation equivalence has not been verified.",
+    "specs": {
+      "system": "Professional Waterborne · White / Pigmented",
+      "catalysis": "2K · CW-4002 at 20%; 5-hour pot life",
+      "resin": "OH Functional Acrylic Polyol",
+      "volume": "38.77 ± 1%",
+      "weight": "46.34 ± 1%",
+      "voc": "109.98 g/L · minus exempt; 48.55 g/L · as supplied",
+      "coverage": "622 sq ft · 1 mil dry, 100% transfer efficiency",
+      "touch": "Dust-free 10–15 minutes · 77°F, 50% RH; touch time not stated",
+      "recoat": "Sand 45–60 minutes; no separate recoat time specified",
+      "cure": "Package overnight; full cure not specified",
+      "performance": "TDS claims KCMA performance specifications are met or exceeded; no test scores, methods, cure schedule or independent laboratory report are attached."
+    },
+    "safety": {
+      "signal": "Warning · as printed; see discrepancy note",
+      "edition": "October 21, 2020 · CW-3115–3118",
+      "classes": [
+        "Skin Irritation · Category 2",
+        "Eye Irritation · Category 2A",
+        "Aspiration Hazard · Category 1 (as printed)"
+      ],
+      "summary": "The SDS prints Warning alongside Aspiration Hazard Category 1, an apparent internal labeling inconsistency. Classification and signal word are transcribed, not corrected or independently validated. Hazard statements also describe ingestion / skin / inhalation harm and respiratory irritation. Obtain a current matched SDS before application.",
+      "ingredients": [
+        [
+          "2-Butoxyethanol",
+          "111-76-2",
+          "1–5%"
+        ],
+        [
+          "Dipropylene Glycol Monobutyl Ether",
+          "29911-28-2",
+          "0–1%"
+        ]
+      ],
+      "pages": "Sections 2–3 · pages 1–3"
+    }
+  },
+  "milesi": {
+    "id": "milesi",
+    "name": "Milesi HKR116",
+    "brand": "Milesi",
+    "detail": "2K Waterborne White · 10 Gloss · HNB40 Schedule",
+    "tds": "milesi-tds",
+    "sds": "milesi116-sds",
+    "hardeners": [
+      "hnb40"
+    ],
+    "note": "December 2016 HKR-series TDS; July 2021 U.S. HKR116 base SDS. HNB40 at 10% by weight is one TDS schedule; HNB3 and HNB1 are separate alternatives. The available HNB40 SDS is a 2017 Bulgarian / EU reference, not verified as the current U.S. hardener. No formula equivalence across editions is established.",
+    "specs": {
+      "system": "Professional Waterborne · White / Pigmented",
+      "catalysis": "2K · HNB40 at 10% weight / 11.5% volume; 2-hour pot life",
+      "resin": "Water-based pigmented converter; exact resin not identified in this TDS",
+      "unqualifiedSolids": "HKR116 base 49.2 ± 2%; HNB40 mixture 50.1 ± 2% · basis not identified",
+      "voc": "47.4 g/L / 3.87% · 2021 base SDS §9; subtraction basis not stated",
+      "wet": "Airmix 4.0–5.0 mil; hand spray 3.6–4.3 mil · HNB40 schedule",
+      "touch": "2 hours · 18–22°C / 64–72°F, 65–70% RH · HNB40 schedule",
+      "cure": "Complete drying 96 hours; stackable 24 hours · HNB40 schedule",
+      "performance": "No numerical hardness, adhesion, MEK or KCMA results in this HKR-series TDS. Brand-level tests for other products are not assigned to HKR116."
+    },
+    "specSources": {
+      "voc": "milesi116-sds"
+    },
+    "safety": {
+      "signal": "Warning",
+      "edition": "July 23, 2021 · Version 102 · HKR116 · U.S. OSHA HCS",
+      "classes": [
+        "Skin Sensitization · Category 1"
+      ],
+      "summary": "May cause an allergic skin reaction. This is the supplied base SDS; hardener classification is separate. The older 2015 HKR114 sheet is a different sheen and is not substituted.",
+      "ingredients": [
+        [
+          "2-Butoxyethanol",
+          "111-76-2",
+          "1–2.49%"
+        ],
+        [
+          "Dipropylene Glycol Monomethyl Ether",
+          "34590-94-8",
+          "1–<5%"
+        ],
+        [
+          "2-(2-Butoxyethoxy)ethanol",
+          "112-34-5",
+          "<0.5%"
+        ],
+        [
+          "C16–18 Ethoxylated Alcohols",
+          "68439-49-6",
+          "<0.5%"
+        ],
+        [
+          "Methylisothiazolinone",
+          "2682-20-4",
+          "≥0.0015–<0.01%"
+        ],
+        [
+          "CMIT / MIT Mixture",
+          "55965-84-9",
+          "≥0.00025–<0.0015%"
+        ]
+      ],
+      "pages": "Sections 2–3 · pages 1–2"
     }
   }
 };

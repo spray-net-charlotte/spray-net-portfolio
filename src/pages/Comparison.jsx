@@ -7,6 +7,7 @@ import Lightbox from '../components/Lightbox';
 import { mediaUrl } from '../lib/media';
 import { closeOverlay, navigate, updateQuery } from '../lib/navigation';
 import { benchmarkProducts, benchmarkRows, catalystSafety, coatingHardeners, coatingProducts, comparisonChecked, comparisonDocuments, comparisonGroups, specificationRows } from '../data/comparisons';
+import { getKcmaEvidence, kcmaPrograms, kcmaReferences } from '../data/kcmaEvidence';
 import '../comparison.css';
 
 const docById = (id) => comparisonDocuments.find((doc) => doc.id === id);
@@ -99,7 +100,7 @@ function ComparisonSheet({ groupKey, route }) {
   }, []);
   const group = comparisonGroups[groupKey];
   const products = [group.ours, ...group.peers].map(id => coatingProducts[id]);
-  const rows = specificationRows.filter(([key]) => (groupKey === 'paint' || !['pencil','persoz','adhesion','mek','performance'].includes(key)) && (!['unqualifiedSolids','sdsSolids'].includes(key) || products.some(p => p.specs[key])));
+  const rows = specificationRows.filter(([key]) => (groupKey === 'paint' || !['pencil','persoz','adhesion','mek','performance'].includes(key)) && (!['unqualifiedSolids','sdsSolids','emissions'].includes(key) || products.some(p => p.specs[key])));
   const sourceIds = new Set(products.flatMap(p => [p.tds,p.sds,p.tests?.source,...(p.extraSources || []),...(p.hardeners || []).map(id => coatingHardeners[id].sds)]).filter(Boolean));
   const brandFor = p => p.brand || (p.name.startsWith('Sherwin-Williams') ? 'Sherwin-Williams' : p.name.startsWith('INSL-X') ? 'INSL-X' : p.name.startsWith('Benjamin Moore') ? 'Benjamin Moore' : p.name.startsWith('Zinsser') ? 'Zinsser' : p.name.startsWith('KILZ') ? 'KILZ' : 'Spray-Net');
   const brands = [...new Set(products.slice(1).map(brandFor))];
@@ -114,6 +115,7 @@ function ComparisonSheet({ groupKey, route }) {
   if (groupKey === 'paint') { sourceIds.add('sn-benchmark'); sourceIds.add('sn-catalyst-sds'); }
   return <>
     <h2 className="comparison-sheet-title">{groupKey === 'primer' ? 'Cabinet Primers' : 'Cabinet Paint'} — All Brands</h2>
+    <details className="comparison-source-library"><summary>Understanding KCMA &amp; ANSI</summary><p>KCMA has three certification programs, not bronze, silver or gold paint levels. A coating claim that it meets finish requirements is different from certification of a cabinet design. ANSI approves standards; it does not certify products.</p><dl>{kcmaPrograms.map(([name, detail]) => <div key={name}><dt><strong>{name}</strong></dt><dd>{detail}</dd></div>)}</dl><p>No cabinet-line certificate is verified for the coatings in this sheet. The row below identifies the finish evidence we have; an unverified status does not mean a product failed.</p><p className="comparison-source-url">{kcmaReferences.map(url => <span key={url}>{url}<br/></span>)}</p></details>
     <div className="comparison-brand-jumps" role="group" aria-label="Jump to a brand"><span>Find a Brand</span>{brands.map(brand => <button key={brand} className="chip" aria-pressed={activeBrand === brand} onClick={() => jumpToBrand(brand)}>{brand}</button>)}</div>
     <p className="comparison-reading-note">Tap a brand or swipe across the sheet. Property names, Spray-Net and the brand headings stay in view.</p>
     <div ref={sheet} className="comparison-matrix-scroll" role="region" aria-label="All-brand comparison sheet" tabIndex={0}>
@@ -121,6 +123,7 @@ function ComparisonSheet({ groupKey, route }) {
         <thead><tr><th scope="col">Compare</th>{products.map(p => <th scope="col" key={p.id} data-product={p.id}><span className="small-caps">{brandFor(p).toUpperCase()}</span>{p.name}<small>{p.detail}</small></th>)}</tr></thead>
         <tbody>
           <tr className="matrix-section"><th colSpan={products.length+1}><span>Specifications &amp; Performance</span></th></tr>
+          <tr><th scope="row">KCMA / ANSI Evidence<small>Finish evidence and cabinet certification have different scopes.</small></th>{products.map(p => { const evidence = getKcmaEvidence(p.id, groupKey); return <td key={p.id} data-product={p.id}><strong>{evidence.status}</strong><p>{evidence.detail}</p>{evidence.source && <SourceLink id={evidence.source} route={route}>Read Evidence</SourceLink>}</td>; })}</tr>
           {rows.map(([key,label,help]) => <tr key={key}><th scope="row">{label}{help && <details><summary>About This Value</summary><p>{help}</p></details>}</th>{products.map(p => <td key={p.id} data-product={p.id}>{key === 'performance' ? <TestResults product={p} route={route}/> : <>{p.specs[key] || p.missingLabel || 'Not Reported in This TDS'}{p.specSources?.[key] && <SourceLink id={p.specSources[key]} route={route}>View Source</SourceLink>}</>}</td>)}</tr>)}
           <tr className="matrix-section"><th colSpan={products.length+1}><span>Coating Base Safety &amp; Materials</span></th></tr>
           <tr><th scope="row">Signal Word</th>{products.map(p => <td key={p.id} data-product={p.id}>{p.safety.signal}</td>)}</tr>

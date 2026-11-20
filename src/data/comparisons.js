@@ -18,6 +18,7 @@ export const specificationRows = [
   ['unqualifiedSolids', 'Solids (Unspecified Basis)', 'Shown separately when the manufacturer does not identify weight or volume basis.'],
   ['sdsSolids', 'SDS Total Solids at 250°C', 'The SDS reports this separate test at 250°C / 482°F. Do not substitute it for TDS weight or volume solids; reference dates and formulations may differ.'],
   ['voc', 'VOC Content', 'Keep the reporting basis with the number. These sheets use different bases; VOC content alone does not measure indoor emissions or overall safety.'],
+  ['emissions', 'Indoor Emissions Testing', 'Chamber emissions in mg/m³ are different from liquid VOC content in g/L. Certification applies to the named product, test edition and modeled conditions.'],
   ['wet', 'Wet Film per Coat'],
   ['dry', 'Dry Film per Coat', '1 mil = 0.001 inch. Compare coverage only alongside the specified film thickness.'],
   ['coverage', 'Coverage per U.S. Gallon'],
@@ -141,7 +142,7 @@ export const coatingProducts = {
 
 export const comparisonGroups = {
   primer: { label: 'Primer', ours: 'sn-primer', peers: ['extreme', 'sw-shellac', 'sw-problock', 'renner643', 'renner083', 'stix', 'bin', 'cover', 'bullseye', 'kilz2'] },
-  paint: { label: 'Interior Paint', ours: 'sn-coating', peers: ['gallery', 'command', 'renner688', 'renner785', 'krystal', 'magnamax', 'emerald', 'advance'] },
+  paint: { label: 'Interior Paint', ours: 'sn-coating', peers: ['gallery', 'command', 'renner688', 'renner785', 'centurion', 'milesi', 'krystal', 'magnamax', 'emerald', 'advance'] },
 };
 
 Object.assign(coatingProducts, expandedPrimers, professionalPrimers, professionalPaints);

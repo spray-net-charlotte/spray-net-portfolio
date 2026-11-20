@@ -161,5 +161,58 @@ export const coatingHardeners = {
         "≥1–≤5%"
       ]
     ]
+  },
+  "cw4002": {
+    "name": "Centurion CW-4002",
+    "sds": "centurion-hardener-sds",
+    "edition": "October 21, 2020 · Separate catalyst",
+    "signal": "Danger",
+    "classes": [
+      "Flammable Liquid · Category 3",
+      "Acute Toxicity, Inhalation · Category 4",
+      "Acute Toxicity, Dermal · Category 4",
+      "Skin Irritation · Category 2",
+      "Eye Irritation · Category 1 (as printed)",
+      "Aspiration Hazard · Category 1",
+      "Aquatic Chronic Hazard · Category 3"
+    ],
+    "summary": "Contains isocyanate oligomers and butyl acetate. Labels are preserved as printed: the sheet uses Eye Irritation Category 1 and hazard wording that is not fully consistent with the classification list. This archived reference is not a corrected or current mixed-system classification.",
+    "ingredients": [
+      [
+        "HDI Oligomers, Isocyanurate",
+        "28182-81-2",
+        "40–50%"
+      ],
+      [
+        "IPDI Oligomers",
+        "53880-05-0",
+        "30–40%"
+      ],
+      [
+        "N-Butyl Acetate",
+        "123-86-4",
+        "20–30%"
+      ]
+    ]
+  },
+  "hnb40": {
+    "name": "Milesi HNB40 · Regional Reference",
+    "sds": "milesi-hnb40-sds",
+    "edition": "March 23, 2017 · Version 71 · Bulgarian / EU CLP",
+    "signal": "Warning · regional reference",
+    "classes": [
+      "Acute Toxicity, Inhalation · Category 4 · H332",
+      "Skin Sensitization · Category 1 · H317",
+      "Specific Target Organ Toxicity, Single Exposure · Category 3 · H335",
+      "Aquatic Chronic Hazard · Category 3 · H412"
+    ],
+    "summary": "Translated hazard-code summary: inhalation harm, skin allergy, respiratory irritation and long-lasting aquatic harm. EUH204: contains isocyanates; may produce an allergic reaction. This is a Bulgarian / EU reference only. A current U.S. HNB40 SDS and formula equivalence remain unverified.",
+    "ingredients": [
+      [
+        "Aliphatic Polyisocyanate",
+        "160994-68-3",
+        "50–74.9%"
+      ]
+    ]
   }
 };
