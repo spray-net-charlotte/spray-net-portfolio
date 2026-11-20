@@ -7,6 +7,7 @@ import { coatingProducts, comparisonGroups, coatingHardeners } from '../src/data
 import { getComparisonSummary } from '../src/data/comparisonSummary.js';
 import { getKcmaEvidence, kcmaFinishStatus } from '../src/data/kcmaEvidence.js';
 import { regulatoryVoc, estimateRegulatoryVoc } from '../src/data/regulatoryVoc.js';
+import { getCatalystComparison } from '../src/data/catalystComparison.js';
 
 test('product evidence points to captured SDS and preserves component and test scopes', () => {
   const ids = new Set(comparisonDocuments.map(doc => doc.id));
@@ -16,6 +17,7 @@ test('product evidence points to captured SDS and preserves component and test s
       expect(getComparisonSummary(p).type, `${id} compact coating type`).toBeTruthy();
       expect(getComparisonSummary(p).catalyst, `${id} compact catalyst`).toBeTruthy();
       expect(ids.has(regulatoryVoc[id]?.source), `${id} regulatory VOC source`).toBe(true);
+      for (const source of getCatalystComparison(p,getComparisonSummary(p)).sources || []) expect(ids.has(source), `${id} catalyst source`).toBe(true);
       expect(ids.has(p.tds), `${id} TDS`).toBe(true);
       expect(ids.has(p.sds), `${id} SDS`).toBe(true);
       for (const h of p.hardeners || []) expect(ids.has(coatingHardeners[h].sds), `${id} hardener`).toBe(true);
@@ -102,6 +104,13 @@ test('comparison navigation preserves product, source pages and Back behavior', 
   await expect(voc.locator('[data-product="sn-coating"]')).toHaveText('<150');
   await expect(voc.locator('[data-product="milesi"]')).toHaveText('≈120*');
   await expect(paint.getByRole('row',{name:/^Recoat /}).locator('[data-product="sn-coating"]')).toHaveText('25 min');
+  const catalyst = paint.getByRole('row',{name:/^Isocyanate-Free Catalyst /});
+  await expect(catalyst.locator('[data-product="sn-coating"]')).toHaveText('Yes');
+  await expect(catalyst.locator('[data-product="gallery"]')).toHaveText('No added catalyst');
+  await expect(catalyst.locator('[data-product="renner688"]')).toHaveText('No');
+  await expect(catalyst.locator('[data-product="centurion"]')).toHaveText('No');
+  await expect(catalyst.locator('[data-product="milesi"]')).toHaveText('No');
+  await expect(catalyst.locator('[data-product="krystal"]')).toHaveText('No isocyanates listed');
   await page.getByRole('button', {name:'Milesi',exact:true}).click();
   await expect(page.getByRole('button', {name:'Milesi',exact:true})).toHaveAttribute('aria-pressed','true');
   await paint.getByRole('row',{name:/^Documents /}).locator('[data-product="milesi"]').getByRole('link',{name:'SDS',exact:true}).click();

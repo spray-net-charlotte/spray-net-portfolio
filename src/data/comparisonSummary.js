@@ -2,6 +2,7 @@
 export const summaryRows = [
   ['type', 'Coating Type'],
   ['catalyst', 'Catalyst'],
+  ['isocyanateFree', 'Isocyanate-Free Catalyst'],
   ['solids', 'Solids'],
   ['voc', 'Regulatory VOC (g/L)'],
   ['film', 'Film Thickness (mil)'],

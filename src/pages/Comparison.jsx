@@ -10,6 +10,7 @@ import { benchmarkProducts, benchmarkRows, coatingHardeners, coatingProducts, co
 import { getComparisonSummary, summaryRows } from '../data/comparisonSummary.js';
 import { kcmaFinishStatus } from '../data/kcmaEvidence.js';
 import { regulatoryVoc, vocMethodReference } from '../data/regulatoryVoc.js';
+import { getCatalystComparison } from '../data/catalystComparison.js';
 import '../comparison.css';
 
 const docById = (id) => comparisonDocuments.find((doc) => doc.id === id);
@@ -113,7 +114,7 @@ function ComparisonSheet({ groupKey, route }) {
         <thead><tr><th scope="col">Compare</th>{products.map(p => <th scope="col" key={p.id} data-product={p.id}><span className="small-caps">{brandFor(p).toUpperCase()}</span>{p.name}<small>{p.detail}</small></th>)}</tr></thead>
         <tbody>
           {groupKey === 'paint' && <tr><th scope="row">Meets KCMA</th>{products.map(p => <td key={p.id} data-product={p.id}>{kcmaFinishStatus[p.id] || 'Not verified'}</td>)}</tr>}
-          {summaryRows.map(([key,label]) => <tr key={key}><th scope="row">{label}</th>{products.map(p => <td key={p.id} data-product={p.id}>{key === 'voc' ? regulatoryVoc[p.id]?.display || '—' : getComparisonSummary(p)[key] || '—'}</td>)}</tr>)}
+          {summaryRows.map(([key,label]) => <tr key={key}><th scope="row">{label}</th>{products.map(p => <td key={p.id} data-product={p.id}>{key === 'voc' ? regulatoryVoc[p.id]?.display || '—' : key === 'isocyanateFree' ? getCatalystComparison(p, getComparisonSummary(p)).label : getComparisonSummary(p)[key] || '—'}</td>)}</tr>)}
           <tr><th scope="row">Documents</th>{products.map(p => <td key={p.id} data-product={p.id}><SourceLink id={p.tds} route={route}>TDS</SourceLink>{p.sds && <SourceLink id={p.sds} route={route}>SDS</SourceLink>}</td>)}</tr>
         </tbody>
       </table>
@@ -132,7 +133,7 @@ function ComparisonSheet({ groupKey, route }) {
         </tbody></table></div>
       </details>
     </>}
-    <details className="comparison-source-library"><summary>Source Documents &amp; Product Notes</summary><h2>The Source Library</h2><details><summary>Product Notes</summary>{products.map(p => <div key={p.id}><h3>{p.name}</h3><p>{p.note}</p></div>)}</details><div className="comparison-document-grid">{comparisonDocuments.filter(d => sourceIds.has(d.id)).map(doc => <DocumentCard key={doc.id} doc={doc} route={route}/>)}</div></details>
+    <details className="comparison-source-library"><summary>Source Documents &amp; Product Notes</summary><h2>The Source Library</h2><details><summary>Product Notes</summary>{products.map(p => <div key={p.id}><h3>{p.name}</h3><p>{p.note}</p></div>)}</details><details><summary>Catalyst Comparison Notes</summary><p>The row describes the separate catalyst. “No added catalyst” is different from an isocyanate-free catalyst; neither is an overall safety rating.</p>{products.map(p => {const info=getCatalystComparison(p,getComparisonSummary(p));return <div key={p.id}><h3>{p.name} · {info.label}</h3><p>{info.note}</p>{info.sources?.map(id => <SourceLink key={id} id={id} route={route}>Catalyst Reference</SourceLink>)}</div>;})}</details><div className="comparison-document-grid">{comparisonDocuments.filter(d => sourceIds.has(d.id)).map(doc => <DocumentCard key={doc.id} doc={doc} route={route}/>)}</div></details>
     <aside className="comparison-warranty"><Icon name="shield" size={34}/><div><h2>Our 15-Year No-Peel Warranty</h2><p>15 years against peeling. See your proposal and warranty for coverage.</p><details><summary>Warranty Reference</summary><p>Spray-Net cabinet-warranty and contract-warranty FAQs, checked {comparisonChecked}. Laboratory tests do not calculate a 15-year service life.</p><p className="comparison-source-url">spray-net.com/faqs/what-is-your-warranty-for-kitchen-cabinets<br/>spray-net.com/faqs/how-does-my-contract-warranty-work</p></details></div></aside>
     <p className="comparison-reviewed">Sources checked {comparisonChecked}.</p>
   </>;

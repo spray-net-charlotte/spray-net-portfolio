@@ -95,3 +95,10 @@ Model: regulatory VOC = actual VOC g/L divided by (1 − water volume fraction �
 B-I-N, Cover Stain, Bulls Eye and Krystal retain published VOC figures as explicitly basis-assumed provisional proxies, marked *. There are insufficient water / exempt fractions to perform numerical conversion, and their original basis remains unverified. No arbitrary multiplier is applied. Bounds (< / ≤) remain bounds. Krystal uses its reported catalyzed-at-10% range, rounded to ≈570*. All notes and source links remain in a collapsed VOC Calculation Notes section. All estimates are labeled and may mix base / ready-to-use states as specifically documented; this is not a matched as-applied laboratory comparison.
 
 Method source: https://www.aqmd.gov/home/rules-compliance/compliance/vocs/calculations . Existing captured documents provide all numerical inputs; no original PDF was changed.
+
+
+## Isocyanate-free catalyst comparison — 1.8.8
+
+Added a row directly below Catalyst. Spray-Net is Yes, per the operator's confirmation of the current system, alongside the captured A-003 water / polycarbodiimide SDS. No equivalence between legacy SWC010 and A-003 mixing instructions is newly asserted. Renner M403/M404, Centurion CW-4002 and Milesi HNB40 are No based on disclosed isocyanates / polyisocyanates. The HNB40 reference remains explicitly regional. Renner 643 is Depends on catalyst because its optional alternatives are not all captured. The 1K references and factory pre-catalyzed MagnaMax show No added catalyst. C1491 Care Catalyst is an acid catalyst with No isocyanates listed; this does not turn an incomplete SDS into an absolute formulation claim or label it isocyanate-containing. Full notes and links are inside the source library.
+
+This row concerns the supplied catalyst, not an overall safety rating or a claim that all competing coating systems contain isocyanates. Edit `src/data/catalystComparison.js` to maintain these statuses. Pricing research is not included in the app, public documents or release data.
